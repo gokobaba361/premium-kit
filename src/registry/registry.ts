@@ -225,12 +225,9 @@ export const registry: RegistryItem[] = [
     category: "primitive",
     description: "Explicit locale controls built on the accessible select primitive.",
     files: ["src/components/primitives/locale-selectors.tsx"],
-    dependencies: [
-      "@radix-ui/react-select",
-      "@phosphor-icons/react",
-      "clsx",
-      "tailwind-merge",
-    ],
+    // Radix Select and Phosphor arrive through the form dependency; this file
+    // only imports form and the cn helper directly.
+    dependencies: ["clsx", "tailwind-merge"],
     registryDependencies: ["form"],
     note: "Keep language and currency independent: changing the interface language must not silently change prices or checkout currency.",
   },

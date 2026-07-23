@@ -220,7 +220,7 @@ Exit condition: Sites can differ in composition and design language, not only pa
 
 Status: Planned
 
-- [ ] Registry link and dependency audit.
+- [x] Registry link and dependency audit.
 - [ ] Turkish translation coverage audit.
 - [ ] Keyboard/focus test matrix.
 - [ ] Reduced-motion audit.

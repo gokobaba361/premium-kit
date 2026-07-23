@@ -139,15 +139,22 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Add registry link and dependency audits (a script that fails on a missing
-   registry file, a broken registryDependency slug or an undeclared npm import).
-2. Add a Turkish translation coverage audit for the catalogue.
-3. Begin Phase 3 commerce flow: product detail, cart drawer, checkout, confirmation.
-4. Run all validation.
-5. Update `PLAN.md` and this handoff before closing the batch.
+1. Add a Turkish translation coverage audit for the catalogue (fail on any
+   registry slug that has no Turkish name/description).
+2. Begin Phase 3 commerce flow: product detail, cart drawer, checkout, confirmation.
+3. Run all validation.
+4. Update `PLAN.md` and this handoff before closing the batch.
 
 Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
-(batch 16); downloadable project recipe from the brief builder (batch 17).
+(batch 16); downloadable project recipe (batch 17); registry integrity audit
+(batch 18).
+
+## Audit commands
+
+- \`npm run audit:contrast\` — WCAG AA across every theme.
+- \`npm run audit:registry\` — registry files exist, registryDependencies resolve,
+  every imported npm package is declared.
+- \`npm run audit\` — both of the above.
 
 ## 8. Validation commands
 
@@ -314,3 +321,26 @@ Completed on 2026-07-23:
   with the expected filename in-browser.
 - Lint clean. Build 230/230 static. Contrast audit: 0 failures.
 - Phase 1 (AI production contract) checklist is now complete.
+
+## 18. Registry integrity audit batch
+
+Completed on 2026-07-23:
+
+- Added `scripts/registry-audit.mjs`. Parses `registry.ts` with the TypeScript
+  compiler (syntax only) and checks, per entry: source files exist,
+  registryDependencies resolve to real slugs, and every imported npm package is
+  declared in dependencies. Declared-but-unused deps are warnings; missing
+  files, broken slugs and undeclared imports are errors that exit non-zero.
+- The audit initially surfaced 21 warnings. Fixed the real one: `locale-selectors`
+  declared `@radix-ui/react-select` and `@phosphor-icons/react` although its file
+  imports only the `form` registry item (which provides them) and `cn`. Trimmed
+  its direct dependencies to `clsx` and `tailwind-merge`.
+- The remaining warnings were blocks that declare `motion` but reach it through
+  the local `reveal` helper. Taught the audit about that transitive helper via a
+  HELPER_PACKAGES map, so a genuine transitive need no longer warns while a truly
+  dead dependency still would.
+- Added `npm run audit:registry` and a combined `npm run audit`, and added the
+  registry audit as a CI step in `.github/workflows/ci.yml`.
+- Verified: audit exits 0 with zero warnings; `/r/locale-selectors.json` now
+  lists deps `["clsx","tailwind-merge"]` and registryDependency `form`; detail
+  page HTTP 200. Lint clean, build 230/230, contrast 0 failures.

@@ -34,5 +34,8 @@ jobs:
       - name: Audit theme contrast
         run: npm run audit:contrast
 
+      - name: Audit registry integrity
+        run: npm run audit:registry
+
       - name: Build
         run: npm run build
