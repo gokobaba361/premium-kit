@@ -37,5 +37,8 @@ jobs:
       - name: Audit registry integrity
         run: npm run audit:registry
 
+      - name: Audit Turkish coverage
+        run: npm run audit:i18n
+
       - name: Build
         run: npm run build

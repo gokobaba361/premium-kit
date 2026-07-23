@@ -51,7 +51,7 @@ As of 2026-07-23:
 - 3 theme-system entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 216 statically generated routes
+- 230 statically generated routes
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
 - Build-time TypeScript AST prop documentation
@@ -221,7 +221,7 @@ Exit condition: Sites can differ in composition and design language, not only pa
 Status: Planned
 
 - [x] Registry link and dependency audit.
-- [ ] Turkish translation coverage audit.
+- [x] Turkish translation coverage audit.
 - [ ] Keyboard/focus test matrix.
 - [ ] Reduced-motion audit.
 - [ ] Image and metadata completeness audit.

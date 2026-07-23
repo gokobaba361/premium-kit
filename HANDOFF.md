@@ -31,7 +31,7 @@ Latest fully validated state before the active batch:
 - Grouped primitive entries: 14
 - Site skeletons: 10
 - Visual themes: 12
-- Static pages: 216/216
+- Static pages: 230/230
 - Lint: clean
 - Theme contrast audit: 0 WCAG AA failures
 - Key Turkish routes: HTTP 200
@@ -139,22 +139,23 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Add a Turkish translation coverage audit for the catalogue (fail on any
-   registry slug that has no Turkish name/description).
-2. Begin Phase 3 commerce flow: product detail, cart drawer, checkout, confirmation.
-3. Run all validation.
-4. Update `PLAN.md` and this handoff before closing the batch.
+1. Begin Phase 3 commerce flow: product detail, cart drawer, checkout, confirmation,
+   each with real loading, empty, error and success states.
+2. Run all validation.
+3. Update `PLAN.md` and this handoff before closing the batch.
 
 Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
 (batch 16); downloadable project recipe (batch 17); registry integrity audit
-(batch 18).
+(batch 18); Turkish coverage audit (batch 19).
 
 ## Audit commands
 
 - \`npm run audit:contrast\` — WCAG AA across every theme.
 - \`npm run audit:registry\` — registry files exist, registryDependencies resolve,
   every imported npm package is declared.
-- \`npm run audit\` — both of the above.
+- \`npm run audit:i18n\` — every registry slug has a non-empty Turkish name and
+  description; stale translation keys warn.
+- \`npm run audit\` — all three of the above.
 
 ## 8. Validation commands
 
@@ -344,3 +345,18 @@ Completed on 2026-07-23:
 - Verified: audit exits 0 with zero warnings; `/r/locale-selectors.json` now
   lists deps `["clsx","tailwind-merge"]` and registryDependency `form`; detail
   page HTTP 200. Lint clean, build 230/230, contrast 0 failures.
+
+## 19. Turkish coverage audit batch
+
+Completed on 2026-07-23:
+
+- Added `scripts/i18n-audit.mjs`. Parses registry slugs from registry.ts and the
+  `text` translation map from registry-tr.ts, both via the TypeScript compiler.
+  Fails when any slug has no Turkish translation or an empty name/description;
+  warns on a stale translation key with no matching slug.
+- The Turkish catalogue silently falls back to English for a missing slug, so
+  this closes the one gap that build and lint could not see.
+- Verified detection: temporarily removing the marquee translation produced
+  "61/62" and exit 1; restored to 62/62 exit 0.
+- Added `npm run audit:i18n`, folded it into `npm run audit`, and added a CI step.
+- Current coverage: 62/62 complete, zero stale keys.
