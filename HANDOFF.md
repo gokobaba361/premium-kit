@@ -26,12 +26,12 @@ training knowledge.
 
 Latest fully validated state before the active batch:
 
-- Registry items: 66
+- Registry items: 67
 - Block entries: 43
 - Grouped primitive entries: 14
 - Site skeletons: 10
 - Visual themes: 12
-- Static pages: 242/242
+- Static pages: 246/246
 - Lint: clean
 - Theme contrast audit: 0 WCAG AA failures
 - Key Turkish routes: HTTP 200
@@ -139,16 +139,16 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Add a bound cart store primitive (client context + hook) so product-detail,
-   cart-drawer and checkout share live state instead of prop wiring.
-2. Assemble a demo commerce route that sequences the four blocks end to end.
-3. Add the account flow: sign up, onboarding, dashboard shell, settings.
-4. Run all validation.
-5. Update `PLAN.md` and this handoff before closing the batch.
+1. Add the account flow: sign-up, onboarding, dashboard shell (exists) wiring,
+   and settings forms, each with real states.
+2. Add the content flow: index, category, article, search, subscription.
+3. Run all validation.
+4. Update `PLAN.md` and this handoff before closing the batch.
 
 Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
 (batch 16); downloadable project recipe (batch 17); registry integrity audit
-(batch 18); Turkish coverage audit (batch 19); commerce flow blocks (batch 20).
+(batch 18); Turkish coverage audit (batch 19); commerce flow blocks (batch 20);
+cart store and end-to-end commerce demo (batch 21).
 
 ## Audit commands
 
@@ -390,3 +390,25 @@ Completed on 2026-07-23:
   215,00 €); confirmation renders order OCK-2048.
 - Registry 62 -> 66 items. Lint clean. audit: integrity OK, TR 66/66. Build
   242/242 static. Contrast 0 failures. All 12 new routes (EN/TR/JSON) HTTP 200.
+
+## 21. Cart store and commerce demo batch
+
+Completed on 2026-07-23:
+
+- Added `src/components/primitives/cart-store.tsx`: an in-memory module store
+  read through a `useCart` hook via useSyncExternalStore. No setState-in-effect,
+  no hydration mismatch (server and first client render start empty). Actions:
+  add (merges by id+variant), setQuantity, remove, clear; derived count and
+  subtotalMinor. Persistence is left as a documented extension.
+- Added `onPlaced` to checkout-form: when the parent passes it, the parent owns
+  the success screen (an order-confirmation block) instead of the form's own
+  alert, so the full flow can complete.
+- Added `/demo/commerce` (ThemeScope forest) sequencing product-detail →
+  cart-drawer → checkout-form → order-confirmation, all sharing the cart store.
+- Registered cart-store as a primitive (registry, TR, metadata; no visual
+  preview, links to the demo).
+- Verified in-browser: add updates the header cart badge; "Go to checkout"
+  reaches the form; a valid submit lands on the confirmation (order OCK-3098);
+  the shared cart is cleared afterwards ("Cart, 0 items", empty drawer).
+- Registry 66 -> 67. Lint clean. audit: integrity OK, TR 67/67. Build 246/246
+  static. Contrast 0 failures. Commerce (Phase 3, item 1) is complete end to end.

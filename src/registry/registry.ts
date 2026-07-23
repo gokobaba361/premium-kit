@@ -636,6 +636,14 @@ export const registry: RegistryItem[] = [
     registryDependencies: ["button"],
     note: "The success end of the flow. No invented tracking numbers; delivery is an estimate rendered in the page locale.",
   },
+  {
+    slug: "cart-store",
+    name: "Cart store",
+    category: "primitive",
+    description: "A shared cart with a useCart hook, so the commerce blocks share live state.",
+    files: ["src/components/primitives/cart-store.tsx"],
+    note: "In-memory module store read via useSyncExternalStore, so no setState-in-effect and no hydration mismatch. See /demo/commerce for the assembled flow.",
+  },
 
   /* ------------------------------------------------------------------ theme */
   {

@@ -265,6 +265,10 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Sipariş onayı",
     description: "Sipariş numarası, kalem dökümü ve sonraki adımla başarı durumu.",
   },
+  "cart-store": {
+    name: "Sepet deposu",
+    description: "useCart kancasıyla paylaşılan sepet; ticaret blokları canlı durumu paylaşır.",
+  },
 };
 
 export const registryTr: RegistryItem[] = registry.map((item) => ({

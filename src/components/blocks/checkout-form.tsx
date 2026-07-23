@@ -17,6 +17,12 @@ export type CheckoutFormProps = {
   countries?: { value: string; label: string }[];
   /** Wire to a payment provider. The form never collects card details itself. */
   onPlaceOrder?: (data: Record<string, string>) => void;
+  /**
+   * Fired after the placing delay. When provided, the parent owns the success
+   * screen and this form does not render its own confirmation, so a full
+   * order-confirmation block can take over.
+   */
+  onPlaced?: (data: Record<string, string>) => void;
 };
 
 type Errors = Record<string, string>;
@@ -47,6 +53,7 @@ export function CheckoutForm({
   shippingMinor = 0,
   countries = defaultCountries,
   onPlaceOrder,
+  onPlaced,
 }: CheckoutFormProps) {
   const [errors, setErrors] = useState<Errors>({});
   const [state, setState] = useState<"idle" | "placing" | "placed">("idle");
@@ -72,7 +79,14 @@ export function CheckoutForm({
 
     setState("placing");
     onPlaceOrder?.(data);
-    window.setTimeout(() => setState("placed"), 700);
+    window.setTimeout(() => {
+      if (onPlaced) {
+        // Parent takes over the success screen (e.g. an order-confirmation block).
+        onPlaced(data);
+      } else {
+        setState("placed");
+      }
+    }, 700);
   }
 
   if (state === "placed") {
