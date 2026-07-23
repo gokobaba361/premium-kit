@@ -26,12 +26,12 @@ training knowledge.
 
 Latest fully validated state before the active batch:
 
-- Registry items: 69
-- Block entries: 45
+- Registry items: 70
+- Block entries: 46
 - Grouped primitive entries: 14
 - Site skeletons: 10
 - Visual themes: 12
-- Static pages: 252/252
+- Static pages: 255/255
 - Lint: clean
 - Theme contrast audit: 0 WCAG AA failures
 - Key Turkish routes: HTTP 200
@@ -139,15 +139,17 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Add the content flow: index, category, article, search, subscription.
-2. Optionally assemble account and content demo routes like /demo/commerce.
+1. Add a category/index page block for the content flow (article cards with a
+   filter), then optionally an assembled /demo/content route.
+2. Add the booking flow: service, staff/location, calendar, confirmation.
 3. Run all validation.
 4. Update `PLAN.md` and this handoff before closing the batch.
 
 Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
 (batch 16); downloadable project recipe (batch 17); registry integrity audit
 (batch 18); Turkish coverage audit (batch 19); commerce flow blocks (batch 20);
-cart store and commerce demo (batch 21); account flow blocks (batch 22).
+cart store and commerce demo (batch 21); account flow blocks (batch 22);
+article layout and prose typography (batch 23).
 
 ## Audit commands
 
@@ -433,4 +435,25 @@ Completed on 2026-07-23:
   from Profile and Security tabs at once (keepMounted), inactive panels are
   display:none, and save reaches "Changes saved".
 - Registry 67 -> 69. Lint clean. audit: integrity OK, TR 69/69. Build 252/252
+  static. Contrast 0 failures.
+
+## 23. Article layout batch
+
+Completed on 2026-07-23:
+
+- Added a reusable `.pk-prose` utility to globals.css: long-form reading
+  typography (headings, paragraphs, lists, links, blockquote, code, images)
+  built entirely from tokens, with no font-family override so the page theme
+  still owns the type.
+- Added article-layout: a measured single-column reading layout with category
+  eyebrow, title, standfirst, real author attribution (Avatar + role + localised
+  date + reading time), a cover with a job, the prose body and a tag footer.
+  Server component; no client JavaScript.
+- With blog-grid (index), search-results and newsletter-signup already present,
+  the content flow's core reading page is covered. A category filter page remains.
+- Registered in registry (registryDependency data), TR, metadata and previews.
+- Verified in-browser: .pk-prose applied, h2 renders in the display font at
+  25.6px, blockquote has the accent left border and italics, lists are disc,
+  the measure is ~62ch and the byline localises to "12 May 2026".
+- Registry 69 -> 70. Lint clean. audit: integrity OK, TR 70/70. Build 255/255
   static. Contrast 0 failures.

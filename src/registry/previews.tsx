@@ -51,6 +51,7 @@ import { CheckoutForm } from "@/components/blocks/checkout-form";
 import { OrderConfirmation } from "@/components/blocks/order-confirmation";
 import { OnboardingFlow } from "@/components/blocks/onboarding-flow";
 import { SettingsForm } from "@/components/blocks/settings-form";
+import { ArticleLayout } from "@/components/blocks/article-layout";
 import { RadioGroup } from "@/components/primitives/form";
 import { presets } from "@/design/presets";
 
@@ -687,6 +688,47 @@ const previews: Record<string, React.ReactNode> = {
           },
         ]}
       />
+    </div>
+  ),
+
+  "article-layout": (
+    <div className="w-full">
+      <ArticleLayout
+        category="Making"
+        title="Why we deleted the staging server"
+        standfirst="Six teams, one shared environment and a queue. What replaced it and what it cost."
+        author={{ name: "Mira Okonkwo", role: "Staff engineer" }}
+        date="2026-05-12"
+        readingTime="6 minute read"
+        cover={{
+          src: "https://picsum.photos/seed/article-staging/1200/675",
+          alt: "Server rack in a machine room",
+        }}
+        tags={[
+          { label: "Infrastructure", href: "#" },
+          { label: "Teams", href: "#" },
+        ]}
+      >
+        <p>
+          For six teams the staging server was a queue with a hostname. You waited for it, you
+          fought over it, and when it broke everyone stopped.
+        </p>
+        <h2>The environment was the bottleneck</h2>
+        <p>
+          The problem was never the deploy itself. It was the twenty minutes after, when something
+          was off and nobody could reproduce it against the same state.
+        </p>
+        <ul>
+          <li>Branch environments replaced the shared one.</li>
+          <li>Each pull request got its own database branch.</li>
+          <li>Access expired when the branch merged.</li>
+        </ul>
+        <blockquote>We stopped keeping a staging server alive for six teams.</blockquote>
+        <p>
+          The cost was real: more compute, more moving parts. The result was that reviewing code
+          against something real stopped being a scheduling problem.
+        </p>
+      </ArticleLayout>
     </div>
   ),
 

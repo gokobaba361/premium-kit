@@ -85,6 +85,7 @@ const tags: Record<string, string[]> = {
   "cart-store": ["commerce", "cart", "state", "hook"],
   "onboarding-flow": ["account", "onboarding", "stepper", "form"],
   "settings-form": ["account", "settings", "tabs", "form"],
+  "article-layout": ["content", "article", "reading", "prose"],
   "dashboard-shell": ["application", "dashboard", "navigation"],
   "docs-sidebar": ["documentation", "navigation", "content"],
   "event-schedule": ["event", "schedule", "programme"],

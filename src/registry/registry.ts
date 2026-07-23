@@ -666,6 +666,17 @@ export const registry: RegistryItem[] = [
     note: "One form wraps every tab and the tabs keep mounted, so a save collects all sections together rather than only the visible one.",
   },
 
+  /* ----------------------------------------------------------------- content */
+  {
+    slug: "article-layout",
+    name: "Article layout",
+    category: "block",
+    description: "Long-form reading layout with author attribution and prose typography.",
+    files: ["src/components/blocks/article-layout.tsx"],
+    registryDependencies: ["data"],
+    note: "The body uses the shared .pk-prose rules from globals.css, so Markdown-rendered content and hand-written JSX read the same. Server component; no client JavaScript.",
+  },
+
   /* ------------------------------------------------------------------ theme */
   {
     slug: "tokens",

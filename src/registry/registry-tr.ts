@@ -277,6 +277,10 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Ayarlar formu",
     description: "Tek kaydet düğmesi ve gerçek kaydedildi durumuyla sekmeli ayarlar.",
   },
+  "article-layout": {
+    name: "Makale düzeni",
+    description: "Yazar künyesi ve prose tipografisiyle uzun içerik okuma düzeni.",
+  },
 };
 
 export const registryTr: RegistryItem[] = registry.map((item) => ({

@@ -44,14 +44,14 @@ content structure, accessible interaction and editable source code.
 
 As of 2026-07-23:
 
-- 69 registry items
-- 45 full-page blocks
+- 70 registry items
+- 46 full-page blocks
 - 14 grouped primitive families
 - 6 motion components
 - 3 theme-system entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 252 statically generated routes
+- 255 statically generated routes
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
 - Build-time TypeScript AST prop documentation
@@ -170,7 +170,8 @@ Status: In progress
   ship, a cart-store shares live state, and /demo/commerce runs the flow end to end.
 - [x] Account: sign up → onboarding → dashboard → settings. auth-split, onboarding-flow,
   dashboard-shell and settings-form all ship. Remaining: an assembled account demo route.
-- [ ] Content: index → category → article → search → subscription.
+- [~] Content: index → category → article → search → subscription. blog-grid (index),
+  article-layout, search-results and newsletter-signup ship; category filter page pending.
 - [ ] Booking: service → staff/location → calendar → confirmation.
 - [ ] Event: schedule → speaker → venue → registration.
 - [ ] Admin: list → filter → create → edit → delete → audit.

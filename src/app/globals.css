@@ -162,3 +162,79 @@
 [data-theme="neon"] .pk-code span {
   color: var(--shiki-dark);
 }
+
+/* Prose: long-form article body typography, built from tokens. Applied to a
+   wrapper so article-layout and any Markdown-rendered content read consistently.
+   Only spacing, hierarchy and colour; no font family override, so the page theme
+   still owns the type. */
+.pk-prose {
+  color: var(--pk-fg);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  max-width: var(--pk-measure);
+}
+.pk-prose > * + * {
+  margin-top: 1.5em;
+}
+.pk-prose h2 {
+  font-family: var(--pk-font-display);
+  font-weight: var(--pk-display-weight);
+  letter-spacing: var(--pk-display-tracking);
+  font-size: 1.6rem;
+  line-height: 1.2;
+  margin-top: 2em;
+}
+.pk-prose h3 {
+  font-family: var(--pk-font-display);
+  font-weight: var(--pk-display-weight);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin-top: 1.6em;
+}
+.pk-prose p,
+.pk-prose li {
+  color: var(--pk-fg-muted);
+}
+.pk-prose a {
+  color: var(--pk-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.pk-prose strong {
+  color: var(--pk-fg);
+  font-weight: 600;
+}
+.pk-prose ul,
+.pk-prose ol {
+  padding-left: 1.4em;
+}
+.pk-prose ul {
+  list-style: disc;
+}
+.pk-prose ol {
+  list-style: decimal;
+}
+.pk-prose li + li {
+  margin-top: 0.5em;
+}
+.pk-prose blockquote {
+  border-left: 2px solid var(--pk-accent);
+  padding-left: 1.2em;
+  font-style: italic;
+  color: var(--pk-fg);
+}
+.pk-prose code {
+  font-family: var(--pk-font-mono);
+  font-size: 0.9em;
+  background: var(--pk-bg-subtle);
+  padding: 0.15em 0.4em;
+  border-radius: var(--pk-radius-sm);
+}
+.pk-prose img {
+  max-width: 100%;
+  border-radius: var(--pk-radius);
+}
+.pk-prose hr {
+  border: 0;
+  border-top: 1px solid var(--pk-line);
+}
