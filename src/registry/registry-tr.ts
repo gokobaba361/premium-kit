@@ -269,6 +269,14 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Sepet deposu",
     description: "useCart kancasıyla paylaşılan sepet; ticaret blokları canlı durumu paylaşır.",
   },
+  "onboarding-flow": {
+    name: "Karşılama akışı",
+    description: "İlerleme çubuğu, geri/devam ve tamamlanma durumuyla çok adımlı kurulum.",
+  },
+  "settings-form": {
+    name: "Ayarlar formu",
+    description: "Tek kaydet düğmesi ve gerçek kaydedildi durumuyla sekmeli ayarlar.",
+  },
 };
 
 export const registryTr: RegistryItem[] = registry.map((item) => ({

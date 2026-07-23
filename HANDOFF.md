@@ -26,12 +26,12 @@ training knowledge.
 
 Latest fully validated state before the active batch:
 
-- Registry items: 67
-- Block entries: 43
+- Registry items: 69
+- Block entries: 45
 - Grouped primitive entries: 14
 - Site skeletons: 10
 - Visual themes: 12
-- Static pages: 246/246
+- Static pages: 252/252
 - Lint: clean
 - Theme contrast audit: 0 WCAG AA failures
 - Key Turkish routes: HTTP 200
@@ -139,16 +139,15 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Add the account flow: sign-up, onboarding, dashboard shell (exists) wiring,
-   and settings forms, each with real states.
-2. Add the content flow: index, category, article, search, subscription.
+1. Add the content flow: index, category, article, search, subscription.
+2. Optionally assemble account and content demo routes like /demo/commerce.
 3. Run all validation.
 4. Update `PLAN.md` and this handoff before closing the batch.
 
 Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
 (batch 16); downloadable project recipe (batch 17); registry integrity audit
 (batch 18); Turkish coverage audit (batch 19); commerce flow blocks (batch 20);
-cart store and end-to-end commerce demo (batch 21).
+cart store and commerce demo (batch 21); account flow blocks (batch 22).
 
 ## Audit commands
 
@@ -412,3 +411,26 @@ Completed on 2026-07-23:
   the shared cart is cleared afterwards ("Cart, 0 items", empty drawer).
 - Registry 66 -> 67. Lint clean. audit: integrity OK, TR 67/67. Build 246/246
   static. Contrast 0 failures. Commerce (Phase 3, item 1) is complete end to end.
+
+## 22. Account flow blocks batch
+
+Completed on 2026-07-23:
+
+- Added onboarding-flow: multi-step onboarding with a progress rail, back and
+  continue, an optional per-step canContinue gate and a completion screen. The
+  rail carries progression, so no per-panel step labels. Owns navigation only.
+- Added settings-form: tabbed settings under a single save with idle/saving/saved
+  states and an inline saved confirmation.
+- Enhanced the Tabs primitive with a `keepMounted` prop: it force-mounts every
+  panel and hides inactive ones with `data-[state=inactive]:hidden`, so a single
+  form submit inside tabs collects fields from all tabs, not only the visible one.
+  settings-form relies on this.
+- With auth-split and dashboard-shell already present, the account flow's blocks
+  are complete.
+- Registered both in registry, TR, metadata and previews.
+- Verified in-browser: onboarding advances 1->2->3 with Back disabled at the
+  start and Finish reaching the done screen; settings FormData contains fields
+  from Profile and Security tabs at once (keepMounted), inactive panels are
+  display:none, and save reaches "Changes saved".
+- Registry 67 -> 69. Lint clean. audit: integrity OK, TR 69/69. Build 252/252
+  static. Contrast 0 failures.

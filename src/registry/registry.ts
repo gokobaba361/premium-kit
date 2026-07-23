@@ -645,6 +645,27 @@ export const registry: RegistryItem[] = [
     note: "In-memory module store read via useSyncExternalStore, so no setState-in-effect and no hydration mismatch. See /demo/commerce for the assembled flow.",
   },
 
+  /* ---------------------------------------------------------------- account */
+  {
+    slug: "onboarding-flow",
+    name: "Onboarding flow",
+    category: "block",
+    description: "Multi-step onboarding with a progress rail, back/continue and a done state.",
+    files: ["src/components/blocks/onboarding-flow.tsx"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    registryDependencies: ["button"],
+    note: "The rail carries the progression, so no per-panel step labels. It owns navigation only; each step owns its own inputs.",
+  },
+  {
+    slug: "settings-form",
+    name: "Settings form",
+    category: "block",
+    description: "Tabbed settings under one save action with a real saved state.",
+    files: ["src/components/blocks/settings-form.tsx"],
+    registryDependencies: ["button", "tabs", "feedback"],
+    note: "One form wraps every tab and the tabs keep mounted, so a save collects all sections together rather than only the visible one.",
+  },
+
   /* ------------------------------------------------------------------ theme */
   {
     slug: "tokens",

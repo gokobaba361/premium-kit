@@ -49,6 +49,9 @@ import { ProductDetail } from "@/components/blocks/product-detail";
 import { CartDrawer, type CartLine } from "@/components/blocks/cart-drawer";
 import { CheckoutForm } from "@/components/blocks/checkout-form";
 import { OrderConfirmation } from "@/components/blocks/order-confirmation";
+import { OnboardingFlow } from "@/components/blocks/onboarding-flow";
+import { SettingsForm } from "@/components/blocks/settings-form";
+import { RadioGroup } from "@/components/primitives/form";
 import { presets } from "@/design/presets";
 
 /**
@@ -637,6 +640,97 @@ const previews: Record<string, React.ReactNode> = {
         lines={[
           { id: "skillet-28", name: "The 28cm skillet", variant: "Sage", priceMinor: 14500, quantity: 1 },
           { id: "care-kit", name: "Seasoning care kit", priceMinor: 3200, quantity: 2 },
+        ]}
+      />
+    </div>
+  ),
+
+  "onboarding-flow": (
+    <div className="w-full">
+      <OnboardingFlow
+        steps={[
+          {
+            id: "profile",
+            title: "Name your workspace",
+            description: "This is what your team will see in the switcher.",
+            content: (
+              <Field label="Workspace name" helper="You can rename it later.">
+                <Input defaultValue="Meridyen Coffee" />
+              </Field>
+            ),
+          },
+          {
+            id: "role",
+            title: "What brings you here?",
+            description: "We use this to set sensible defaults, nothing more.",
+            content: (
+              <RadioGroup
+                name="use-case"
+                defaultValue="team"
+                options={[
+                  { value: "team", label: "Running a team", description: "Shared projects and roles." },
+                  { value: "solo", label: "Working solo" },
+                  { value: "trying", label: "Just looking around" },
+                ]}
+              />
+            ),
+          },
+          {
+            id: "invite",
+            title: "Invite a teammate",
+            description: "Optional. You can do this any time from settings.",
+            content: (
+              <Field label="Email" helper="They will get one invitation email.">
+                <Input type="email" placeholder="name@company.com" />
+              </Field>
+            ),
+          },
+        ]}
+      />
+    </div>
+  ),
+
+  "settings-form": (
+    <div className="w-full">
+      <SettingsForm
+        sections={[
+          {
+            value: "profile",
+            label: "Profile",
+            content: (
+              <div className="flex flex-col gap-5">
+                <Field label="Display name">
+                  <Input name="displayName" defaultValue="Deniz Arıkan" />
+                </Field>
+                <Field label="Email">
+                  <Input name="email" type="email" defaultValue="deniz@meridyen.co" />
+                </Field>
+              </div>
+            ),
+          },
+          {
+            value: "notifications",
+            label: "Notifications",
+            content: (
+              <div className="flex flex-col gap-5">
+                <Switch label="Weekly summary" description="Every Friday afternoon." defaultChecked />
+                <Switch label="Mentions" description="When someone tags you." defaultChecked />
+                <Switch label="Product updates" />
+              </div>
+            ),
+          },
+          {
+            value: "security",
+            label: "Security",
+            content: (
+              <div className="flex flex-col gap-5">
+                <Switch label="Two-factor authentication" description="Require a code at sign in." />
+                <Field label="Recovery email">
+                  <Input name="recovery" type="email" placeholder="backup@company.com" />
+                </Field>
+              </div>
+            ),
+          },
         ]}
       />
     </div>

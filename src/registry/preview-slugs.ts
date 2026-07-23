@@ -32,4 +32,6 @@ export const previewSlugs = new Set([
   "cart-drawer",
   "checkout-form",
   "order-confirmation",
+  "onboarding-flow",
+  "settings-form",
 ]);

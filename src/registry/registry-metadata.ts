@@ -40,6 +40,8 @@ const clientItems = new Set([
   "cart-drawer",
   "checkout-form",
   "cart-store",
+  "onboarding-flow",
+  "settings-form",
 ]);
 
 const mixedItems = new Set([
@@ -81,6 +83,8 @@ const tags: Record<string, string[]> = {
   "checkout-form": ["commerce", "checkout", "form", "payment"],
   "order-confirmation": ["commerce", "checkout", "confirmation", "success"],
   "cart-store": ["commerce", "cart", "state", "hook"],
+  "onboarding-flow": ["account", "onboarding", "stepper", "form"],
+  "settings-form": ["account", "settings", "tabs", "form"],
   "dashboard-shell": ["application", "dashboard", "navigation"],
   "docs-sidebar": ["documentation", "navigation", "content"],
   "event-schedule": ["event", "schedule", "programme"],

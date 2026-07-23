@@ -13,10 +13,17 @@ export function Tabs({
   items,
   defaultValue,
   className,
+  keepMounted = false,
 }: {
   items: TabItem[];
   defaultValue?: string;
   className?: string;
+  /**
+   * Keep every panel mounted and hide inactive ones with CSS. Needed when the
+   * panels contain form fields that a single submit must collect together,
+   * because Radix unmounts inactive panels by default.
+   */
+  keepMounted?: boolean;
 }) {
   return (
     <TabsPrimitive.Root
@@ -40,7 +47,14 @@ export function Tabs({
       </TabsPrimitive.List>
 
       {items.map((item) => (
-        <TabsPrimitive.Content key={item.value} value={item.value}>
+        <TabsPrimitive.Content
+          key={item.value}
+          value={item.value}
+          forceMount={keepMounted ? true : undefined}
+          // forceMount keeps inactive panels in the DOM; hide them with CSS so
+          // their fields still submit while staying invisible.
+          className={keepMounted ? "data-[state=inactive]:hidden" : undefined}
+        >
           {item.content}
         </TabsPrimitive.Content>
       ))}
