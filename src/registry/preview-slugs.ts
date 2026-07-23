@@ -28,4 +28,8 @@ export const previewSlugs = new Set([
   "mega-nav",
   "tokens",
   "themes",
+  "product-detail",
+  "cart-drawer",
+  "checkout-form",
+  "order-confirmation",
 ]);

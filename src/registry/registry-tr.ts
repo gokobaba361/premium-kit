@@ -249,6 +249,22 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Çalışma zamanı tema seçimi",
     description: "Ziyaretçi seçimi için provider, parlamasız script ve tema seçici.",
   },
+  "product-detail": {
+    name: "Ürün detayı",
+    description: "Galeri, varyant seçimi, adet ve sepete ekleme; gerçek durumlarıyla.",
+  },
+  "cart-drawer": {
+    name: "Sepet çekmecesi",
+    description: "Satır kalemleri, adet, ara toplam ve boş durumla açılır sepet.",
+  },
+  "checkout-form": {
+    name: "Ödeme formu",
+    description: "İletişim ve teslimat alanları, sipariş özeti ve eksiksiz durumlar.",
+  },
+  "order-confirmation": {
+    name: "Sipariş onayı",
+    description: "Sipariş numarası, kalem dökümü ve sonraki adımla başarı durumu.",
+  },
 };
 
 export const registryTr: RegistryItem[] = registry.map((item) => ({

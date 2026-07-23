@@ -136,17 +136,21 @@ export function Select({
   defaultValue,
   disabled,
   onValueChange,
+  name,
 }: {
   options: { value: string; label: string }[];
   placeholder?: string;
   defaultValue?: string;
   disabled?: boolean;
   onValueChange?: (value: string) => void;
+  /** Enables form submission: Radix renders a hidden native select under this name. */
+  name?: string;
 }) {
   const { id, describedBy, invalid } = useField();
 
   return (
     <SelectPrimitive.Root
+      name={name}
       defaultValue={defaultValue}
       disabled={disabled}
       onValueChange={onValueChange}

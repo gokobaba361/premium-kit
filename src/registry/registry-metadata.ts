@@ -36,6 +36,9 @@ const clientItems = new Set([
   "combobox",
   "locale-selectors",
   "theme-runtime",
+  "product-detail",
+  "cart-drawer",
+  "checkout-form",
 ]);
 
 const mixedItems = new Set([
@@ -58,6 +61,10 @@ const avoidWhen: Record<string, string> = {
   combobox: "Avoid for short lists that a native select can expose more directly.",
   "locale-selectors": "Avoid coupling language and currency unless the business rules truly require it.",
   "search-results": "Avoid hiding weak information architecture behind search; browse routes must remain available.",
+  "product-detail": "Avoid burying the price or the add-to-cart control below decorative content.",
+  "cart-drawer": "Avoid making the drawer the only path to the cart; keep a cart route for deep links.",
+  "checkout-form": "Never collect card details in this form; hand payment to a provider on submit.",
+  "order-confirmation": "Avoid inventing tracking numbers or delivery promises the fulfilment cannot keep.",
 };
 
 const tags: Record<string, string[]> = {
@@ -68,6 +75,10 @@ const tags: Record<string, string[]> = {
   "locale-selectors": ["localisation", "language", "currency", "select"],
   "search-results": ["search", "results", "empty-state", "recent-searches"],
   "product-grid": ["commerce", "collection", "products"],
+  "product-detail": ["commerce", "product", "gallery", "cart"],
+  "cart-drawer": ["commerce", "cart", "drawer", "checkout"],
+  "checkout-form": ["commerce", "checkout", "form", "payment"],
+  "order-confirmation": ["commerce", "checkout", "confirmation", "success"],
   "dashboard-shell": ["application", "dashboard", "navigation"],
   "docs-sidebar": ["documentation", "navigation", "content"],
   "event-schedule": ["event", "schedule", "programme"],

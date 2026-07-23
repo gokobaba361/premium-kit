@@ -595,6 +595,48 @@ export const registry: RegistryItem[] = [
     note: "Dates and version labels carry the sequence; decorative timeline markers are unnecessary.",
   },
 
+  /* --------------------------------------------------------------- commerce */
+  {
+    slug: "product-detail",
+    name: "Product detail",
+    category: "block",
+    description: "Gallery, variant selection, quantity and add-to-cart with real states.",
+    files: ["src/components/blocks/product-detail.tsx"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    registryDependencies: ["button"],
+    note: "Sold-out variants stay visible but disabled, and the add button shows a transient added state. It owns no cart; onAdd hands the choice to the target project.",
+  },
+  {
+    slug: "cart-drawer",
+    name: "Cart drawer",
+    category: "block",
+    description: "Slide-over cart with line items, quantity, subtotal and an empty state.",
+    files: ["src/components/blocks/cart-drawer.tsx"],
+    dependencies: ["@radix-ui/react-dialog", "@phosphor-icons/react", "clsx", "tailwind-merge"],
+    registryDependencies: ["button"],
+    note: "Radix Dialog handles focus, escape and scroll lock. Presentational: the parent owns the cart data and callbacks.",
+  },
+  {
+    slug: "checkout-form",
+    name: "Checkout form",
+    category: "block",
+    description: "Contact and delivery fields with an order summary and complete states.",
+    files: ["src/components/blocks/checkout-form.tsx"],
+    dependencies: ["@phosphor-icons/react"],
+    registryDependencies: ["button", "form", "feedback"],
+    note: "Collects contact and shipping only. Card details go to a payment provider on submit, never on this page.",
+  },
+  {
+    slug: "order-confirmation",
+    name: "Order confirmation",
+    category: "block",
+    description: "Success state with order number, itemised total and a next step.",
+    files: ["src/components/blocks/order-confirmation.tsx"],
+    dependencies: ["@phosphor-icons/react"],
+    registryDependencies: ["button"],
+    note: "The success end of the flow. No invented tracking numbers; delivery is an estimate rendered in the page locale.",
+  },
+
   /* ------------------------------------------------------------------ theme */
   {
     slug: "tokens",

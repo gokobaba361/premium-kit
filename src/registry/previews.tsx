@@ -6,6 +6,7 @@
  * server to client boundary.
  */
 
+import { useState } from "react";
 import { Marquee } from "@/components/motion/marquee";
 import { NumberTicker } from "@/components/motion/number-ticker";
 import { SpotlightCard } from "@/components/motion/spotlight-card";
@@ -44,6 +45,10 @@ import {
   TimeInput,
 } from "@/components/primitives/advanced-form";
 import { MegaNav } from "@/components/blocks/mega-nav";
+import { ProductDetail } from "@/components/blocks/product-detail";
+import { CartDrawer, type CartLine } from "@/components/blocks/cart-drawer";
+import { CheckoutForm } from "@/components/blocks/checkout-form";
+import { OrderConfirmation } from "@/components/blocks/order-confirmation";
 import { presets } from "@/design/presets";
 
 /**
@@ -55,6 +60,44 @@ import { presets } from "@/design/presets";
  */
 
 const logos = ["Meridyen", "Lodos", "Ocak", "Kavram", "Ledgerline", "Northbeam"];
+
+/* Shared commerce sample data. Prices are in minor units. */
+const cartSample: CartLine[] = [
+  {
+    id: "skillet-28",
+    name: "The 28cm skillet",
+    variant: "Sage",
+    priceMinor: 14500,
+    quantity: 1,
+    image: { src: "https://picsum.photos/seed/ocak-skillet/160/160", alt: "Cast iron skillet" },
+  },
+  {
+    id: "care-kit",
+    name: "Seasoning care kit",
+    priceMinor: 3200,
+    quantity: 2,
+    image: { src: "https://picsum.photos/seed/ocak-care/160/160", alt: "Care kit" },
+  },
+];
+
+/** Cart drawer needs live quantity/remove state, so the preview is stateful. */
+function CartDrawerPreview() {
+  const [lines, setLines] = useState<CartLine[]>(cartSample);
+  return (
+    <CartDrawer
+      trigger={<Button variant="secondary">Open cart ({lines.reduce((n, l) => n + l.quantity, 0)})</Button>}
+      lines={lines}
+      currency="EUR"
+      locale="de-DE"
+      freeShippingMinor={20000}
+      shippingMinor={600}
+      onQuantityChange={(id, quantity) =>
+        setLines((current) => current.map((l) => (l.id === id ? { ...l, quantity } : l)))
+      }
+      onRemove={(id) => setLines((current) => current.filter((l) => l.id !== id))}
+    />
+  );
+}
 
 const previews: Record<string, React.ReactNode> = {
   marquee: (
@@ -536,6 +579,66 @@ const previews: Record<string, React.ReactNode> = {
           <span className="text-sm">{preset.name}</span>
         </div>
       ))}
+    </div>
+  ),
+
+  "product-detail": (
+    <div className="w-full">
+      <ProductDetail
+        name="The 28cm skillet"
+        priceMinor={14500}
+        currency="EUR"
+        locale="de-DE"
+        description="Sand cast in one piece, milled smooth and seasoned six times before it ships."
+        images={[
+          { src: "https://picsum.photos/seed/ocak-skillet-a/800/800", alt: "Skillet, top view" },
+          { src: "https://picsum.photos/seed/ocak-skillet-b/800/800", alt: "Skillet, in use" },
+          { src: "https://picsum.photos/seed/ocak-skillet-c/800/800", alt: "Skillet handle" },
+        ]}
+        variants={[
+          { id: "sage", label: "Sage" },
+          { id: "charcoal", label: "Charcoal" },
+          { id: "clay", label: "Clay", soldOut: true },
+        ]}
+        specs={[
+          { label: "Diameter", value: "28cm" },
+          { label: "Weight", value: "2.1kg" },
+          { label: "Material", value: "Sand cast grey iron" },
+          { label: "Guarantee", value: "Replaced if it cracks in normal use" },
+        ]}
+      />
+    </div>
+  ),
+
+  "cart-drawer": <CartDrawerPreview />,
+
+  "checkout-form": (
+    <div className="w-full">
+      <CheckoutForm
+        currency="EUR"
+        locale="de-DE"
+        shippingMinor={600}
+        lines={[
+          { id: "skillet-28", name: "The 28cm skillet", variant: "Sage", priceMinor: 14500, quantity: 1 },
+          { id: "care-kit", name: "Seasoning care kit", priceMinor: 3200, quantity: 2 },
+        ]}
+      />
+    </div>
+  ),
+
+  "order-confirmation": (
+    <div className="w-full">
+      <OrderConfirmation
+        orderNumber="OCK-2048"
+        email="deniz@meridyen.co"
+        currency="EUR"
+        locale="de-DE"
+        estimatedDelivery="2026-08-02"
+        lines={[
+          { id: "skillet-28", name: "The 28cm skillet", variant: "Sage", priceMinor: 14500, quantity: 1 },
+          { id: "care-kit", name: "Seasoning care kit", priceMinor: 3200, quantity: 2 },
+        ]}
+      />
     </div>
   ),
 };

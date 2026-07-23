@@ -26,12 +26,12 @@ training knowledge.
 
 Latest fully validated state before the active batch:
 
-- Registry items: 62
-- Block entries: 39
+- Registry items: 66
+- Block entries: 43
 - Grouped primitive entries: 14
 - Site skeletons: 10
 - Visual themes: 12
-- Static pages: 230/230
+- Static pages: 242/242
 - Lint: clean
 - Theme contrast audit: 0 WCAG AA failures
 - Key Turkish routes: HTTP 200
@@ -139,14 +139,16 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Begin Phase 3 commerce flow: product detail, cart drawer, checkout, confirmation,
-   each with real loading, empty, error and success states.
-2. Run all validation.
-3. Update `PLAN.md` and this handoff before closing the batch.
+1. Add a bound cart store primitive (client context + hook) so product-detail,
+   cart-drawer and checkout share live state instead of prop wiring.
+2. Assemble a demo commerce route that sequences the four blocks end to end.
+3. Add the account flow: sign up, onboarding, dashboard shell, settings.
+4. Run all validation.
+5. Update `PLAN.md` and this handoff before closing the batch.
 
 Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
 (batch 16); downloadable project recipe (batch 17); registry integrity audit
-(batch 18); Turkish coverage audit (batch 19).
+(batch 18); Turkish coverage audit (batch 19); commerce flow blocks (batch 20).
 
 ## Audit commands
 
@@ -360,3 +362,31 @@ Completed on 2026-07-23:
   "61/62" and exit 1; restored to 62/62 exit 0.
 - Added `npm run audit:i18n`, folded it into `npm run audit`, and added a CI step.
 - Current coverage: 62/62 complete, zero stale keys.
+
+## 20. Commerce flow blocks batch
+
+Completed on 2026-07-23:
+
+- Added four commerce blocks, each presentational (parent owns data/callbacks)
+  with complete states and integer-minor-unit money via Intl.NumberFormat:
+  - product-detail: thumbnail gallery, variant selection that keeps sold-out
+    options visible-but-disabled, quantity stepper, add-to-cart with a transient
+    added state.
+  - cart-drawer: Radix Dialog slide-over with line items, quantity, remove, a
+    subtotal/shipping/total summary and an empty state.
+  - checkout-form: contact and delivery fields with inline validation, an order
+    summary aside, and idle/placing/placed states. Collects no card details;
+    payment is explicitly handed to a provider on submit.
+  - order-confirmation: success state with order number, itemised total and a
+    next step. No invented tracking numbers.
+- Enhanced the shared form Select with a `name` prop (Radix renders a hidden
+  native select) so it participates in FormData; the checkout country field
+  needed it.
+- Registered all four in registry.ts, registry-tr.ts, registry-metadata (client
+  items, tags, avoid-when) and previews (with a stateful cart preview).
+- Verified in-browser: sold-out variant disabled, quantity 1->3, added state,
+  EUR de-DE formatting (145,00 €); cart remove down to empty state; checkout
+  shows 5 errors on empty submit and reaches "Order placed" when valid (total
+  215,00 €); confirmation renders order OCK-2048.
+- Registry 62 -> 66 items. Lint clean. audit: integrity OK, TR 66/66. Build
+  242/242 static. Contrast 0 failures. All 12 new routes (EN/TR/JSON) HTTP 200.

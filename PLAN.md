@@ -44,14 +44,14 @@ content structure, accessible interaction and editable source code.
 
 As of 2026-07-23:
 
-- 62 registry items
-- 39 full-page blocks
+- 66 registry items
+- 43 full-page blocks
 - 14 grouped primitive families
 - 6 motion components
 - 3 theme-system entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 230 statically generated routes
+- 242 statically generated routes
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
 - Build-time TypeScript AST prop documentation
@@ -166,7 +166,9 @@ inventing new primitives.
 
 Status: Planned
 
-- [ ] Commerce: collection → product → cart → checkout → confirmation.
+- [~] Commerce: collection → product → cart → checkout → confirmation. Product
+  detail, cart drawer, checkout and confirmation blocks shipped; collection grid
+  already existed. Remaining: a bound cart store and an assembled demo route.
 - [ ] Account: sign up → onboarding → dashboard → settings.
 - [ ] Content: index → category → article → search → subscription.
 - [ ] Booking: service → staff/location → calendar → confirmation.
