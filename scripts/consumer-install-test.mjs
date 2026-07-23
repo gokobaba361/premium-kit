@@ -168,6 +168,7 @@ function verifyInstallation({ fixturePath, sourceRoot }) {
     `${sourceRoot}components/primitives/reveal.tsx`,
     `${sourceRoot}components/primitives/motion-scope.tsx`,
     `${sourceRoot}components/blocks/hero-split.tsx`,
+    `${sourceRoot}components/blocks/content-index.tsx`,
     `${sourceRoot}components/blocks/article-layout.tsx`,
     `${sourceRoot}components/blocks/checkout-form.tsx`,
     `${sourceRoot}lib/cn.ts`,
@@ -261,6 +262,7 @@ async function main() {
   const representativeItems = [
     "button",
     "hero-split",
+    "content-index",
     "article-layout",
     "checkout-form",
   ].map((slug) => `${origin}/r/${slug}.json`);

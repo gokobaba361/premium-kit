@@ -727,6 +727,14 @@ export const registry: RegistryItem[] = [
 
   /* ----------------------------------------------------------------- content */
   {
+    slug: "content-index",
+    name: "Content index",
+    category: "block",
+    description: "Filterable editorial index with result counts and a complete empty state.",
+    files: ["src/components/blocks/content-index.tsx"],
+    note: "Use for category-led discovery. The active filter and result count remain visible and programmatically available.",
+  },
+  {
     slug: "article-layout",
     name: "Article layout",
     category: "block",

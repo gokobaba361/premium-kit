@@ -1,7 +1,7 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Phase 6 quality automation
+Current milestone: Phase 3 content flow complete
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -15,14 +15,14 @@ English human routes and machine-readable AI routes describe the same source of 
 
 Validated inventory:
 
-- 72 registry items
-- 46 full-page blocks
+- 73 registry items
+- 47 full-page blocks
 - 14 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes and 10 purpose-led site skeletons
-- 188 statically generated documentation/product pages
+- 190 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
-- Turkish catalogue coverage: 72/72
+- Turkish catalogue coverage: 73/73
 
 ## 2. Fixed architecture
 
@@ -68,7 +68,7 @@ Primary files:
 
 ## 4. Quality automation
 
-`scripts/registry-audit.mjs` checks all 72 entries for:
+`scripts/registry-audit.mjs` checks all 73 entries for:
 
 - missing published files and CSS files
 - invalid or cyclic registry dependencies
@@ -86,11 +86,11 @@ Primary files:
 - one with `src/`
 - one without `src/`
 
-The fixture installs `button`, `hero-split`, `article-layout` and `checkout-form`, which exercises
-base CSS, direct and transitive registry dependencies, motion helpers, prose and a complex
-commerce block. Both fixtures verify installed paths and CSS markers, then run TypeScript and a
-production Next.js build. Successful fixtures are deleted; failed fixtures are preserved and
-their path is printed.
+The fixture installs `button`, `hero-split`, `content-index`, `article-layout` and
+`checkout-form`, which exercises base CSS, direct and transitive registry dependencies, client
+filtering, motion helpers, prose and a complex commerce block. Both fixtures verify installed
+paths and CSS markers, then run TypeScript and a production Next.js build. Successful fixtures
+are deleted; failed fixtures are preserved and their path is printed.
 
 CI runs lint, typecheck, all audits, the production build and this consumer test.
 
@@ -110,28 +110,29 @@ Latest local result:
 
 - lint: clean
 - typecheck: clean
-- registry installation audit: 72/72, no errors
-- Turkish coverage: 72/72
+- registry installation audit: 73/73, no errors
+- Turkish coverage: 73/73
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 188/188 static pages, dynamic registry endpoints
+- production build: 190/190 static pages, dynamic registry endpoints
 - dynamic registry trace: shared CSS and representative block/primitive source included
 - clean `src` fixture: install, typecheck and build pass
 - clean non-`src` fixture: install, typecheck and build pass
 
 ## 6. Completed in the latest batch
 
-- Added `premium-kit-base` and `motion-foundation`.
-- Extracted canonical shared CSS from `globals.css` without changing the catalogue's visual
-  behavior.
-- Migrated all existing entries to automatic base closure and full Premium Kit URLs.
-- Added portable targets for components, libraries and design sources.
-- Added narrow `/r/*` output tracing for packaged/serverless registry source reads.
-- Fixed missing local-file closure in navigation blocks with `nav-types.ts`.
-- Made theme runtime ship its preset source.
-- Replaced the shallow registry audit with full import/CSS/dependency checks.
-- Added real clean-consumer fixture tests and CI coverage.
-- Updated catalogue dependency metadata and detail pages to include automatic dependencies.
-- Consolidated README, PLAN and this handoff.
+- Added `content-index`, a filterable editorial category/index block with realistic article data.
+- Kept the data model aligned with existing content blocks: title, excerpt, href, category, ISO
+  date and localised reading time.
+- Added explicit active-filter state, result count, a real empty category state and reset action.
+- Used native buttons, `aria-pressed`, `aria-controls` and a polite atomic status announcement.
+- Added configurable labels plus `Intl.DateTimeFormat` locale support with stable UTC date-only
+  formatting.
+- Added English and Turkish registry copy, metadata v2 tags/guidance and a live preview.
+- Kept the item dependency-free beyond the automatic `premium-kit-base` registry foundation.
+- Added `content-index` to both clean consumer fixtures and verified `src` and non-`src`
+  installation, TypeScript and production builds.
+- Verified long content, 375px mobile wrapping, no horizontal overflow and a clean browser error
+  log.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -154,14 +155,11 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-Do not add content, booking, event or admin work to the registry-foundation commit.
-
 After this batch is committed, pushed and green in CI:
 
-1. Complete the content flow with a category/filter index page block.
-2. Optionally assemble `/demo/content` from the existing blog, article, search and newsletter
-   pieces.
-3. Then begin the booking flow: service → staff/location → calendar → confirmation.
+1. Optionally assemble `/demo/content` from blog-grid, content-index, article-layout,
+   search-results and newsletter-signup.
+2. Then begin the booking flow: service → staff/location → calendar → confirmation.
 
 Before that next implementation, re-read `PLAN.md`, this file and relevant local Next.js docs.
 

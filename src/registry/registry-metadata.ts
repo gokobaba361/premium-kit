@@ -47,6 +47,7 @@ const clientItems = new Set([
   "cart-store",
   "onboarding-flow",
   "settings-form",
+  "content-index",
 ]);
 
 const mixedItems = new Set([
@@ -73,6 +74,7 @@ const avoidWhen: Record<string, string> = {
   "cart-drawer": "Avoid making the drawer the only path to the cart; keep a cart route for deep links.",
   "checkout-form": "Never collect card details in this form; hand payment to a provider on submit.",
   "order-confirmation": "Avoid inventing tracking numbers or delivery promises the fulfilment cannot keep.",
+  "content-index": "Avoid when the collection is too small to benefit from category-led discovery.",
 };
 
 const tags: Record<string, string[]> = {
@@ -90,6 +92,7 @@ const tags: Record<string, string[]> = {
   "cart-store": ["commerce", "cart", "state", "hook"],
   "onboarding-flow": ["account", "onboarding", "stepper", "form"],
   "settings-form": ["account", "settings", "tabs", "form"],
+  "content-index": ["content", "category", "filter", "index", "empty-state"],
   "article-layout": ["content", "article", "reading", "prose"],
   "dashboard-shell": ["application", "dashboard", "navigation"],
   "docs-sidebar": ["documentation", "navigation", "content"],

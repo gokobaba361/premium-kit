@@ -51,6 +51,7 @@ import { CheckoutForm } from "@/components/blocks/checkout-form";
 import { OrderConfirmation } from "@/components/blocks/order-confirmation";
 import { OnboardingFlow } from "@/components/blocks/onboarding-flow";
 import { SettingsForm } from "@/components/blocks/settings-form";
+import { ContentIndex } from "@/components/blocks/content-index";
 import { ArticleLayout } from "@/components/blocks/article-layout";
 import { RadioGroup } from "@/components/primitives/form";
 import { presets } from "@/design/presets";
@@ -685,6 +686,64 @@ const previews: Record<string, React.ReactNode> = {
                 <Input type="email" placeholder="name@company.com" />
               </Field>
             ),
+          },
+        ]}
+      />
+    </div>
+  ),
+
+  "content-index": (
+    <div className="w-full">
+      <ContentIndex
+        title="Field notes"
+        body="Reporting and practical guidance from people shaping public places, services and tools."
+        categories={["Practice", "Places", "Technology", "Dispatches"]}
+        items={[
+          {
+            title: "The maintenance plan belongs in the first design review",
+            excerpt:
+              "What changes when cleaning, replacement parts and seasonal access are treated as design inputs instead of handover notes.",
+            href: "#",
+            category: "Practice",
+            date: "2026-06-18",
+            readingTime: "7 minute read",
+          },
+          {
+            title:
+              "A neighbourhood library redesigned around the hour after school without turning every room into a classroom",
+            excerpt:
+              "The team observed arrivals, noise and informal study patterns before moving a single shelf. The resulting plan keeps quiet reading, group work and everyday borrowing visible to one another.",
+            href: "#",
+            category: "Places",
+            date: "2026-06-03",
+            readingTime: "9 minute read",
+          },
+          {
+            title: "When a public map has to work without a signal",
+            excerpt:
+              "A field test of downloaded routes, plain-language landmarks and recovery states for visitors arriving with limited connectivity.",
+            href: "#",
+            category: "Technology",
+            date: "2026-05-21",
+            readingTime: "6 minute read",
+          },
+          {
+            title: "Writing a useful brief for a shared workshop",
+            excerpt:
+              "A practical brief separates fixed safety constraints from the routines that members are still free to shape.",
+            href: "#",
+            category: "Practice",
+            date: "2026-04-29",
+            readingTime: "5 minute read",
+          },
+          {
+            title: "The small signs that explain how a market actually opens",
+            excerpt:
+              "Stall numbers, delivery windows and handwritten changes reveal the operating system behind a weekly street market.",
+            href: "#",
+            category: "Places",
+            date: "2026-04-11",
+            readingTime: "4 minute read",
           },
         ]}
       />

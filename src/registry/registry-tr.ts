@@ -285,6 +285,10 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Ayarlar formu",
     description: "Tek kaydet düğmesi ve gerçek kaydedildi durumuyla sekmeli ayarlar.",
   },
+  "content-index": {
+    name: "İçerik dizini",
+    description: "Sonuç sayısı ve eksiksiz boş durumuyla filtrelenebilir editoryal dizin.",
+  },
   "article-layout": {
     name: "Makale düzeni",
     description: "Yazar künyesi ve prose tipografisiyle uzun içerik okuma düzeni.",

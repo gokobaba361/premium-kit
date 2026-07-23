@@ -10,8 +10,8 @@ the delivered source code editable and owned by the user.
 
 ## Current scope
 
-- 72 installable registry items
-- 46 full-page blocks
+- 73 installable registry items
+- 47 full-page blocks
 - 14 grouped primitive families
 - 6 motion components
 - 12 sector-calibrated visual themes

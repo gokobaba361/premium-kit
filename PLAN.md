@@ -44,14 +44,14 @@ content structure, accessible interaction and editable source code.
 
 As of 2026-07-24:
 
-- 72 registry items
-- 46 full-page blocks
+- 73 registry items
+- 47 full-page blocks
 - 14 grouped primitive families
 - 6 motion components
 - 4 theme/foundation entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 188 statically generated pages; registry endpoints are dynamic so dependency URLs use the
+- 190 statically generated pages; registry endpoints are dynamic so dependency URLs use the
   real request origin
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
@@ -167,12 +167,16 @@ inventing new primitives.
 
 Status: In progress
 
+Latest completed batch: filterable content category/index with localised dates, active state,
+result announcements and an empty category state.
+
 - [x] Commerce: collection → product → cart → checkout → confirmation. All blocks
   ship, a cart-store shares live state, and /demo/commerce runs the flow end to end.
 - [x] Account: sign up → onboarding → dashboard → settings. auth-split, onboarding-flow,
   dashboard-shell and settings-form all ship. Remaining: an assembled account demo route.
-- [~] Content: index → category → article → search → subscription. blog-grid (index),
-  article-layout, search-results and newsletter-signup ship; category filter page pending.
+- [x] Content: index → category → article → search → subscription. blog-grid, content-index,
+  article-layout, search-results and newsletter-signup ship. An assembled `/demo/content` route
+  remains optional.
 - [ ] Booking: service → staff/location → calendar → confirmation.
 - [ ] Event: schedule → speaker → venue → registration.
 - [ ] Admin: list → filter → create → edit → delete → audit.
@@ -224,7 +228,8 @@ Exit condition: Sites can differ in composition and design language, not only pa
 
 Status: In progress
 
-Current batch: portable registry foundation and real consumer installation verification.
+Latest completed quality batch: portable registry foundation and real consumer installation
+verification.
 
 - [x] Registry link and dependency audit.
 - [x] Turkish translation coverage audit.

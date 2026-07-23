@@ -34,5 +34,6 @@ export const previewSlugs = new Set([
   "order-confirmation",
   "onboarding-flow",
   "settings-form",
+  "content-index",
   "article-layout",
 ]);
