@@ -135,7 +135,7 @@ Status: In progress
 - [x] Add AI manifest, recipe JSON and Markdown guides.
 - [x] Add `PLAN.md` and `HANDOFF.md`.
 - [x] Add registry metadata v2 catalogue.
-- [ ] Add metadata filtering/search to the human catalogue.
+- [x] Add metadata filtering/search to the human catalogue.
 - [ ] Export a complete `DESIGN.md` for each visual theme.
 - [ ] Export a generated project recipe from a completed brief.
 

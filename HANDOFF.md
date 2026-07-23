@@ -139,13 +139,15 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Add metadata v2 filters to the human component catalogue.
-2. Export one complete theme as `DESIGN.md`, validate the format, then generate all themes.
-3. Export a downloadable project recipe from the AI brief builder.
-4. Add Turkish and English documentation for the new discovery workflow.
-5. Add registry link and dependency audits.
-6. Run all validation.
-7. Update `PLAN.md` and this handoff before closing the batch.
+1. Export one complete theme as `DESIGN.md`, validate the format, then generate all themes.
+2. Export a downloadable project recipe from the AI brief builder.
+3. Add Turkish and English documentation for the new discovery workflow.
+4. Add registry link and dependency audits.
+5. Run all validation.
+6. Update `PLAN.md` and this handoff before closing the batch.
+
+Completed in the previous batch: metadata v2 filters on the human catalogue
+(rendering, JavaScript level and tag facets, in English and Turkish).
 
 ## 8. Validation commands
 
@@ -253,3 +255,21 @@ Completed on 2026-07-23:
 - Theme contrast audit: 0 failures.
 - Production build: 216/216 static pages.
 - New human and machine routes: HTTP 200.
+
+## 15. Catalogue filter batch
+
+Completed on 2026-07-23:
+
+- Added metadata v2 facets to `src/registry/registry-metadata.ts`: `facetsBySlug`
+  (rendering, JavaScript level, tags per slug), `tagCounts` and the mode lists.
+  Facets are keyed by slug, so English and Turkish catalogues share one object.
+- Rebuilt `ComponentsBrowser` with rendering and JavaScript single-select facets,
+  multi-select tag chips (AND semantics), a combined empty state with a reset
+  control and a live result counter. Full English and Turkish labels.
+- Wired facets and the top 18 tags into `/components` and `/tr/bilesenler`.
+- Turkish cards now link to `/tr/bilesenler/<slug>` rather than the English route.
+- Verified in-browser: Server facet 62 -> 42, tag `form` -> 4, `form` + `keyboard`
+  -> 1, Turkish `İstemci` -> 16, empty state and reset both work.
+- No new colours: every control reuses accent and line tokens already audited.
+- Lint clean. Production build: 216/216 static pages. `/r/catalog.json`,
+  `/components` and `/tr/bilesenler`: HTTP 200. Contrast audit: 0 failures.

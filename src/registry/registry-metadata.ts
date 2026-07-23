@@ -122,3 +122,37 @@ export const registryCatalogV2 = registry.map((item) => ({
   registryDependencies: item.registryDependencies ?? [],
   ...metadataFor(item),
 }));
+
+/* ------------------------------------------------------------------------- *
+ * Facets for the human catalogue filter.
+ *
+ * A serialisable slice of metadata v2, keyed by slug so both the English and
+ * Turkish catalogue pages (which share slugs) can hand the same object to the
+ * client browser. Nothing here depends on the display language.
+ * ------------------------------------------------------------------------- */
+
+export type ItemFacet = {
+  rendering: RenderingMode;
+  javascript: JavascriptLevel;
+  tags: string[];
+};
+
+export const facetsBySlug: Record<string, ItemFacet> = Object.fromEntries(
+  registry.map((item) => {
+    const meta = metadataFor(item);
+    return [item.slug, { rendering: meta.rendering, javascript: meta.javascript, tags: meta.tags }];
+  }),
+);
+
+/** Every tag in use, with how many items carry it, most common first. */
+export const tagCounts: { tag: string; count: number }[] = Object.entries(
+  registry.reduce<Record<string, number>>((acc, item) => {
+    for (const tag of metadataFor(item).tags) acc[tag] = (acc[tag] ?? 0) + 1;
+    return acc;
+  }, {}),
+)
+  .map(([tag, count]) => ({ tag, count }))
+  .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+
+export const renderingModes: RenderingMode[] = ["server", "client", "mixed"];
+export const javascriptLevels: JavascriptLevel[] = ["none", "interaction", "motion"];

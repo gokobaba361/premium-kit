@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Container } from "@/components/primitives/layout";
 import { PageHeader } from "@/components/blocks/page-header";
 import { registry, categories } from "@/registry/registry";
+import { facetsBySlug, tagCounts } from "@/registry/registry-metadata";
 import { ComponentsBrowser } from "./components-browser";
+
+const topTags = tagCounts.slice(0, 18).map((entry) => entry.tag);
 
 export const metadata: Metadata = {
   title: "Components",
@@ -24,7 +27,7 @@ export default function ComponentsIndex() {
 
       <main className="py-14">
         <Container className="flex flex-col gap-12">
-          <ComponentsBrowser items={registry} />
+          <ComponentsBrowser items={registry} facets={facetsBySlug} tags={topTags} />
 
           <div className="grid gap-6 border-t border-line pt-10 md:grid-cols-4">
             {categories.map((category) => (
