@@ -136,7 +136,7 @@ Status: In progress
 - [x] Add `PLAN.md` and `HANDOFF.md`.
 - [x] Add registry metadata v2 catalogue.
 - [x] Add metadata filtering/search to the human catalogue.
-- [ ] Export a complete `DESIGN.md` for each visual theme.
+- [x] Export a complete `DESIGN.md` for each visual theme.
 - [ ] Export a generated project recipe from a completed brief.
 
 Exit condition: An AI can discover, select and explain compatible Premium Kit resources without
@@ -207,7 +207,7 @@ surfaces and operational states.
 
 Status: Planned
 
-- [ ] Turn all 12 themes into complete `DESIGN.md` exports.
+- [x] Turn all 12 themes into complete `DESIGN.md` exports.
 - [ ] Add typography-pair specimens and selection guidance.
 - [ ] Define image direction per theme.
 - [ ] Define component density and section pacing per theme.

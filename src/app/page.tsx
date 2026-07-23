@@ -99,24 +99,30 @@ export default function KitIndex() {
                   </div>
                 </dl>
 
-                <p className="flex items-center gap-1.5 text-sm font-medium">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium">
                   {ready ? (
-                    <>
+                    <Link
+                      href={`/templates/${preset.id}`}
+                      className="flex items-center gap-1.5 hover:text-accent"
+                    >
                       View template
                       <ArrowUpRight size={15} weight="bold" aria-hidden />
-                    </>
+                    </Link>
                   ) : (
                     <span className="text-faint">Theme ready, template pending</span>
                   )}
-                </p>
+                  <a
+                    href={`/r/design/${preset.id}.md`}
+                    className="flex items-center gap-1.5 text-muted hover:text-accent"
+                  >
+                    Design spec
+                    <ArrowUpRight size={15} weight="bold" aria-hidden />
+                  </a>
+                </div>
               </article>
             );
 
-            return (
-              <li key={preset.id}>
-                {ready ? <Link href={`/templates/${preset.id}`}>{card}</Link> : card}
-              </li>
-            );
+            return <li key={preset.id}>{card}</li>;
           })}
         </ul>
       </Container>

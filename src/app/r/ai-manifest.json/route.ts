@@ -29,6 +29,7 @@ export function GET() {
       guideTr: "/r/AI-GUIDE.tr.md",
       briefTemplate: "/r/SITE-BRIEF.md",
       briefTemplateTr: "/r/SITE-BRIEF.tr.md",
+      designIndex: "/r/design.json",
     },
     inventory: {
       items: registry.length,
@@ -47,6 +48,7 @@ export function GET() {
         motion: preset.motion,
         density: preset.density,
       },
+      designSpec: `/r/design/${preset.id}.md`,
     })),
   });
 }

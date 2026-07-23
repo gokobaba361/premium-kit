@@ -80,24 +80,30 @@ export default function TurkishKitIndex() {
                   </div>
                 </div>
                 <p className="text-[0.9375rem] leading-relaxed text-muted">{preset.read}</p>
-                <p className="mt-auto flex items-center gap-1.5 text-sm font-medium">
+                <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium">
                   {ready ? (
-                    <>
+                    <Link
+                      href={`/templates/${preset.id}`}
+                      className="flex items-center gap-1.5 hover:text-accent"
+                    >
                       Örnek şablonu aç
                       <ArrowUpRight size={15} weight="bold" aria-hidden />
-                    </>
+                    </Link>
                   ) : (
                     <span className="text-faint">Tema hazır, tam şablon sırada</span>
                   )}
-                </p>
+                  <a
+                    href={`/r/design/${preset.id}.md`}
+                    className="flex items-center gap-1.5 text-muted hover:text-accent"
+                  >
+                    Tasarım spesi
+                    <ArrowUpRight size={15} weight="bold" aria-hidden />
+                  </a>
+                </div>
               </article>
             );
 
-            return (
-              <li key={preset.id}>
-                {ready ? <Link href={`/templates/${preset.id}`}>{card}</Link> : card}
-              </li>
-            );
+            return <li key={preset.id}>{card}</li>;
           })}
         </ul>
       </Container>

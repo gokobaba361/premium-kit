@@ -139,15 +139,14 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Export one complete theme as `DESIGN.md`, validate the format, then generate all themes.
-2. Export a downloadable project recipe from the AI brief builder.
-3. Add Turkish and English documentation for the new discovery workflow.
-4. Add registry link and dependency audits.
-5. Run all validation.
-6. Update `PLAN.md` and this handoff before closing the batch.
+1. Export a downloadable project recipe from the AI brief builder.
+2. Add Turkish and English documentation for the new discovery workflow.
+3. Add registry link and dependency audits.
+4. Run all validation.
+5. Update `PLAN.md` and this handoff before closing the batch.
 
-Completed in the previous batch: metadata v2 filters on the human catalogue
-(rendering, JavaScript level and tag facets, in English and Turkish).
+Completed recently: metadata v2 filters on the human catalogue (batch 15); per
+theme DESIGN.md exports at \`/r/design/<theme>.md\` plus \`/r/design.json\` (batch 16).
 
 ## 8. Validation commands
 
@@ -273,3 +272,24 @@ Completed on 2026-07-23:
 - No new colours: every control reuses accent and line tokens already audited.
 - Lint clean. Production build: 216/216 static pages. `/r/catalog.json`,
   `/components` and `/tr/bilesenler`: HTTP 200. Contrast audit: 0 failures.
+
+## 16. Theme DESIGN.md batch
+
+Completed on 2026-07-23:
+
+- Added `src/registry/design-md.ts`: a build-time generator that reads real token
+  values from `tokens.css` (defaults) and `themes.css` (per-theme overrides) and
+  combines them with preset metadata into a complete DESIGN.md per theme.
+- Sections per spec: identity, design dials with readings, colour role table with
+  live token values, typography, shape, spacing/rhythm, motion budget, imagery
+  direction and do/do-not rules.
+- Added routes: `/r/design/<theme>.md` (12, prerendered) and `/r/design.json` index.
+- Wired into `/r/ai-manifest.json` (`endpoints.designIndex` and per-theme
+  `designSpec`) and both AI guides (workflow step 4).
+- Added a "Design spec" / "Tasarım spesi" link to every theme card on `/` and `/tr`.
+  Cards are no longer a single wrapping anchor, so template and spec links coexist
+  without nested anchors.
+- Verified: 12/12 specs HTTP 200 with zero unresolved `inherit` tokens and correct
+  per-theme values (optical scale, radius, display font). design.json count 12.
+  Home pages expose 12 spec links, 0 nested anchors.
+- Lint clean. Production build: 229/229 static pages. Contrast audit: 0 failures.

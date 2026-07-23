@@ -12,7 +12,8 @@ Premium Kit; kaynak kodu kullanıcıya ait bileşen, blok, tema ve site reçetes
 1. \`/r/ai-manifest.json\` dosyasını oku.
 2. İş isteğini hedef kitleye, ana hedefe ve site haritasına dönüştür.
 3. \`/r/site-recipes.json\` dosyasını oku ve amaca en yakın reçeteyi seç.
-4. Manifestten eksiksiz bir görsel yön seç.
+4. Manifestten eksiksiz bir görsel yön seç, sonra kesin renk, tipografi, biçim ve
+   hareket kuralları için \`/r/design/<tema>.md\` spesifikasyonunu oku.
 5. Kullanım, kaçınma, rendering ve uyumluluğu karşılaştırmak için \`/r/catalog.json\` dosyasını oku.
 6. \`/r/registry.json\` içinden uygun parçaları kur; benzerlerini sıfırdan üretme.
 7. Reçeteyi gerçek içeriğe ve kullanıcı akışına göre uyarla.
