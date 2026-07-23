@@ -1,6 +1,14 @@
 import { categories, registry, type RegistryItem } from "./registry";
 
 const text: Record<string, { name: string; description: string }> = {
+  "premium-kit-base": {
+    name: "Premium Kit temeli",
+    description: "Tüm Premium Kit parçaları için ortak tokenlar, global stiller ve yerleşim yardımcıları.",
+  },
+  "motion-foundation": {
+    name: "Hareket temeli",
+    description: "Azaltılmış hareket tercihine duyarlı ortak reveal ve motion scope yardımcıları.",
+  },
   marquee: {
     name: "Kayan şerit",
     description: "Logo, etiket veya yetenekler için kesintisiz yatay akış.",

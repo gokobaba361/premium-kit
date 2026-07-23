@@ -4,7 +4,10 @@ import { Container } from "@/components/primitives/layout";
 import { PageHeader } from "@/components/blocks/page-header";
 import { CodeBlock } from "@/components/site/code-block";
 import { PropsTables } from "@/components/site/props-table";
-import { itemBySlug } from "@/registry/registry";
+import {
+  itemBySlug,
+  registryDependencySlugs,
+} from "@/registry/registry";
 import { itemBySlugTr } from "@/registry/registry-tr";
 import { readSources } from "@/registry/source";
 import { extractPropsForFiles } from "@/registry/props";
@@ -26,6 +29,7 @@ export async function ComponentDetailPage({
   const sources = readSources(item.files);
   const hasPreview = previewSlugs.has(item.slug);
   const npmDeps = item.dependencies?.join(" ");
+  const registryDeps = registryDependencySlugs(item);
   const propsTables = extractPropsForFiles(item.files);
 
   const [highlightedSources, cliCommand, depsCommand] = await Promise.all([
@@ -119,10 +123,10 @@ export async function ComponentDetailPage({
               />
             ) : null}
 
-            {item.registryDependencies?.length ? (
+            {registryDeps.length ? (
               <p className="text-sm text-muted">
                 {tr ? "Ayrıca gerekenler: " : "Also needs "}
-                {item.registryDependencies.map((dep, index) => (
+                {registryDeps.map((dep, index) => (
                   <span key={dep}>
                     {index > 0 ? ", " : ""}
                     <Link

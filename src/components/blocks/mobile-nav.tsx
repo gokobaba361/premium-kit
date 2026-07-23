@@ -3,7 +3,7 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { List, X } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-import type { NavItem } from "./site-nav";
+import type { NavItem } from "./nav-types";
 
 /**
  * Mobile navigation drawer. Radix Dialog gives the focus trap, escape key and

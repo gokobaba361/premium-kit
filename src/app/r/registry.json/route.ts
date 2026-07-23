@@ -1,29 +1,28 @@
 import { registry } from "@/registry/registry";
+import {
+  itemTypeFor,
+  registryDependencyUrls,
+} from "@/registry/registry-output";
 
 /**
  * Registry index. Lists everything available at /r/<name>.json, so a person or
  * a tool can discover the set without reading the source tree.
  */
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
-export function GET() {
+export function GET(request: Request) {
   return Response.json({
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "premium-kit",
-    homepage: "https://your-domain.com",
+    homepage: new URL(request.url).origin,
     items: registry.map((item) => ({
       name: item.slug,
       title: item.name,
-      type:
-        item.category === "block"
-          ? "registry:block"
-          : item.category === "theme"
-            ? "registry:theme"
-            : "registry:ui",
+      type: itemTypeFor(item),
       description: item.description,
       dependencies: item.dependencies ?? [],
-      registryDependencies: item.registryDependencies ?? [],
+      registryDependencies: registryDependencyUrls(item, request.url),
     })),
   });
 }

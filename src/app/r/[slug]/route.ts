@@ -1,5 +1,5 @@
-import { registry, itemBySlug } from "@/registry/registry";
-import { readSources } from "@/registry/source";
+import { itemBySlug } from "@/registry/registry";
+import { buildRegistryItemPayload } from "@/registry/registry-output";
 
 /**
  * shadcn CLI compatible registry endpoint.
@@ -11,20 +11,10 @@ import { readSources } from "@/registry/source";
  * URL works from any project on your machine.
  */
 
-export const dynamic = "force-static";
-
-export function generateStaticParams() {
-  return registry.map((item) => ({ slug: `${item.slug}.json` }));
-}
-
-function typeFor(category: string) {
-  if (category === "block") return "registry:block";
-  if (category === "theme") return "registry:theme";
-  return "registry:ui";
-}
+export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
@@ -35,22 +25,5 @@ export async function GET(
     return Response.json({ error: `Unknown registry item: ${name}` }, { status: 404 });
   }
 
-  const files = readSources(item.files).map((file) => ({
-    path: file.path,
-    // The CLI writes into the consumer's own tree, so ship a target too.
-    target: file.path.replace(/^src\//, ""),
-    type: typeFor(item.category),
-    content: file.code,
-  }));
-
-  return Response.json({
-    $schema: "https://ui.shadcn.com/schema/registry-item.json",
-    name: item.slug,
-    type: typeFor(item.category),
-    title: item.name,
-    description: item.description,
-    dependencies: item.dependencies ?? [],
-    registryDependencies: item.registryDependencies ?? [],
-    files,
-  });
+  return Response.json(buildRegistryItemPayload(item, request.url));
 }

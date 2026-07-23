@@ -2,8 +2,9 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container } from "@/components/primitives/layout";
 import { MobileNav } from "./mobile-nav";
+import type { NavItem } from "./nav-types";
 
-export type NavItem = { label: string; href: string };
+export type { NavItem } from "./nav-types";
 
 /**
  * One line at desktop, 68px tall, collapses to a link row on mobile.

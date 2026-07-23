@@ -31,6 +31,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Audit theme contrast
         run: npm run audit:contrast
 
@@ -42,3 +45,6 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Test clean consumer installs
+        run: npm run test:consumer-registry

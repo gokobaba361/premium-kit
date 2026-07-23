@@ -8,7 +8,7 @@ import {
   useMemo,
   useSyncExternalStore,
 } from "react";
-import { presets } from "@/design/presets";
+import { presets } from "@/lib/premium-kit/presets";
 import { cn } from "@/lib/cn";
 
 /**

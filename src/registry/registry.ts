@@ -16,6 +16,12 @@ export type RegistryCategory =
   | "motion"
   | "theme";
 
+export type RegistryItemType =
+  | "registry:base"
+  | "registry:block"
+  | "registry:theme"
+  | "registry:ui";
+
 export type RegistryItem = {
   slug: string;
   name: string;
@@ -28,11 +34,55 @@ export type RegistryItem = {
   dependencies?: string[];
   /** Other registry slugs this one imports. */
   registryDependencies?: string[];
+  /** Overrides the shadcn registry item type inferred from the category. */
+  registryType?: RegistryItemType;
+  /** CSS sources merged into the consumer's configured Tailwind stylesheet. */
+  cssFiles?: string[];
+  /** False only for foundations that can be installed without Premium Kit base. */
+  requiresBase?: boolean;
   /** Shown under the preview. The rule this component enforces or the trap it avoids. */
   note?: string;
 };
 
+export const PREMIUM_KIT_BASE_SLUG = "premium-kit-base";
+
 export const registry: RegistryItem[] = [
+  /* -------------------------------------------------------------- foundation */
+  {
+    slug: "premium-kit-base",
+    name: "Premium Kit base",
+    category: "theme",
+    registryType: "registry:base",
+    description: "Shared tokens, global styles and layout helpers for every Premium Kit item.",
+    files: [
+      "src/design/tokens.css",
+      "src/design/themes.css",
+      "src/design/base.css",
+      "src/lib/cn.ts",
+      "src/components/primitives/layout.tsx",
+    ],
+    cssFiles: [
+      "src/design/tokens.css",
+      "src/design/themes.css",
+      "src/design/base.css",
+    ],
+    dependencies: ["clsx", "tailwind-merge"],
+    requiresBase: false,
+    note: "Install once. Every non-theme registry item pulls this foundation automatically.",
+  },
+  {
+    slug: "motion-foundation",
+    name: "Motion foundation",
+    category: "motion",
+    description: "Shared reduced-motion-aware reveal and motion scope helpers.",
+    files: [
+      "src/components/primitives/reveal.tsx",
+      "src/components/primitives/motion-scope.tsx",
+    ],
+    dependencies: ["motion"],
+    note: "Blocks depend on this shared helper instead of duplicating reveal logic or hiding a transitive motion dependency.",
+  },
+
   /* ----------------------------------------------------------------- motion */
   {
     slug: "marquee",
@@ -248,8 +298,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Asymmetric hero, copy left, asset right.",
     files: ["src/components/blocks/hero-split.tsx"],
-    dependencies: ["motion", "clsx", "tailwind-merge"],
-    registryDependencies: ["button"],
+    dependencies: ["clsx", "tailwind-merge"],
+    registryDependencies: ["button", "motion-foundation"],
     note: "Subtext is capped at twenty words by the house rules, and the display size is tuned so a forty character headline stays on two lines.",
   },
   {
@@ -258,8 +308,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Statement hero with a full bleed image below the fold line.",
     files: ["src/components/blocks/hero-editorial.tsx"],
-    dependencies: ["motion", "clsx", "tailwind-merge"],
-    registryDependencies: ["button"],
+    dependencies: ["clsx", "tailwind-merge"],
+    registryDependencies: ["button", "motion-foundation"],
   },
   {
     slug: "feature-bento",
@@ -267,7 +317,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Mixed span grid with exact cell count.",
     files: ["src/components/blocks/feature-bento.tsx"],
-    dependencies: ["motion", "clsx", "tailwind-merge"],
+    dependencies: ["clsx", "tailwind-merge"],
+    registryDependencies: ["motion-foundation"],
     note: "Renders exactly the cells you pass, so an empty tile is impossible.",
   },
   {
@@ -276,8 +327,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Two plans, five features each, one featured.",
     files: ["src/components/blocks/pricing-duo.tsx"],
-    dependencies: ["@phosphor-icons/react", "motion", "clsx", "tailwind-merge"],
-    registryDependencies: ["button"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    registryDependencies: ["button", "motion-foundation"],
   },
   {
     slug: "contact-form",
@@ -293,7 +344,11 @@ export const registry: RegistryItem[] = [
     name: "Site navigation",
     category: "block",
     description: "Sticky header on one line with a mobile drawer.",
-    files: ["src/components/blocks/site-nav.tsx", "src/components/blocks/mobile-nav.tsx"],
+    files: [
+      "src/components/blocks/site-nav.tsx",
+      "src/components/blocks/mobile-nav.tsx",
+      "src/components/blocks/nav-types.ts",
+    ],
     dependencies: ["@radix-ui/react-dialog", "@phosphor-icons/react", "clsx", "tailwind-merge"],
     registryDependencies: ["button"],
   },
@@ -329,7 +384,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Alternating image-and-copy rows, capped at two.",
     files: ["src/components/blocks/features-split.tsx"],
-    dependencies: ["motion", "clsx", "tailwind-merge"],
+    dependencies: ["clsx", "tailwind-merge"],
+    registryDependencies: ["motion-foundation"],
     note: "A third zigzag row is a signal to switch to a bento, tabs or a separate page.",
   },
   {
@@ -338,7 +394,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Three or four connected actions without numbered badges.",
     files: ["src/components/blocks/steps-flow.tsx"],
-    dependencies: ["motion"],
+    registryDependencies: ["motion-foundation"],
     note: "Step names describe the action. The reading order carries the sequence.",
   },
   {
@@ -347,7 +403,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Practical details arranged in three breathable clusters.",
     files: ["src/components/blocks/spec-grouped.tsx"],
-    dependencies: ["motion"],
+    registryDependencies: ["motion-foundation"],
     note: "Each cluster is capped at four rows. Longer specifications belong on a detail page.",
   },
   {
@@ -356,7 +412,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Three-image atmosphere break with optional full bleed.",
     files: ["src/components/blocks/gallery-strip.tsx"],
-    dependencies: ["motion", "clsx", "tailwind-merge"],
+    dependencies: ["clsx", "tailwind-merge"],
+    registryDependencies: ["motion-foundation"],
     note: "Captions sit under images, never as labels over the photography.",
   },
   {
@@ -365,8 +422,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Three sourced figures with a section introduction.",
     files: ["src/components/blocks/stats-band.tsx"],
-    dependencies: ["motion"],
-    registryDependencies: ["data"],
+    registryDependencies: ["data", "motion-foundation"],
     note: "Every number requires a source, so invented proof has nowhere to hide.",
   },
   {
@@ -375,7 +431,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Vertical history using real period labels.",
     files: ["src/components/blocks/timeline.tsx"],
-    dependencies: ["motion"],
+    registryDependencies: ["motion-foundation"],
     note: "Use dates or seasons people recognize, not decorative phase numbers.",
   },
   {
@@ -384,7 +440,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Portrait-led people grid with name and role.",
     files: ["src/components/blocks/team-grid.tsx"],
-    dependencies: ["motion"],
+    registryDependencies: ["motion-foundation"],
     note: "Biographies belong on person pages rather than beneath a wall of portraits.",
   },
   {
@@ -393,7 +449,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Editorial cards with category, date and reading time.",
     files: ["src/components/blocks/blog-grid.tsx"],
-    dependencies: ["motion"],
+    registryDependencies: ["motion-foundation"],
     note: "Metadata stays plain and readable instead of floating over the cover image.",
   },
   {
@@ -402,7 +458,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Single attributed quote with an optional portrait.",
     files: ["src/components/blocks/proof-quote.tsx"],
-    dependencies: ["motion"],
+    registryDependencies: ["motion-foundation"],
     note: "One short quote per section. Longer stories are case studies.",
   },
   {
@@ -429,8 +485,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Closing action with one repeated page intent.",
     files: ["src/components/blocks/cta-band.tsx"],
-    dependencies: ["motion"],
-    registryDependencies: ["button"],
+    registryDependencies: ["button", "motion-foundation"],
     note: "Reuse the hero CTA wording so the page closes with the same promise it opened with.",
   },
   {
@@ -447,8 +502,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Centered launch statement with two actions and a proof line.",
     files: ["src/components/blocks/hero-centered.tsx"],
-    dependencies: ["motion"],
-    registryDependencies: ["button"],
+    registryDependencies: ["button", "motion-foundation"],
     note: "Use when the product has one clear promise and does not need an image to explain itself.",
   },
   {
@@ -457,7 +511,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Three equally weighted quotes with full attribution.",
     files: ["src/components/blocks/testimonial-grid.tsx"],
-    dependencies: ["motion"],
+    registryDependencies: ["motion-foundation"],
     note: "Longer stories belong in case studies; this block is for short corroborating evidence.",
   },
   {
@@ -466,7 +520,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Directory of six to twelve product connections.",
     files: ["src/components/blocks/integration-grid.tsx"],
-    dependencies: ["@phosphor-icons/react", "motion"],
+    dependencies: ["@phosphor-icons/react"],
+    registryDependencies: ["motion-foundation"],
     note: "Every card remains readable without a vendor mark because name and description are required.",
   },
   {
@@ -484,7 +539,11 @@ export const registry: RegistryItem[] = [
     name: "Floating navigation",
     category: "block",
     description: "Rounded floating header for focused launch pages.",
-    files: ["src/components/blocks/floating-nav.tsx", "src/components/blocks/mobile-nav.tsx"],
+    files: [
+      "src/components/blocks/floating-nav.tsx",
+      "src/components/blocks/mobile-nav.tsx",
+      "src/components/blocks/nav-types.ts",
+    ],
     dependencies: ["@radix-ui/react-dialog", "@phosphor-icons/react", "clsx", "tailwind-merge"],
     registryDependencies: ["button"],
     note: "Use when the page background should remain visible around the header.",
@@ -505,8 +564,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Product promise followed by a framed interface screenshot.",
     files: ["src/components/blocks/app-showcase-hero.tsx"],
-    dependencies: ["motion"],
-    registryDependencies: ["button"],
+    registryDependencies: ["button", "motion-foundation"],
     note: "The screenshot is real product evidence, not a canvas for floating labels and invented charts.",
   },
   {
@@ -515,7 +573,8 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Outcome-led project cards for studios and service businesses.",
     files: ["src/components/blocks/case-study-grid.tsx"],
-    dependencies: ["@phosphor-icons/react", "motion"],
+    dependencies: ["@phosphor-icons/react"],
+    registryDependencies: ["motion-foundation"],
     note: "Each card leads with the result; the full process belongs on the linked case-study page.",
   },
   {
@@ -684,6 +743,8 @@ export const registry: RegistryItem[] = [
     category: "theme",
     description: "The variables every component in the kit reads.",
     files: ["src/design/tokens.css"],
+    cssFiles: ["src/design/tokens.css"],
+    requiresBase: false,
     note: "Start here. Nothing else works without it, and a hardcoded colour anywhere else is a bug.",
   },
   {
@@ -692,7 +753,9 @@ export const registry: RegistryItem[] = [
     category: "theme",
     description: "Twelve full token sets, one per sector.",
     files: ["src/design/themes.css"],
+    cssFiles: ["src/design/themes.css"],
     registryDependencies: ["tokens"],
+    requiresBase: false,
     note: "Every pair is checked by npm run audit:contrast, which fails the command below WCAG AA.",
   },
   {
@@ -700,8 +763,12 @@ export const registry: RegistryItem[] = [
     name: "Runtime theme switching",
     category: "theme",
     description: "Provider, no-flash script and picker for visitor chosen themes.",
-    files: ["src/components/primitives/theme-runtime.tsx"],
+    files: [
+      "src/components/primitives/theme-runtime.tsx",
+      "src/lib/premium-kit/presets.ts",
+    ],
     dependencies: ["clsx", "tailwind-merge"],
+    requiresBase: true,
     note: "Writes to documentElement, so portals inherit the theme. ThemeScope cannot do that.",
   },
 ];
@@ -730,3 +797,17 @@ export const categories: { id: RegistryCategory; label: string; blurb: string }[
 ];
 
 export const itemBySlug = (slug: string) => registry.find((item) => item.slug === slug);
+
+export function registryDependencySlugs(item: RegistryItem) {
+  const dependencies = new Set(item.registryDependencies ?? []);
+
+  if (
+    item.slug !== PREMIUM_KIT_BASE_SLUG &&
+    (item.requiresBase ?? item.category !== "theme")
+  ) {
+    dependencies.add(PREMIUM_KIT_BASE_SLUG);
+  }
+
+  dependencies.delete(item.slug);
+  return [...dependencies];
+}

@@ -1,6 +1,6 @@
 # Premium Kit — Master Plan
 
-Last updated: 2026-07-23
+Last updated: 2026-07-24
 Status: Active development
 Working language: Turkish-first, English parity
 Primary surface: `http://localhost:3000/tr`
@@ -42,16 +42,17 @@ content structure, accessible interaction and editable source code.
 
 ## 3. Current baseline
 
-As of 2026-07-23:
+As of 2026-07-24:
 
-- 70 registry items
+- 72 registry items
 - 46 full-page blocks
 - 14 grouped primitive families
 - 6 motion components
-- 3 theme-system entries
+- 4 theme/foundation entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 255 statically generated routes
+- 188 statically generated pages; registry endpoints are dynamic so dependency URLs use the
+  real request origin
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
 - Build-time TypeScript AST prop documentation
@@ -128,7 +129,7 @@ Status: Complete
 
 ### Phase 1 — AI production contract
 
-Status: In progress
+Status: Complete
 
 - [x] Add Turkish and English AI site builder pages.
 - [x] Add brief-to-production-prompt generator.
@@ -144,7 +145,7 @@ scraping rendered pages.
 
 ### Phase 2 — Primitive and navigation completeness
 
-Status: In progress
+Status: Complete
 
 Latest completed batch: discovery primitives — combobox, popover/context menu, locale selectors
 and search-result states.
@@ -221,10 +222,17 @@ Exit condition: Sites can differ in composition and design language, not only pa
 
 ### Phase 6 — Quality automation
 
-Status: Planned
+Status: In progress
+
+Current batch: portable registry foundation and real consumer installation verification.
 
 - [x] Registry link and dependency audit.
 - [x] Turkish translation coverage audit.
+- [x] Add a minimal `premium-kit-base` registry item for shared styles and infrastructure.
+- [x] Resolve Premium Kit dependencies through unambiguous full registry URLs.
+- [x] Use portable shadcn target placeholders for every shipped file.
+- [x] Validate local imports, CSS/token requirements and dependency closure.
+- [x] Install representative items into clean `src` and non-`src` consumer fixtures.
 - [ ] Keyboard/focus test matrix.
 - [ ] Reduced-motion audit.
 - [ ] Image and metadata completeness audit.

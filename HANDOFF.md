@@ -1,459 +1,151 @@
 # Premium Kit — Development Handoff
 
-Last updated: 2026-07-23
-Current milestone: Phase 1 AI production contract + Phase 2 completeness
+Last updated: 2026-07-24
+Current milestone: Phase 6 quality automation
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
-Repository status: Git repository on `main`, connected to a private GitHub remote.
-GitHub remote: `https://github.com/gokobaba361/premium-kit`
+GitHub: `https://github.com/gokobaba361/premium-kit` (private)
 
-## 1. Read this first
+## 1. Product state
 
-The product goal and complete roadmap live in `PLAN.md`. This file is the operational handoff:
-what exists now, which decisions are fixed, what changed most recently and what to do next.
+Premium Kit is a Turkish-first, source-owned website production system for people and AI coding
+agents. A user starts with a business brief, chooses a site skeleton and complete visual system,
+then installs editable blocks and primitives through a shadcn-compatible registry. Turkish and
+English human routes and machine-readable AI routes describe the same source of truth.
 
-Do not restart architecture from scratch. Preserve the existing Next.js App Router structure,
-registry model, design tokens, Turkish routes and build-time documentation pipeline.
+Validated inventory:
 
-Before editing Next.js code, read the relevant local guides under:
+- 72 registry items
+- 46 full-page blocks
+- 14 grouped primitive families
+- 6 user-facing motion components plus one shared motion foundation
+- 12 visual themes and 10 purpose-led site skeletons
+- 188 statically generated documentation/product pages
+- Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
+- Turkish catalogue coverage: 72/72
 
-`node_modules/next/dist/docs/`
+## 2. Fixed architecture
 
-The installed Next.js version is `16.2.11` and contains breaking changes compared with older
-training knowledge.
+Preserve these decisions:
 
-## 2. Current validated state
+1. Next.js App Router, Server Components by default.
+2. Read the matching local guide under `node_modules/next/dist/docs/` before editing Next.js
+   behavior; the installed version is `16.2.11`.
+3. Turkish is implemented as real `/tr` routes, not a client-only translation layer.
+4. Shiki highlighting runs at build time and sends no highlighter JavaScript.
+5. Props tables are derived from TypeScript AST syntax at build time.
+6. Registry source is copied into the consumer; there is no opaque Premium Kit runtime package.
+7. External code needs compatible licensing and recorded provenance before adaptation.
+8. Themes change typography, density, shape, imagery and motion—not only color.
+9. Never invent customer proof, metrics, logos or testimonials.
 
-Latest fully validated state before the active batch:
+## 3. Registry distribution contract
 
-- Registry items: 70
-- Block entries: 46
-- Grouped primitive entries: 14
-- Site skeletons: 10
-- Visual themes: 12
-- Static pages: 255/255
-- Lint: clean
-- Theme contrast audit: 0 WCAG AA failures
-- Key Turkish routes: HTTP 200
-- AI JSON and Markdown resources: HTTP 200
-- Missing Turkish registry translations: 0
-- Broken site-recipe registry references: 0
+The registry is now a tested installation graph:
 
-## 3. Important architecture
+- `premium-kit-base` owns `tokens.css`, `themes.css`, `base.css`, `cn.ts` and `layout.tsx`.
+- Every non-theme item receives `premium-kit-base` automatically.
+- `motion-foundation` owns `Reveal` and `MotionScope`; all 19 reveal-based blocks declare it.
+- Premium Kit registry dependencies leave the server as full `/r/<slug>.json` URLs. A bare
+  `button`, `form` or `data` can therefore never resolve to shadcn's built-in item by accident.
+- File targets use shadcn's portable `@components/` and `@lib/` placeholders.
+- Canonical CSS is parsed at request time. Normal rules use the registry `css` field and Tailwind
+  v4 `@theme inline` declarations use `cssVars.theme`.
+- Registry routes are dynamic because their dependency URLs must use the actual request origin.
+- `src/lib/premium-kit/presets.ts` is the installable preset source;
+  `src/design/presets.ts` remains a compatibility re-export inside the catalogue app.
 
-### Registry
+Primary files:
 
-- `src/registry/registry.ts` — source of truth for installable items.
-- `src/registry/registry-tr.ts` — Turkish names and descriptions.
-- `src/registry/previews.tsx` — visual preview routing.
-- `src/registry/source.ts` — build-time source loading.
-- `src/registry/props.ts` — TypeScript AST prop extraction.
-- `src/registry/skeletons.ts` — purpose-led site recipes.
-- `src/registry/site-planning.ts` — brief schema, prompt generation and quality gates.
-- `src/registry/research-sources.ts` — approved source research and backlog.
+- `src/registry/registry.ts` — item source of truth and dependency closure
+- `src/registry/registry-output.ts` — shadcn types, targets and full dependency URLs
+- `src/registry/registry-css.ts` — PostCSS conversion to `css` and `cssVars`
+- `src/design/base.css` — shared Tailwind bridge, global rules, prose and keyframes
+- `src/app/r/[slug]/route.ts` — individual install endpoint
+- `src/app/r/registry.json/route.ts` — registry discovery endpoint
 
-### Human-facing pages
+## 4. Quality automation
 
-- `src/app/page.tsx` and `src/app/tr/page.tsx`
-- `src/app/components/*` and `src/app/tr/bilesenler/*`
-- `src/app/blocks/page.tsx` and `src/app/tr/bloklar/page.tsx`
-- `src/app/skeletons/page.tsx` and `src/app/tr/iskeletler/page.tsx`
-- `src/app/ai/page.tsx` and `src/app/tr/yapay-zeka/page.tsx`
-- `src/app/sources/page.tsx` and `src/app/tr/kaynaklar/page.tsx`
+`scripts/registry-audit.mjs` checks all 72 entries for:
 
-### AI-facing resources
+- missing published files and CSS files
+- invalid or cyclic registry dependencies
+- unresolved `@/` and relative imports
+- local imports not supplied by the item, base or a declared registry dependency
+- undeclared npm imports
+- unsupported non-portable output paths
+- missing base token, Tailwind bridge and `.pk-prose` contracts
+- accidental loss of full Premium Kit dependency URL generation
 
-- `/r/registry.json`
-- `/r/<slug>.json`
-- `/r/ai-manifest.json`
-- `/r/site-recipes.json`
-- `/r/AI-GUIDE.md`
-- `/r/AI-GUIDE.tr.md`
-- `/r/SITE-BRIEF.md`
-- `/r/SITE-BRIEF.tr.md`
+`scripts/consumer-install-test.mjs` starts the production registry and uses real
+`shadcn@4.14.1` to install representative items into two temporary Next.js 16.2.11 projects:
 
-### Design
+- one with `src/`
+- one without `src/`
 
-- `src/design/tokens.css` — shared token contract.
-- `src/design/themes.css` — theme implementations.
-- `src/design/presets.ts` — theme metadata and design rationale.
-- `src/app/globals.css` — token bridge and global utilities.
+The fixture installs `button`, `hero-split`, `article-layout` and `checkout-form`, which exercises
+base CSS, direct and transitive registry dependencies, motion helpers, prose and a complex
+commerce block. Both fixtures verify installed paths and CSS markers, then run TypeScript and a
+production Next.js build. Successful fixtures are deleted; failed fixtures are preserved and
+their path is printed.
 
-## 4. Decisions that must be preserved
+CI runs lint, typecheck, all audits, the production build and this consumer test.
 
-1. Shiki highlighting runs at build time. Do not add a browser highlighter.
-2. Prop tables come from TypeScript syntax at build time. Do not hand-maintain prop docs.
-3. Turkish routes are real routes, not client-side translation toggles.
-4. The language switch maps equivalent routes using `usePathname`.
-5. Pages and layouts remain Server Components unless interaction requires a Client Component.
-6. Code blocks use one dual-theme Shiki markup tree and theme-scoped token colours.
-7. External GitHub code requires a verified compatible licence and recorded provenance.
-8. Themes must change typography, density, shape and motion—not only colours.
-9. Site skeletons encode argument and hierarchy; visual themes remain swappable.
-10. No invented customer proof, metrics or testimonials in previews.
+## 5. Current validation
 
-## 5. Completed work
-
-### Foundation
-
-- 12 theme presets with local `next/font` families.
-- Primitive, motion, block and theme registry categories.
-- Shadcn-compatible install JSON routes.
-- Source preview and AST prop documentation.
-- Contrast audit script.
-
-### Catalogue expansion
-
-- Expanded registry to 59 items.
-- Expanded block library to 39 entries.
-- Added 10 site skeletons covering marketing, commerce, apps, docs and events.
-- Added Turkish component, block, skeleton and source pages.
-
-### AI production contract
-
-- Added `/ai` and `/tr/yapay-zeka`.
-- Added an interactive brief builder.
-- The builder combines 10 skeletons and 12 visual directions.
-- Generated prompts include planning, registry use, content rules and quality gates.
-- Added AI manifest, site recipe JSON, AI guides and brief templates.
-- Linked the AI workflow from the home and skeleton pages.
-
-## 6. Active batch
-
-The current batch must complete these items:
-
-1. Add combobox/autocomplete with keyboard navigation and an empty state.
-   Status: complete.
-2. Expand the overlay family with popover and context-menu primitives.
-   Status: complete.
-3. Add language and currency selector patterns.
-   Status: complete.
-4. Add search results, no-results and recent-search patterns.
-   Status: complete.
-5. Add English/Turkish registry copy, metadata and live previews.
-   Status: complete.
-6. Record Radix provenance and dependency details.
-   Status: complete.
-7. Run lint, contrast audit, production build and route checks.
-   Status: complete.
-
-## 7. Exact next implementation order
-
-1. Add a category/index page block for the content flow (article cards with a
-   filter), then optionally an assembled /demo/content route.
-2. Add the booking flow: service, staff/location, calendar, confirmation.
-3. Run all validation.
-4. Update `PLAN.md` and this handoff before closing the batch.
-
-Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
-(batch 16); downloadable project recipe (batch 17); registry integrity audit
-(batch 18); Turkish coverage audit (batch 19); commerce flow blocks (batch 20);
-cart store and commerce demo (batch 21); account flow blocks (batch 22);
-article layout and prose typography (batch 23).
-
-## Audit commands
-
-- \`npm run audit:contrast\` — WCAG AA across every theme.
-- \`npm run audit:registry\` — registry files exist, registryDependencies resolve,
-  every imported npm package is declared.
-- \`npm run audit:i18n\` — every registry slug has a non-empty Turkish name and
-  description; stale translation keys warn.
-- \`npm run audit\` — all three of the above.
-
-## 8. Validation commands
-
-Run from the project root:
+Run from the repository root:
 
 ```powershell
 npm run lint
-npm run audit:contrast
+npm run typecheck
+npm run audit
 npm run build
+npm run test:consumer-registry
 ```
 
-Then verify at minimum:
+Latest local result:
 
-- `/tr/yapay-zeka`
-- `/tr/bilesenler/combobox`
-- `/tr/bilesenler/locale-selectors`
-- `/tr/bilesenler/search-results`
-- `/tr/bilesenler/overlay`
-- `/r/catalog.json`
-- `/r/combobox.json`
-- `/r/locale-selectors.json`
-- `/r/search-results.json`
-- `/r/overlay.json`
+- lint: clean
+- typecheck: clean
+- registry installation audit: 72/72, no errors
+- Turkish coverage: 72/72
+- theme contrast audit: 0 pairs below WCAG AA
+- production build: 188/188 static pages, dynamic registry endpoints
+- clean `src` fixture: install, typecheck and build pass
+- clean non-`src` fixture: install, typecheck and build pass
 
-## 9. Known constraints
+## 6. Completed in the latest batch
 
-- The project is currently local and has no `.openai/hosting.json`.
-- The project is under Git version control and mirrored to a private GitHub repository.
-- Browser animation behaviour has not been explicitly requested for manual visual QA.
-- Registry homepage metadata still needs a real production domain before public distribution.
-- `npm audit --omit=dev` reports advisories in Next.js-owned PostCSS/Sharp versions. The offered
-  forced fix incorrectly downgrades Next.js to 9.3.3, so no unsafe automatic fix was applied.
-- Current site recipes are homepage/flow structures; most sector kits do not yet contain every
-  interior route.
-- Metadata v2 is a Premium Kit discovery layer and must not break the official shadcn registry
-  schema used by `/r/registry.json`.
+- Added `premium-kit-base` and `motion-foundation`.
+- Extracted canonical shared CSS from `globals.css` without changing the catalogue's visual
+  behavior.
+- Migrated all existing entries to automatic base closure and full Premium Kit URLs.
+- Added portable targets for components, libraries and design sources.
+- Fixed missing local-file closure in navigation blocks with `nav-types.ts`.
+- Made theme runtime ship its preset source.
+- Replaced the shallow registry audit with full import/CSS/dependency checks.
+- Added real clean-consumer fixture tests and CI coverage.
+- Updated catalogue dependency metadata and detail pages to include automatic dependencies.
+- Consolidated README, PLAN and this handoff.
 
-## 10. Next milestone after this batch
+## 7. Exact next batch
 
-Finish Phase 2 discovery and form completeness, then begin Phase 3 with complete commerce and
-account flows:
+Do not add content, booking, event or admin work to the registry-foundation commit.
 
-1. Product detail
-2. Cart drawer
-3. Checkout form
-4. Order confirmation
-5. Account navigation
-6. Sign-up and onboarding
-7. Settings forms
-8. Loading, empty, error and success states
+After this batch is committed, pushed and green in CI:
 
-## 11. Latest batch result
+1. Complete the content flow with a category/filter index page block.
+2. Optionally assemble `/demo/content` from the existing blog, article, search and newsletter
+   pieces.
+3. Then begin the booking flow: service → staff/location → calendar → confirmation.
 
-Completed on 2026-07-23:
+Before that next implementation, re-read `PLAN.md`, this file and relevant local Next.js docs.
 
-- Added `PLAN.md` and `HANDOFF.md`.
-- Added Premium Kit metadata v2 at `/r/catalog.json`.
-- Added `MegaNav`, `CommandPalette` and advanced native form fields.
-- Added Turkish catalogue copy and live previews.
-- Updated the AI prompt, AI manifest and AI guides to use metadata v2.
-- Updated the source research backlog.
-- Validated 59 catalogue items, 39 blocks, 11 primitive entries and 10 skeletons.
-- Lint clean.
-- TypeScript clean.
-- Contrast audit: 0 failures.
-- Production build: 207/207 static pages.
-- New Turkish detail pages and registry endpoints: HTTP 200.
+## 8. Source-control protocol
 
-## 12. GitHub publication policy
-
-- `main` is the protected-quality branch by convention.
-- Every batch updates `PLAN.md` and `HANDOFF.md`.
-- Local lint, contrast and build checks run before push.
-- GitHub Actions repeats the complete quality gate.
-- Repository secrets and `.env` files remain untracked.
-- External source licences and provenance are reviewed before adaptation.
-
-## 13. GitHub publication result
-
-- Repository: `gokobaba361/premium-kit`
-- Visibility: private
-- Default development branch: `main`
-- CI workflow: lint, theme contrast audit and production build
-- Initial GitHub Actions quality run: passed
-- Pull-request template: roadmap, registry completeness and quality checklist
-- Contribution policy: `CONTRIBUTING.md`
-- Licence: MIT
-
-Update `PLAN.md` and this file after every coherent batch.
-
-## 14. Discovery primitives batch
-
-Completed on 2026-07-23:
-
-- Added a searchable combobox with keyboard navigation, controlled/uncontrolled values,
-  disabled options and an explicit no-results state.
-- Expanded overlays with Radix Popover and Context Menu, including managed focus, keyboard
-  navigation and long-press support.
-- Added independent language and currency selector patterns.
-- Added server-rendered result, no-result and recent-search patterns.
-- Added English and Turkish catalogue copy, metadata v2 records and live previews.
-- Added Radix Primitives to the MIT provenance catalogue.
-- Registry total: 62 items; grouped primitive families: 14.
-- Lint and TypeScript clean.
-- Theme contrast audit: 0 failures.
-- Production build: 216/216 static pages.
-- New human and machine routes: HTTP 200.
-
-## 15. Catalogue filter batch
-
-Completed on 2026-07-23:
-
-- Added metadata v2 facets to `src/registry/registry-metadata.ts`: `facetsBySlug`
-  (rendering, JavaScript level, tags per slug), `tagCounts` and the mode lists.
-  Facets are keyed by slug, so English and Turkish catalogues share one object.
-- Rebuilt `ComponentsBrowser` with rendering and JavaScript single-select facets,
-  multi-select tag chips (AND semantics), a combined empty state with a reset
-  control and a live result counter. Full English and Turkish labels.
-- Wired facets and the top 18 tags into `/components` and `/tr/bilesenler`.
-- Turkish cards now link to `/tr/bilesenler/<slug>` rather than the English route.
-- Verified in-browser: Server facet 62 -> 42, tag `form` -> 4, `form` + `keyboard`
-  -> 1, Turkish `İstemci` -> 16, empty state and reset both work.
-- No new colours: every control reuses accent and line tokens already audited.
-- Lint clean. Production build: 216/216 static pages. `/r/catalog.json`,
-  `/components` and `/tr/bilesenler`: HTTP 200. Contrast audit: 0 failures.
-
-## 16. Theme DESIGN.md batch
-
-Completed on 2026-07-23:
-
-- Added `src/registry/design-md.ts`: a build-time generator that reads real token
-  values from `tokens.css` (defaults) and `themes.css` (per-theme overrides) and
-  combines them with preset metadata into a complete DESIGN.md per theme.
-- Sections per spec: identity, design dials with readings, colour role table with
-  live token values, typography, shape, spacing/rhythm, motion budget, imagery
-  direction and do/do-not rules.
-- Added routes: `/r/design/<theme>.md` (12, prerendered) and `/r/design.json` index.
-- Wired into `/r/ai-manifest.json` (`endpoints.designIndex` and per-theme
-  `designSpec`) and both AI guides (workflow step 4).
-- Added a "Design spec" / "Tasarım spesi" link to every theme card on `/` and `/tr`.
-  Cards are no longer a single wrapping anchor, so template and spec links coexist
-  without nested anchors.
-- Verified: 12/12 specs HTTP 200 with zero unresolved `inherit` tokens and correct
-  per-theme values (optical scale, radius, display font). design.json count 12.
-  Home pages expose 12 spec links, 0 nested anchors.
-- Lint clean. Production build: 229/229 static pages. Contrast audit: 0 failures.
-
-## 17. Project recipe batch
-
-Completed on 2026-07-23:
-
-- Added `buildProjectRecipe(input, language)` and `recipeFileName(input)` to
-  `src/registry/site-planning.ts`. The recipe resolves the chosen skeleton and
-  theme, marks which sections map to an installable registry item, lists the
-  de-duplicated install order and endpoints, and embeds the quality gates and
-  the generated prompt. Values are derived from the brief plus shipping data.
-- Added a "Download recipe (.json)" button to the brief builder that serialises
-  the recipe to a Blob and downloads it. Filename slugs from the project name,
-  Unicode-safe (Turkish "Köşe Kafé" -> `kose-kafe-recipe.json`).
-- Published a worked example at `/r/project-recipe.example.json` and referenced
-  it from the AI manifest (`endpoints.projectRecipeExample`) and both AI pages.
-- Verified: example recipe resolves the clinic theme with 9 installable sections
-  in the correct order and a 2645-char prompt; download button produces a blob
-  with the expected filename in-browser.
-- Lint clean. Build 230/230 static. Contrast audit: 0 failures.
-- Phase 1 (AI production contract) checklist is now complete.
-
-## 18. Registry integrity audit batch
-
-Completed on 2026-07-23:
-
-- Added `scripts/registry-audit.mjs`. Parses `registry.ts` with the TypeScript
-  compiler (syntax only) and checks, per entry: source files exist,
-  registryDependencies resolve to real slugs, and every imported npm package is
-  declared in dependencies. Declared-but-unused deps are warnings; missing
-  files, broken slugs and undeclared imports are errors that exit non-zero.
-- The audit initially surfaced 21 warnings. Fixed the real one: `locale-selectors`
-  declared `@radix-ui/react-select` and `@phosphor-icons/react` although its file
-  imports only the `form` registry item (which provides them) and `cn`. Trimmed
-  its direct dependencies to `clsx` and `tailwind-merge`.
-- The remaining warnings were blocks that declare `motion` but reach it through
-  the local `reveal` helper. Taught the audit about that transitive helper via a
-  HELPER_PACKAGES map, so a genuine transitive need no longer warns while a truly
-  dead dependency still would.
-- Added `npm run audit:registry` and a combined `npm run audit`, and added the
-  registry audit as a CI step in `.github/workflows/ci.yml`.
-- Verified: audit exits 0 with zero warnings; `/r/locale-selectors.json` now
-  lists deps `["clsx","tailwind-merge"]` and registryDependency `form`; detail
-  page HTTP 200. Lint clean, build 230/230, contrast 0 failures.
-
-## 19. Turkish coverage audit batch
-
-Completed on 2026-07-23:
-
-- Added `scripts/i18n-audit.mjs`. Parses registry slugs from registry.ts and the
-  `text` translation map from registry-tr.ts, both via the TypeScript compiler.
-  Fails when any slug has no Turkish translation or an empty name/description;
-  warns on a stale translation key with no matching slug.
-- The Turkish catalogue silently falls back to English for a missing slug, so
-  this closes the one gap that build and lint could not see.
-- Verified detection: temporarily removing the marquee translation produced
-  "61/62" and exit 1; restored to 62/62 exit 0.
-- Added `npm run audit:i18n`, folded it into `npm run audit`, and added a CI step.
-- Current coverage: 62/62 complete, zero stale keys.
-
-## 20. Commerce flow blocks batch
-
-Completed on 2026-07-23:
-
-- Added four commerce blocks, each presentational (parent owns data/callbacks)
-  with complete states and integer-minor-unit money via Intl.NumberFormat:
-  - product-detail: thumbnail gallery, variant selection that keeps sold-out
-    options visible-but-disabled, quantity stepper, add-to-cart with a transient
-    added state.
-  - cart-drawer: Radix Dialog slide-over with line items, quantity, remove, a
-    subtotal/shipping/total summary and an empty state.
-  - checkout-form: contact and delivery fields with inline validation, an order
-    summary aside, and idle/placing/placed states. Collects no card details;
-    payment is explicitly handed to a provider on submit.
-  - order-confirmation: success state with order number, itemised total and a
-    next step. No invented tracking numbers.
-- Enhanced the shared form Select with a `name` prop (Radix renders a hidden
-  native select) so it participates in FormData; the checkout country field
-  needed it.
-- Registered all four in registry.ts, registry-tr.ts, registry-metadata (client
-  items, tags, avoid-when) and previews (with a stateful cart preview).
-- Verified in-browser: sold-out variant disabled, quantity 1->3, added state,
-  EUR de-DE formatting (145,00 €); cart remove down to empty state; checkout
-  shows 5 errors on empty submit and reaches "Order placed" when valid (total
-  215,00 €); confirmation renders order OCK-2048.
-- Registry 62 -> 66 items. Lint clean. audit: integrity OK, TR 66/66. Build
-  242/242 static. Contrast 0 failures. All 12 new routes (EN/TR/JSON) HTTP 200.
-
-## 21. Cart store and commerce demo batch
-
-Completed on 2026-07-23:
-
-- Added `src/components/primitives/cart-store.tsx`: an in-memory module store
-  read through a `useCart` hook via useSyncExternalStore. No setState-in-effect,
-  no hydration mismatch (server and first client render start empty). Actions:
-  add (merges by id+variant), setQuantity, remove, clear; derived count and
-  subtotalMinor. Persistence is left as a documented extension.
-- Added `onPlaced` to checkout-form: when the parent passes it, the parent owns
-  the success screen (an order-confirmation block) instead of the form's own
-  alert, so the full flow can complete.
-- Added `/demo/commerce` (ThemeScope forest) sequencing product-detail →
-  cart-drawer → checkout-form → order-confirmation, all sharing the cart store.
-- Registered cart-store as a primitive (registry, TR, metadata; no visual
-  preview, links to the demo).
-- Verified in-browser: add updates the header cart badge; "Go to checkout"
-  reaches the form; a valid submit lands on the confirmation (order OCK-3098);
-  the shared cart is cleared afterwards ("Cart, 0 items", empty drawer).
-- Registry 66 -> 67. Lint clean. audit: integrity OK, TR 67/67. Build 246/246
-  static. Contrast 0 failures. Commerce (Phase 3, item 1) is complete end to end.
-
-## 22. Account flow blocks batch
-
-Completed on 2026-07-23:
-
-- Added onboarding-flow: multi-step onboarding with a progress rail, back and
-  continue, an optional per-step canContinue gate and a completion screen. The
-  rail carries progression, so no per-panel step labels. Owns navigation only.
-- Added settings-form: tabbed settings under a single save with idle/saving/saved
-  states and an inline saved confirmation.
-- Enhanced the Tabs primitive with a `keepMounted` prop: it force-mounts every
-  panel and hides inactive ones with `data-[state=inactive]:hidden`, so a single
-  form submit inside tabs collects fields from all tabs, not only the visible one.
-  settings-form relies on this.
-- With auth-split and dashboard-shell already present, the account flow's blocks
-  are complete.
-- Registered both in registry, TR, metadata and previews.
-- Verified in-browser: onboarding advances 1->2->3 with Back disabled at the
-  start and Finish reaching the done screen; settings FormData contains fields
-  from Profile and Security tabs at once (keepMounted), inactive panels are
-  display:none, and save reaches "Changes saved".
-- Registry 67 -> 69. Lint clean. audit: integrity OK, TR 69/69. Build 252/252
-  static. Contrast 0 failures.
-
-## 23. Article layout batch
-
-Completed on 2026-07-23:
-
-- Added a reusable `.pk-prose` utility to globals.css: long-form reading
-  typography (headings, paragraphs, lists, links, blockquote, code, images)
-  built entirely from tokens, with no font-family override so the page theme
-  still owns the type.
-- Added article-layout: a measured single-column reading layout with category
-  eyebrow, title, standfirst, real author attribution (Avatar + role + localised
-  date + reading time), a cover with a job, the prose body and a tag footer.
-  Server component; no client JavaScript.
-- With blog-grid (index), search-results and newsletter-signup already present,
-  the content flow's core reading page is covered. A category filter page remains.
-- Registered in registry (registryDependency data), TR, metadata and previews.
-- Verified in-browser: .pk-prose applied, h2 renders in the display font at
-  25.6px, blockquote has the accent left border and italics, lists are disc,
-  the measure is ~62ch and the byline localises to "12 May 2026".
-- Registry 69 -> 70. Lint clean. audit: integrity OK, TR 70/70. Build 255/255
-  static. Contrast 0 failures.
+- Keep `main` in a validated state.
+- One coherent batch, one descriptive commit.
+- Update `PLAN.md` and `HANDOFF.md` in the same commit.
+- Inspect the full diff before committing.
+- Never commit `.env`, caches, `.next`, temporary fixtures or credentials.
+- Push only after local checks pass, then verify the GitHub Actions run reaches success.

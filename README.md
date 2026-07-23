@@ -10,8 +10,8 @@ the delivered source code editable and owned by the user.
 
 ## Current scope
 
-- 62 installable registry items
-- 39 full-page blocks
+- 72 installable registry items
+- 46 full-page blocks
 - 14 grouped primitive families
 - 6 motion components
 - 12 sector-calibrated visual themes
@@ -22,6 +22,8 @@ the delivered source code editable and owned by the user.
 - Build-time Shiki source highlighting
 - Build-time TypeScript AST prop documentation
 - Automated WCAG AA theme contrast audit
+- Portable shadcn installation for projects with or without a `src/` directory
+- Real clean-consumer installation, typecheck and production-build fixtures
 
 ## Start locally
 
@@ -71,9 +73,13 @@ When the catalogue is deployed:
 npx shadcn@latest add https://your-domain.example/r/command-palette.json
 ```
 
-The CLI writes the source into the target project and installs the declared dependencies. Source
-shown in the documentation is read from the shipping file at build time, so documentation cannot
-silently drift from implementation.
+The CLI writes source through shadcn's portable `@components` and `@lib` targets, installs npm
+packages and follows full Premium Kit dependency URLs. Every non-theme item automatically installs
+`premium-kit-base`, which owns the token contract, all 12 themes, shared global styles, `cn` and
+layout primitives. This works in projects both with and without a `src/` directory.
+
+Source shown in the documentation is read from the shipping file at build time, so documentation
+cannot silently drift from implementation.
 
 ## How the system is organised
 
@@ -86,11 +92,15 @@ src/
     primitives/           Interaction and content foundations
     site/                 Catalogue and AI workflow UI
   design/
+    base.css              Tailwind bridge, global rules, prose and motion CSS
     tokens.css            Shared design-token contract
     themes.css            Twelve complete theme implementations
+  lib/premium-kit/
     presets.ts            Theme rationale, sectors and design dials
   registry/
     registry.ts           Installable item source of truth
+    registry-output.ts    Portable shadcn payload and dependency URLs
+    registry-css.ts       Canonical CSS to shadcn CSS/cssVars conversion
     registry-tr.ts        Turkish catalogue copy
     registry-metadata.ts  AI-oriented metadata v2
     skeletons.ts          Purpose-led page recipes
@@ -99,6 +109,8 @@ src/
     source.ts             Build-time source loading
 scripts/
   contrast-audit.mjs      WCAG AA audit across every theme
+  registry-audit.mjs      Full local-import, CSS and dependency-graph audit
+  consumer-install-test.mjs  Clean src/non-src shadcn install fixtures
 ```
 
 ## Project memory
@@ -114,8 +126,10 @@ Every coherent development batch must begin by reading both files and end by upd
 
 ```bash
 npm run lint
-npm run audit:contrast
+npm run typecheck
+npm run audit
 npm run build
+npm run test:consumer-registry
 ```
 
 A registry item is not stable until its dependencies, Turkish copy, accessibility behaviour,

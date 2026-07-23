@@ -1,4 +1,8 @@
-import { registry, type RegistryItem } from "@/registry/registry";
+import {
+  registry,
+  registryDependencySlugs,
+  type RegistryItem,
+} from "@/registry/registry";
 import { skeletons } from "@/registry/skeletons";
 
 export type RenderingMode = "server" | "client" | "mixed";
@@ -20,6 +24,7 @@ export type RegistryMetadataV2 = {
 };
 
 const clientItems = new Set([
+  "motion-foundation",
   "marquee",
   "number-ticker",
   "spotlight-card",
@@ -137,7 +142,7 @@ export const registryCatalogV2 = registry.map((item) => ({
   description: item.description,
   category: item.category,
   dependencies: item.dependencies ?? [],
-  registryDependencies: item.registryDependencies ?? [],
+  registryDependencies: registryDependencySlugs(item),
   ...metadataFor(item),
 }));
 

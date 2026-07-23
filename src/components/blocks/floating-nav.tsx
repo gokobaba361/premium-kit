@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container } from "@/components/primitives/layout";
 import { MobileNav } from "./mobile-nav";
-import type { NavItem } from "./site-nav";
+import type { NavItem } from "./nav-types";
 
 /**
  * Floating navigation for launch pages with a visible page background.
