@@ -240,7 +240,53 @@ Current batch: portable registry foundation and real consumer installation verif
 - [ ] JavaScript budget reporting.
 - [ ] Automated route and registry smoke tests.
 
+The following small Phase 6 workstreams must not delay or reorder the active content and booking
+roadmap:
+
+#### Agent Skills v0
+
+- [ ] Ship only the first `premium-kit-site-build` skill.
+- [ ] Keep it independent of any model or agent application.
+- [ ] Define explicit inputs, outputs and acceptance criteria.
+- [ ] Do not mark it complete until it is validated with a real customer brief.
+- [ ] Keep it specific to Premium Kit website production; do not grow it into a general-purpose
+  software-development skill collection.
+
+#### Design Review v0
+
+- [ ] Make the first version report-only; it must not edit code automatically.
+- [ ] Keep deterministic checks separate from subjective visual evaluation.
+- [ ] Never let an aesthetic or model-based score block a build or CI by itself.
+- [ ] Record false positives from real projects.
+- [ ] Do not turn the review into a blocking quality gate until enough real-project evidence
+  exists.
+
+#### Real-project learning loop
+
+After every real customer project, record:
+
+- the repeated manual task
+- time spent or lost
+- where Premium Kit was insufficient
+- the manual correction that was applied
+- whether the same problem occurred before
+- whether it should become a skill, rule, registry item or test candidate
+
+Do not build major automation or introduce a new framework until the same problem has been
+observed in at least two real customer projects.
+
 Exit condition: A registry item cannot be marked stable without passing repeatable checks.
+
+#### Future decision gates (not scheduled work)
+
+- Pilot Office document automation only after proposal, content-matrix or delivery-document
+  repetition is observed across 2–3 real customer projects.
+- Evaluate a repository graph only after a measured navigation, context or blast-radius problem
+  appears.
+- Evaluate multi-agent/worktree infrastructure only after coordination becomes a bottleneck
+  while several customer projects are active at the same time.
+- Keep customer acquisition and opportunity-analysis agents outside the Premium Kit core as a
+  possible future module.
 
 ### Phase 7 — Distribution and community
 

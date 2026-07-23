@@ -133,7 +133,26 @@ Latest local result:
 - Updated catalogue dependency metadata and detail pages to include automatic dependencies.
 - Consolidated README, PLAN and this handoff.
 
-## 7. Exact next batch
+## 7. Research decision and non-blocking quality work
+
+The architecture review confirmed that Premium Kit should remain focused on producing real
+customer websites faster and with more consistent quality. Large general-purpose agent
+frameworks and agent runtime/orchestration layers were rejected for the core.
+
+Three small additions are recorded under Phase 6:
+
+- `premium-kit-site-build` as the only Agent Skills v0 skill
+- a report-only Design Review v0 that separates deterministic checks from subjective visual
+  evaluation
+- a real-project learning loop that promotes repeated problems into skill, rule, registry-item
+  or test candidates only after evidence from at least two customer projects
+
+Agent Skills v0 and Design Review v0 are non-blocking quality work. They must not delay the
+content or booking flow. Office document automation, repository graphs, multi-agent/worktree
+infrastructure and customer opportunity analysis remain conditional future decision gates, not
+current implementation tasks.
+
+## 8. Exact next batch
 
 Do not add content, booking, event or admin work to the registry-foundation commit.
 
@@ -146,7 +165,7 @@ After this batch is committed, pushed and green in CI:
 
 Before that next implementation, re-read `PLAN.md`, this file and relevant local Next.js docs.
 
-## 8. Source-control protocol
+## 9. Source-control protocol
 
 - Keep `main` in a validated state.
 - One coherent batch, one descriptive commit.
