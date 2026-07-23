@@ -29,6 +29,7 @@ const copy = {
       { href: "/r/registry.json", label: "Component registry", detail: "Installable blocks, dependencies and source" },
       { href: "/r/AI-GUIDE.md", label: "AI guide", detail: "Portable human-readable build contract" },
       { href: "/r/SITE-BRIEF.md", label: "Brief template", detail: "Questions to answer before design begins" },
+      { href: "/r/project-recipe.example.json", label: "Project recipe", detail: "Downloadable build recipe, worked example" },
     ],
   },
   tr: {
@@ -54,6 +55,7 @@ const copy = {
       { href: "/r/registry.json", label: "Bileşen registry’si", detail: "Kurulabilir bloklar, bağımlılıklar ve kaynak" },
       { href: "/r/AI-GUIDE.tr.md", label: "Türkçe AI rehberi", detail: "Taşınabilir, okunabilir yapım sözleşmesi" },
       { href: "/r/SITE-BRIEF.tr.md", label: "Türkçe brief şablonu", detail: "Tasarımdan önce cevaplanacak sorular" },
+      { href: "/r/project-recipe.example.json", label: "Proje reçetesi", detail: "İndirilebilir yapım reçetesi, örnek" },
     ],
   },
 } as const;

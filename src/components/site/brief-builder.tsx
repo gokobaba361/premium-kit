@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check, Copy } from "@phosphor-icons/react";
+import { Check, Copy, DownloadSimple } from "@phosphor-icons/react";
 import {
+  buildProjectRecipe,
   buildSitePrompt,
+  recipeFileName,
   siteTypeOptions,
   visualDirectionOptions,
   type PlanningLanguage,
@@ -29,6 +31,7 @@ export function BriefBuilder({ language }: { language: PlanningLanguage }) {
   const [brief, setBrief] = useState(initialBrief);
   const [copied, setCopied] = useState(false);
   const prompt = useMemo(() => buildSitePrompt(brief, language), [brief, language]);
+  const recipe = useMemo(() => buildProjectRecipe(brief, language), [brief, language]);
 
   function update<K extends keyof SiteBriefInput>(key: K, value: SiteBriefInput[K]) {
     setBrief((current) => ({ ...current, [key]: value }));
@@ -39,6 +42,18 @@ export function BriefBuilder({ language }: { language: PlanningLanguage }) {
     await navigator.clipboard.writeText(prompt);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
+  }
+
+  function downloadRecipe() {
+    const blob = new Blob([JSON.stringify(recipe, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = recipeFileName(brief);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -170,14 +185,24 @@ export function BriefBuilder({ language }: { language: PlanningLanguage }) {
               {tr ? "Üretime hazır komut" : "Production-ready prompt"}
             </h2>
           </div>
-          <button
-            type="button"
-            onClick={copyPrompt}
-            className="inline-flex h-10 items-center gap-2 rounded-pk-sm border border-strong bg-elevated px-3.5 text-sm font-medium transition-colors hover:border-fg"
-          >
-            {copied ? <Check size={16} weight="bold" aria-hidden /> : <Copy size={16} aria-hidden />}
-            {copied ? (tr ? "Kopyalandı" : "Copied") : tr ? "Komutu kopyala" : "Copy prompt"}
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={copyPrompt}
+              className="inline-flex h-10 items-center gap-2 rounded-pk-sm border border-strong bg-elevated px-3.5 text-sm font-medium transition-colors hover:border-fg"
+            >
+              {copied ? <Check size={16} weight="bold" aria-hidden /> : <Copy size={16} aria-hidden />}
+              {copied ? (tr ? "Kopyalandı" : "Copied") : tr ? "Komutu kopyala" : "Copy prompt"}
+            </button>
+            <button
+              type="button"
+              onClick={downloadRecipe}
+              className="inline-flex h-10 items-center gap-2 rounded-pk-sm bg-accent px-3.5 text-sm font-medium text-accent-fg transition-[filter] hover:brightness-110"
+            >
+              <DownloadSimple size={16} weight="bold" aria-hidden />
+              {tr ? "Reçeteyi indir (.json)" : "Download recipe (.json)"}
+            </button>
+          </div>
         </div>
 
         <textarea

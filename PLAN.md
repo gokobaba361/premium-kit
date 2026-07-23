@@ -137,7 +137,7 @@ Status: In progress
 - [x] Add registry metadata v2 catalogue.
 - [x] Add metadata filtering/search to the human catalogue.
 - [x] Export a complete `DESIGN.md` for each visual theme.
-- [ ] Export a generated project recipe from a completed brief.
+- [x] Export a generated project recipe from a completed brief.
 
 Exit condition: An AI can discover, select and explain compatible Premium Kit resources without
 scraping rendered pages.

@@ -139,14 +139,15 @@ The current batch must complete these items:
 
 ## 7. Exact next implementation order
 
-1. Export a downloadable project recipe from the AI brief builder.
-2. Add Turkish and English documentation for the new discovery workflow.
-3. Add registry link and dependency audits.
+1. Add registry link and dependency audits (a script that fails on a missing
+   registry file, a broken registryDependency slug or an undeclared npm import).
+2. Add a Turkish translation coverage audit for the catalogue.
+3. Begin Phase 3 commerce flow: product detail, cart drawer, checkout, confirmation.
 4. Run all validation.
 5. Update `PLAN.md` and this handoff before closing the batch.
 
-Completed recently: metadata v2 filters on the human catalogue (batch 15); per
-theme DESIGN.md exports at \`/r/design/<theme>.md\` plus \`/r/design.json\` (batch 16).
+Completed recently: metadata v2 filters (batch 15); per-theme DESIGN.md exports
+(batch 16); downloadable project recipe from the brief builder (batch 17).
 
 ## 8. Validation commands
 
@@ -293,3 +294,23 @@ Completed on 2026-07-23:
   per-theme values (optical scale, radius, display font). design.json count 12.
   Home pages expose 12 spec links, 0 nested anchors.
 - Lint clean. Production build: 229/229 static pages. Contrast audit: 0 failures.
+
+## 17. Project recipe batch
+
+Completed on 2026-07-23:
+
+- Added `buildProjectRecipe(input, language)` and `recipeFileName(input)` to
+  `src/registry/site-planning.ts`. The recipe resolves the chosen skeleton and
+  theme, marks which sections map to an installable registry item, lists the
+  de-duplicated install order and endpoints, and embeds the quality gates and
+  the generated prompt. Values are derived from the brief plus shipping data.
+- Added a "Download recipe (.json)" button to the brief builder that serialises
+  the recipe to a Blob and downloads it. Filename slugs from the project name,
+  Unicode-safe (Turkish "Köşe Kafé" -> `kose-kafe-recipe.json`).
+- Published a worked example at `/r/project-recipe.example.json` and referenced
+  it from the AI manifest (`endpoints.projectRecipeExample`) and both AI pages.
+- Verified: example recipe resolves the clinic theme with 9 installable sections
+  in the correct order and a 2645-char prompt; download button produces a blob
+  with the expected filename in-browser.
+- Lint clean. Build 230/230 static. Contrast audit: 0 failures.
+- Phase 1 (AI production contract) checklist is now complete.

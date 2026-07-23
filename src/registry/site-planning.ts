@@ -1,5 +1,6 @@
 import { presets } from "@/design/presets";
 import { skeletons } from "@/registry/skeletons";
+import { registry } from "@/registry/registry";
 
 export type PlanningLanguage = "en" | "tr";
 
@@ -164,6 +165,96 @@ ${gates}
 
 DELIVERY
 Show the short plan and selected registry items first. Then implement complete pages, run the quality checks and list any remaining assumptions.`;
+}
+
+/**
+ * A complete, downloadable project recipe built from a finished brief.
+ *
+ * This is the machine-shaped sibling of the copyable prompt: a single JSON
+ * object an agent (or a person) can hand straight to a coding tool. It resolves
+ * the chosen skeleton and theme, marks which sections map to an installable
+ * registry item, lists the exact install order and endpoints, and embeds the
+ * prompt and quality gates. Nothing is invented here; every value is derived
+ * from the brief plus the registry, skeletons and presets that ship.
+ */
+export function buildProjectRecipe(input: SiteBriefInput, language: PlanningLanguage) {
+  const skeleton = skeletons.find((item) => item.slug === input.siteType) ?? skeletons[0];
+  const theme = presets.find((item) => item.id === input.visualDirection) ?? presets[0];
+  const installable = new Set(registry.map((item) => item.slug));
+
+  const sections = skeleton.sections.map((section, index) => {
+    const inRegistry = installable.has(section.slug);
+    return {
+      order: index + 1,
+      slug: section.slug,
+      label: section.label,
+      purpose: section.purpose,
+      installable: inRegistry,
+      installUrl: inRegistry ? `/r/${section.slug}.json` : null,
+    };
+  });
+
+  // Install order: registry-backed sections, de-duplicated, in first-seen order.
+  const seen = new Set<string>();
+  const install = sections
+    .filter((section) => section.installable && !seen.has(section.slug) && seen.add(section.slug))
+    .map((section) => ({ name: section.slug, installUrl: `/r/${section.slug}.json` }));
+
+  return {
+    $schema: "https://premium-kit.dev/schema/project-recipe.json",
+    generatedBy: "premium-kit",
+    version: 1,
+    language,
+    brief: {
+      projectName: input.projectName || null,
+      summary: input.summary || null,
+      audience: input.audience || skeleton.audience,
+      primaryGoal: input.primaryGoal || skeleton.outcome,
+      pages: input.pages || null,
+      motion: input.motion,
+    },
+    sitemap: {
+      homepageSkeleton: {
+        slug: skeleton.slug,
+        name: skeleton.name,
+        outcome: skeleton.outcome,
+      },
+      sections,
+    },
+    visualSystem: {
+      theme: theme.id,
+      name: theme.name,
+      designRead: theme.read,
+      scheme: theme.scheme,
+      displayFont: theme.display.name,
+      dials: { variance: theme.variance, motion: theme.motion, density: theme.density },
+      designSpec: `/r/design/${theme.id}.md`,
+    },
+    install,
+    endpoints: {
+      manifest: "/r/ai-manifest.json",
+      catalog: "/r/catalog.json",
+      recipes: "/r/site-recipes.json",
+      registry: "/r/registry.json",
+      designIndex: "/r/design.json",
+      guide: language === "tr" ? "/r/AI-GUIDE.tr.md" : "/r/AI-GUIDE.md",
+    },
+    qualityGates: [...(language === "tr" ? qualityGatesTr : qualityGates)],
+    prompt: buildSitePrompt(input, language),
+  };
+}
+
+/** A filesystem-safe filename for the downloaded recipe. */
+export function recipeFileName(input: SiteBriefInput) {
+  const base = (input.projectName || input.siteType || "premium-kit")
+    .toLowerCase()
+    .normalize("NFKD")
+    // Drop combining marks so "köşe" becomes "kose", not "ko-s-e".
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^\w]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
+  return `${base || "premium-kit"}-recipe.json`;
 }
 
 export function buildBriefTemplate(language: PlanningLanguage) {

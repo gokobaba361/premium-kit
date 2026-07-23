@@ -30,6 +30,7 @@ export function GET() {
       briefTemplate: "/r/SITE-BRIEF.md",
       briefTemplateTr: "/r/SITE-BRIEF.tr.md",
       designIndex: "/r/design.json",
+      projectRecipeExample: "/r/project-recipe.example.json",
     },
     inventory: {
       items: registry.length,
