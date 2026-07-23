@@ -403,6 +403,27 @@ function main() {
     }
   }
 
+  const nextConfig = fs.readFileSync(
+    path.join(root, "next.config.ts"),
+    "utf8",
+  );
+  const traceMarkers = [
+    '"/r/*"',
+    '"src/components/blocks/**/*"',
+    '"src/components/motion/**/*"',
+    '"src/components/primitives/**/*"',
+    '"src/design/*.css"',
+    '"src/lib/cn.ts"',
+    '"src/lib/premium-kit/**/*"',
+  ];
+  for (const marker of traceMarkers) {
+    if (!nextConfig.includes(marker)) {
+      errors.push(
+        `next.config.ts: dynamic registry routes must trace runtime source (${marker})`,
+      );
+    }
+  }
+
   console.log(`Audited ${entries.length} registry entries.`);
 
   if (warnings.length > 0) {

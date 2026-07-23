@@ -52,6 +52,8 @@ The registry is now a tested installation graph:
 - Canonical CSS is parsed at request time. Normal rules use the registry `css` field and Tailwind
   v4 `@theme inline` declarations use `cssVars.theme`.
 - Registry routes are dynamic because their dependency URLs must use the actual request origin.
+- `next.config.ts` narrowly includes registry source and CSS in `/r/*` server traces so dynamic
+  endpoints also work in packaged/serverless deployments.
 - `src/lib/premium-kit/presets.ts` is the installable preset source;
   `src/design/presets.ts` remains a compatibility re-export inside the catalogue app.
 
@@ -76,6 +78,7 @@ Primary files:
 - unsupported non-portable output paths
 - missing base token, Tailwind bridge and `.pk-prose` contracts
 - accidental loss of full Premium Kit dependency URL generation
+- missing runtime source globs in the dynamic registry route's output trace
 
 `scripts/consumer-install-test.mjs` starts the production registry and uses real
 `shadcn@4.14.1` to install representative items into two temporary Next.js 16.2.11 projects:
@@ -111,6 +114,7 @@ Latest local result:
 - Turkish coverage: 72/72
 - theme contrast audit: 0 pairs below WCAG AA
 - production build: 188/188 static pages, dynamic registry endpoints
+- dynamic registry trace: shared CSS and representative block/primitive source included
 - clean `src` fixture: install, typecheck and build pass
 - clean non-`src` fixture: install, typecheck and build pass
 
@@ -121,6 +125,7 @@ Latest local result:
   behavior.
 - Migrated all existing entries to automatic base closure and full Premium Kit URLs.
 - Added portable targets for components, libraries and design sources.
+- Added narrow `/r/*` output tracing for packaged/serverless registry source reads.
 - Fixed missing local-file closure in navigation blocks with `nav-types.ts`.
 - Made theme runtime ship its preset source.
 - Replaced the shallow registry audit with full import/CSS/dependency checks.
