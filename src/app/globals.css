@@ -1,0 +1,164 @@
+@import "tailwindcss";
+@import "../design/tokens.css";
+@import "../design/themes.css";
+
+/*
+ * Token -> Tailwind bridge.
+ * Utilities available everywhere: bg-bg / bg-subtle / bg-elevated,
+ * text-fg / text-muted / text-faint, bg-accent / text-accent,
+ * border-line / border-strong, rounded-pk, py-section, max-w-container.
+ */
+@theme inline {
+  --color-bg: var(--pk-bg);
+  --color-subtle: var(--pk-bg-subtle);
+  --color-elevated: var(--pk-bg-elevated);
+
+  --color-fg: var(--pk-fg);
+  --color-muted: var(--pk-fg-muted);
+  --color-faint: var(--pk-fg-faint);
+
+  --color-accent: var(--pk-accent);
+  --color-accent-fg: var(--pk-accent-fg);
+  --color-accent-soft: var(--pk-accent-soft);
+
+  --color-line: var(--pk-line);
+  --color-strong: var(--pk-line-strong);
+
+  --font-sans: var(--pk-font-body);
+  --font-display: var(--pk-font-display);
+  --font-mono: var(--pk-font-mono);
+
+  --radius-pk: var(--pk-radius);
+  --radius-pk-sm: var(--pk-radius-sm);
+  --radius-pk-pill: var(--pk-radius-pill);
+
+  --shadow-pk: var(--pk-shadow);
+  --shadow-pk-lift: var(--pk-shadow-lift);
+
+  --spacing-section: var(--pk-section-y);
+  --container-container: var(--pk-container);
+
+  --ease-pk: var(--pk-ease);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--pk-bg);
+    color: var(--pk-fg);
+    font-family: var(--pk-font-body);
+  }
+
+  /* Focus is a product feature, not a reset casualty. */
+  :focus-visible {
+    outline: 2px solid var(--pk-accent);
+    outline-offset: 2px;
+    border-radius: var(--pk-radius-sm);
+  }
+
+  ::selection {
+    background: var(--pk-accent);
+    color: var(--pk-accent-fg);
+  }
+}
+
+@utility display-1 {
+  font-family: var(--pk-font-display);
+  font-weight: var(--pk-display-weight);
+  letter-spacing: var(--pk-display-tracking);
+  line-height: var(--pk-display-leading);
+  font-size: calc(clamp(2.5rem, 1.4rem + 4.4vw, 4.5rem) * var(--pk-display-scale));
+}
+
+@utility display-2 {
+  font-family: var(--pk-font-display);
+  font-weight: var(--pk-display-weight);
+  letter-spacing: var(--pk-display-tracking);
+  line-height: 1.06;
+  font-size: calc(clamp(2rem, 1.3rem + 2.8vw, 3.25rem) * var(--pk-display-scale));
+}
+
+@utility display-3 {
+  font-family: var(--pk-font-display);
+  font-weight: var(--pk-display-weight);
+  letter-spacing: calc(var(--pk-display-tracking) * 0.6);
+  line-height: 1.12;
+  font-size: calc(clamp(1.5rem, 1.2rem + 1.2vw, 2rem) * var(--pk-display-scale));
+}
+
+@utility measure {
+  max-width: var(--pk-measure);
+}
+
+/* Fixed grain layer. Never on a scrolling container. */
+@utility grain {
+  position: relative;
+}
+
+/* Keyframes used by src/components/motion/*. Transform and opacity only, so
+   they stay on the compositor. Each consumer also disables them in JS under
+   reduced motion rather than relying on the media query alone. */
+@keyframes pk-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pk-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(12%, 8%, 0) scale(1.15);
+  }
+}
+
+@keyframes pk-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.1);
+  }
+  to {
+    transform: translate3d(-10%, 12%, 0) scale(0.95);
+  }
+}
+
+/* Shiki output. Dual theme: every token carries a light and a dark colour as a
+   CSS variable, and the visitor's colour scheme picks one. The background comes
+   from our own surface token so the block matches the page, not the theme the
+   highlighter shipped. */
+.pk-code pre {
+  overflow-x: auto;
+  padding: 1rem;
+  background: transparent !important;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+.pk-code code {
+  font-family: var(--pk-font-mono);
+}
+
+.pk-code,
+.pk-code span {
+  color: var(--shiki-light);
+}
+
+/* Keyed to the page theme, not to the operating system. The documentation runs
+   in the default light theme, so binding this to prefers-color-scheme would put
+   dark syntax colours on a white surface for anyone whose OS is dark. These are
+   the three dark themes in themes.css; add new ones here. */
+[data-theme="obsidian"] .pk-code,
+[data-theme="obsidian"] .pk-code span,
+[data-theme="ember"] .pk-code,
+[data-theme="ember"] .pk-code span,
+[data-theme="neon"] .pk-code,
+[data-theme="neon"] .pk-code span {
+  color: var(--shiki-dark);
+}

@@ -1,0 +1,454 @@
+/*
+ * Sector themes.
+ *
+ * One theme = one locked palette + one radius system + one type feel.
+ * Apply with data-theme on any wrapper element; tokens cascade down.
+ * Never mix two themes on one page.
+ *
+ * Reference sites and rationale per theme: docs/SECTORS.md
+ */
+
+/* ---------------------------------------------------------------------------
+ * obsidian - dev tools, infra, technical SaaS
+ * Dark, hairline borders, one restrained green signal accent.
+ * ------------------------------------------------------------------------ */
+[data-theme="obsidian"] {
+  color-scheme: dark;
+
+  --pk-bg: #0a0b0d;
+  --pk-bg-subtle: #101216;
+  --pk-bg-elevated: #14161b;
+
+  --pk-fg: #f1f2f4;
+  --pk-fg-muted: #9aa1ad;
+  --pk-fg-faint: #79808b;
+
+  --pk-accent: #3fb87f;
+  --pk-accent-fg: #04170e;
+  --pk-accent-soft: #12291f;
+
+  --pk-line: #22252c;
+  --pk-line-strong: #333843;
+
+  --pk-radius: 0.625rem;
+  --pk-radius-sm: 0.375rem;
+
+  --pk-shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 20px 50px -24px rgb(0 0 0 / 0.9);
+  --pk-shadow-lift: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 32px 80px -28px rgb(0 0 0 / 1);
+
+  /* Geist: the grotesque this sector already reads as native. */
+  --pk-font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-tracking: -0.04em;
+  --pk-display-weight: 600;
+  --pk-section-y: 8rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * bone - design studios, agencies, portfolios
+ * Cool paper, near-black type, burnt orange accent. Big type contrast.
+ * ------------------------------------------------------------------------ */
+[data-theme="bone"] {
+  color-scheme: light;
+
+  --pk-bg: #f6f6f4;
+  --pk-bg-subtle: #ececea;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #141416;
+  --pk-fg-muted: #5a5a60;
+  --pk-fg-faint: #69696e;
+
+  --pk-accent: #bf481b;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #f7e3da;
+
+  --pk-line: #dededa;
+  --pk-line-strong: #c4c4bf;
+
+  /* All-sharp shape system */
+  --pk-radius: 0rem;
+  --pk-radius-sm: 0rem;
+  --pk-radius-pill: 0rem;
+
+  --pk-shadow: none;
+  --pk-shadow-lift: 0 24px 64px -28px rgb(20 20 22 / 0.28);
+
+  /* Bricolage Grotesque: wide, slightly odd, holds up at poster sizes. */
+  --pk-font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-tracking: -0.04em;
+  --pk-display-leading: 0.94;
+  --pk-display-weight: 600;
+  --pk-section-y: 9rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * forest - premium consumer, DTC, outdoor, food and craft goods
+ * Deep green type on bone, amber accent. Deliberately NOT beige and brass.
+ * ------------------------------------------------------------------------ */
+[data-theme="forest"] {
+  color-scheme: light;
+
+  --pk-bg: #f5f6f2;
+  --pk-bg-subtle: #eaeee5;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #14261d;
+  --pk-fg-muted: #4c5e53;
+  --pk-fg-faint: #606c64;
+
+  --pk-accent: #a95a19;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #f2e2d3;
+
+  --pk-line: #dbe2d5;
+  --pk-line-strong: #bcc7b4;
+
+  --pk-radius: 1rem;
+  --pk-radius-sm: 0.625rem;
+
+  --pk-shadow: 0 1px 2px rgb(20 38 29 / 0.05), 0 16px 40px -18px rgb(20 38 29 / 0.2);
+  --pk-shadow-lift: 0 28px 70px -24px rgb(20 38 29 / 0.3);
+
+  /* Familjen Grotesk: warm, open apertures, sits well next to product photography. */
+  --pk-font-display: var(--font-familjen), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-tracking: -0.025em;
+  --pk-display-leading: 1.04;
+  --pk-display-weight: 600;
+  --pk-section-y: 8rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * cobalt - fintech, B2B platforms, enterprise trust
+ * Warm off-white ground, saturated cobalt, zero decoration.
+ * ------------------------------------------------------------------------ */
+[data-theme="cobalt"] {
+  color-scheme: light;
+
+  --pk-bg: #fbfaf7;
+  --pk-bg-subtle: #f1f2f6;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #0d1220;
+  --pk-fg-muted: #525b71;
+  --pk-fg-faint: #676d7d;
+
+  --pk-accent: #1b3fd8;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #e2e7fb;
+
+  --pk-line: #e2e5ee;
+  --pk-line-strong: #c8cddd;
+
+  --pk-radius: 0.5rem;
+  --pk-radius-sm: 0.375rem;
+
+  --pk-shadow: 0 1px 2px rgb(13 18 32 / 0.05), 0 14px 36px -16px rgb(13 18 32 / 0.16);
+  --pk-shadow-lift: 0 26px 64px -24px rgb(13 18 32 / 0.24);
+
+  /* Instrument Sans: neutral and tight. Unremarkable in the way a bank should be. */
+  --pk-font-display: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-tracking: -0.03em;
+  --pk-display-weight: 600;
+  --pk-section-y: 7rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * clinic - healthcare, insurance, public service, accessibility first
+ * Cool near-white, teal accent, AAA-leaning contrast, low motion.
+ * ------------------------------------------------------------------------ */
+[data-theme="clinic"] {
+  color-scheme: light;
+
+  --pk-bg: #ffffff;
+  --pk-bg-subtle: #f1f6f6;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #0e1a1c;
+  --pk-fg-muted: #45585c;
+  --pk-fg-faint: #617175;
+
+  --pk-accent: #0b6e6e;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #dcecec;
+
+  --pk-line: #dbe5e6;
+  --pk-line-strong: #b9c9cb;
+
+  --pk-radius: 0.375rem;
+  --pk-radius-sm: 0.25rem;
+
+  --pk-shadow: 0 1px 2px rgb(14 26 28 / 0.06), 0 10px 28px -14px rgb(14 26 28 / 0.16);
+  --pk-shadow-lift: 0 20px 48px -20px rgb(14 26 28 / 0.22);
+
+  /* Public Sans: drawn for US federal services, tested for small size legibility.
+     Used for body as well, because consistency helps comprehension here. */
+  --pk-font-display: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --pk-font-body: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Public Sans has a tall x-height, so it needs slightly less size to match. */
+  --pk-display-scale: 0.96;
+  --pk-display-tracking: -0.015em;
+  --pk-display-leading: 1.1;
+  --pk-display-weight: 700;
+  --pk-section-y: 6rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * terracotta - hospitality, travel, restaurants, venues
+ * Cool slate paper against a warm rust accent. Image led.
+ * ------------------------------------------------------------------------ */
+[data-theme="terracotta"] {
+  color-scheme: light;
+
+  --pk-bg: #f2f3f5;
+  --pk-bg-subtle: #e7e9ec;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #1b1e24;
+  --pk-fg-muted: #565d6a;
+  --pk-fg-faint: #626871;
+
+  --pk-accent: #b64d2f;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #f4ded6;
+
+  --pk-line: #dcdfe4;
+  --pk-line-strong: #bfc4cc;
+
+  --pk-radius: 1.25rem;
+  --pk-radius-sm: 0.75rem;
+
+  --pk-shadow: 0 1px 2px rgb(27 30 36 / 0.05), 0 18px 44px -18px rgb(27 30 36 / 0.22);
+  --pk-shadow-lift: 0 30px 76px -26px rgb(27 30 36 / 0.3);
+
+  /* Cormorant Garamond: the only serif in the kit. A stone house with a printed
+     daily menu is a genuinely editorial brief, so the serif earns its place.
+     Serif display needs looser tracking and more leading than a grotesque. */
+  --pk-font-display: var(--font-cormorant), ui-serif, Georgia, serif;
+  --pk-display-scale: 1.14;
+  --pk-display-tracking: -0.005em;
+  --pk-display-leading: 1.02;
+  --pk-display-weight: 500;
+  --pk-section-y: 8rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * slate - architecture, real estate, interiors, construction
+ * Cool grey ground, near black type, blueprint blue accent, sharp shapes.
+ * ------------------------------------------------------------------------ */
+[data-theme="slate"] {
+  color-scheme: light;
+
+  --pk-bg: #eef0f2;
+  --pk-bg-subtle: #e3e6e9;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #12161a;
+  --pk-fg-muted: #4e5760;
+  --pk-fg-faint: #5f666e;
+
+  --pk-accent: #1f5fa9;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #dde7f3;
+
+  --pk-line: #d5d9dd;
+  --pk-line-strong: #b4bac1;
+
+  --pk-radius: 0.125rem;
+  --pk-radius-sm: 0.125rem;
+  --pk-radius-pill: 0.125rem;
+
+  --pk-shadow: 0 1px 2px rgb(18 22 26 / 0.06), 0 14px 34px -18px rgb(18 22 26 / 0.22);
+  --pk-shadow-lift: 0 26px 66px -26px rgb(18 22 26 / 0.3);
+
+  --pk-font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-scale: 0.98;
+  --pk-display-tracking: -0.035em;
+  --pk-display-leading: 1;
+  --pk-display-weight: 600;
+  --pk-section-y: 8rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * signal - consumer apps, startups, marketplaces
+ * Bright white ground, one saturated indigo, friendly geometric type,
+ * pill shapes. The only theme that is allowed to look cheerful.
+ * ------------------------------------------------------------------------ */
+[data-theme="signal"] {
+  color-scheme: light;
+
+  --pk-bg: #ffffff;
+  --pk-bg-subtle: #f4f4fb;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #14142b;
+  --pk-fg-muted: #55556f;
+  --pk-fg-faint: #6d6d81;
+
+  --pk-accent: #4338ca;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #e6e5fb;
+
+  --pk-line: #e5e5ef;
+  --pk-line-strong: #c8c8da;
+
+  --pk-radius: 1rem;
+  --pk-radius-sm: 0.625rem;
+
+  --pk-shadow: 0 1px 2px rgb(20 20 43 / 0.05), 0 16px 40px -18px rgb(20 20 43 / 0.2);
+  --pk-shadow-lift: 0 28px 70px -24px rgb(20 20 43 / 0.28);
+
+  --pk-font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-scale: 0.98;
+  --pk-display-tracking: -0.03em;
+  --pk-display-leading: 1.05;
+  --pk-display-weight: 700;
+  --pk-section-y: 7rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * ember - fitness, sport, performance, motorsport
+ * Near black ground, hot orange accent, wide heavy display type.
+ * ------------------------------------------------------------------------ */
+[data-theme="ember"] {
+  color-scheme: dark;
+
+  --pk-bg: #0d0c0b;
+  --pk-bg-subtle: #151312;
+  --pk-bg-elevated: #1b1918;
+
+  --pk-fg: #f5f2ef;
+  --pk-fg-muted: #a49e98;
+  --pk-fg-faint: #857e79;
+
+  --pk-accent: #f0511e;
+  --pk-accent-fg: #17100c;
+  --pk-accent-soft: #2d1710;
+
+  --pk-line: #262220;
+  --pk-line-strong: #3a3532;
+
+  --pk-radius: 0.25rem;
+  --pk-radius-sm: 0.1875rem;
+
+  --pk-shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 20px 50px -24px rgb(0 0 0 / 0.9);
+  --pk-shadow-lift: 0 32px 80px -28px rgb(0 0 0 / 1);
+
+  --pk-font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-scale: 1;
+  --pk-display-tracking: -0.03em;
+  --pk-display-leading: 0.98;
+  --pk-display-weight: 700;
+  --pk-section-y: 7rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * ivory - beauty, wellness, spa, fashion
+ * Cold luxury rather than warm craft: bone white, deep plum, geometric type.
+ * Deliberately not the beige and brass palette.
+ * ------------------------------------------------------------------------ */
+[data-theme="ivory"] {
+  color-scheme: light;
+
+  --pk-bg: #faf9f7;
+  --pk-bg-subtle: #efedea;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #241d26;
+  --pk-fg-muted: #5f5563;
+  --pk-fg-faint: #6f6772;
+
+  --pk-accent: #6b2d5b;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #efe2ec;
+
+  --pk-line: #e4e0dd;
+  --pk-line-strong: #c7c1bd;
+
+  --pk-radius: 0.5rem;
+  --pk-radius-sm: 0.25rem;
+  --pk-radius-pill: 999px;
+
+  --pk-shadow: 0 1px 2px rgb(36 29 38 / 0.05), 0 18px 44px -20px rgb(36 29 38 / 0.2);
+  --pk-shadow-lift: 0 30px 76px -28px rgb(36 29 38 / 0.26);
+
+  --pk-font-display: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-scale: 1.04;
+  --pk-display-tracking: -0.015em;
+  --pk-display-leading: 1.06;
+  --pk-display-weight: 500;
+  --pk-section-y: 9rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * archive - education, publishing, museums, cultural institutions
+ * Paper and ink. Serif display, generous measure, minimal color.
+ * ------------------------------------------------------------------------ */
+[data-theme="archive"] {
+  color-scheme: light;
+
+  --pk-bg: #fbfaf8;
+  --pk-bg-subtle: #f0eee9;
+  --pk-bg-elevated: #ffffff;
+
+  --pk-fg: #1c1a17;
+  --pk-fg-muted: #57524b;
+  --pk-fg-faint: #6e6962;
+
+  --pk-accent: #7a1f1f;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #f0e0de;
+
+  --pk-line: #e0dcd5;
+  --pk-line-strong: #c2bcb2;
+
+  --pk-radius: 0.125rem;
+  --pk-radius-sm: 0.125rem;
+  --pk-radius-pill: 0.125rem;
+
+  --pk-shadow: none;
+  --pk-shadow-lift: 0 22px 60px -28px rgb(28 26 23 / 0.3);
+
+  --pk-font-display: var(--font-eb-garamond), ui-serif, Georgia, serif;
+  --pk-display-scale: 1.12;
+  --pk-display-tracking: -0.01em;
+  --pk-display-leading: 1.04;
+  --pk-display-weight: 500;
+  --pk-measure: 68ch;
+  --pk-section-y: 8rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * neon - gaming, streaming, music, nightlife
+ * Dark violet ground with one electric accent. Controlled, not a rainbow.
+ * ------------------------------------------------------------------------ */
+[data-theme="neon"] {
+  color-scheme: dark;
+
+  --pk-bg: #0b0a12;
+  --pk-bg-subtle: #12111c;
+  --pk-bg-elevated: #171626;
+
+  --pk-fg: #f0eefb;
+  --pk-fg-muted: #9d9ab8;
+  --pk-fg-faint: #7f7c97;
+
+  --pk-accent: #38e1b0;
+  --pk-accent-fg: #04170f;
+  --pk-accent-soft: #12281f;
+
+  --pk-line: #232135;
+  --pk-line-strong: #35324c;
+
+  --pk-radius: 0.75rem;
+  --pk-radius-sm: 0.5rem;
+
+  --pk-shadow: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 20px 50px -24px rgb(0 0 0 / 0.9);
+  --pk-shadow-lift: 0 32px 80px -28px rgb(0 0 0 / 1);
+
+  --pk-font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --pk-display-scale: 0.98;
+  --pk-display-tracking: -0.035em;
+  --pk-display-leading: 1.02;
+  --pk-display-weight: 700;
+  --pk-section-y: 7.5rem;
+}

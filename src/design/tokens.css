@@ -1,0 +1,81 @@
+/*
+ * Token contract.
+ *
+ * Every block and primitive in this kit reads ONLY these variables.
+ * A sector theme (see themes.css) is nothing more than a new set of values
+ * for the same names. Never hardcode a color in a component.
+ *
+ * Naming: --pk-* are raw tokens. globals.css maps them into Tailwind's
+ * --color-* / --font-* / --radius-* / --spacing-* namespaces so utilities
+ * like bg-bg, text-muted, border-line, rounded-pk, py-section work.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --pk-bg: #ffffff;
+  --pk-bg-subtle: #f5f5f4;
+  --pk-bg-elevated: #ffffff;
+
+  /* Text */
+  --pk-fg: #18181b;
+  --pk-fg-muted: #5c5c66;
+  --pk-fg-faint: #6f6f78;
+
+  /* Accent: exactly one per theme, used on every section */
+  --pk-accent: #18181b;
+  --pk-accent-fg: #ffffff;
+  --pk-accent-soft: #ecece9;
+
+  /* Lines */
+  --pk-line: #e4e4e1;
+  --pk-line-strong: #cfcfca;
+
+  /* Shape: one radius system per theme */
+  --pk-radius: 0.75rem;
+  --pk-radius-sm: 0.5rem;
+  --pk-radius-pill: 999px;
+
+  /* Elevation: tinted to the background hue, never pure black */
+  --pk-shadow: 0 1px 2px rgb(24 24 27 / 0.04), 0 12px 32px -12px rgb(24 24 27 / 0.12);
+  --pk-shadow-lift: 0 2px 4px rgb(24 24 27 / 0.06), 0 24px 60px -20px rgb(24 24 27 / 0.2);
+
+  /* Type stacks. Themes override the display stack; body stays legible. */
+  --pk-font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --pk-font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --pk-font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Display tracking: tight for grotesques, looser for serif/wide themes */
+  /* Optical size correction per face. A serif with a small x-height reads
+     smaller than a grotesque at the same pixel size, so the theme compensates
+     here instead of every heading guessing its own font-size. */
+  --pk-display-scale: 1;
+  --pk-display-tracking: -0.035em;
+  --pk-display-leading: 1.02;
+  --pk-display-weight: 600;
+
+  /* Rhythm: VISUAL_DENSITY lives here, not in component classnames */
+  --pk-section-y: 7rem;
+  --pk-container: 78rem;
+  --pk-measure: 62ch;
+
+  /* Motion */
+  --pk-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --pk-dur: 420ms;
+  --pk-dur-fast: 180ms;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --pk-section-y: 4.5rem;
+  }
+}
+
+/* Any motion in this kit is opt-out safe. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pk-dur: 1ms;
+    --pk-dur-fast: 1ms;
+  }
+}
