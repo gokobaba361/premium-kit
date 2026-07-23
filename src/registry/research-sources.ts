@@ -9,6 +9,14 @@ export type ResearchSource = {
 
 export const researchSources: ResearchSource[] = [
   {
+    name: "Radix Primitives",
+    repository: "https://github.com/radix-ui/primitives",
+    license: "MIT",
+    focus: "Unstyled accessible React primitives with managed focus and keyboard behaviour.",
+    fit: "Interaction foundation for overlays, menus, selectors and other compound controls.",
+    patterns: ["Popover", "Context menu", "Select and focus management"],
+  },
+  {
     name: "Launch UI",
     repository: "https://github.com/launch-ui/launch-ui",
     license: "MIT",
@@ -80,7 +88,11 @@ export const optionBacklog = [
   { family: "Application", option: "Dashboard shell", source: "TailAdmin", status: "ready" },
   { family: "Application", option: "Authentication flow", source: "Shadcn Space", status: "ready" },
   { family: "Application", option: "Command palette", source: "Origin UI", status: "ready" },
+  { family: "Application", option: "Search result states", source: "Premium Kit", status: "ready" },
   { family: "Application", option: "Filter toolbar", source: "Origin UI", status: "ready" },
+  { family: "Overlay", option: "Popover and context menu", source: "Radix Primitives", status: "ready" },
+  { family: "Form", option: "Combobox and autocomplete", source: "Radix Primitives", status: "ready" },
+  { family: "Form", option: "Language and currency selectors", source: "Premium Kit", status: "ready" },
   { family: "Form", option: "Date, time and one-time-code inputs", source: "Origin UI", status: "ready" },
   { family: "Form", option: "Native file upload", source: "TailGrids", status: "ready" },
   { family: "Content", option: "Documentation sidebar", source: "Shadcn Space", status: "ready" },

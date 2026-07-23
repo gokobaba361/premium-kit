@@ -33,6 +33,8 @@ const clientItems = new Set([
   "accordion",
   "tabs",
   "command-palette",
+  "combobox",
+  "locale-selectors",
   "theme-runtime",
 ]);
 
@@ -53,12 +55,18 @@ const avoidWhen: Record<string, string> = {
   "mega-nav": "Avoid when the site has fewer than four primary destinations.",
   "command-palette": "Avoid as the only navigation path; every command must remain reachable elsewhere.",
   "advanced-form": "Avoid custom-looking controls when a plain labelled native input is clearer.",
+  combobox: "Avoid for short lists that a native select can expose more directly.",
+  "locale-selectors": "Avoid coupling language and currency unless the business rules truly require it.",
+  "search-results": "Avoid hiding weak information architecture behind search; browse routes must remain available.",
 };
 
 const tags: Record<string, string[]> = {
   "mega-nav": ["navigation", "header", "discovery", "marketing"],
   "command-palette": ["search", "navigation", "keyboard", "application"],
   "advanced-form": ["form", "date", "time", "otp", "upload"],
+  combobox: ["form", "search", "select", "autocomplete", "keyboard"],
+  "locale-selectors": ["localisation", "language", "currency", "select"],
+  "search-results": ["search", "results", "empty-state", "recent-searches"],
   "product-grid": ["commerce", "collection", "products"],
   "dashboard-shell": ["application", "dashboard", "navigation"],
   "docs-sidebar": ["documentation", "navigation", "content"],

@@ -34,8 +34,8 @@ const text: Record<string, { name: string; description: string }> = {
     description: "Alan, input, metin alanı, seçim, checkbox, radio ve switch.",
   },
   overlay: {
-    name: "Diyalog, ipucu ve menü",
-    description: "Odak kilitli diyalog, tooltip ve açılır menü.",
+    name: "Diyaloglar ve menüler",
+    description: "Diyalog, ipucu, açılır menü, popover ve bağlam menüsü.",
   },
   feedback: {
     name: "Geri bildirim durumları",
@@ -68,6 +68,18 @@ const text: Record<string, { name: string; description: string }> = {
   "advanced-form": {
     name: "Gelişmiş form alanları",
     description: "Native tarih, saat, tek kullanımlık kod ve dosya yükleme alanları.",
+  },
+  combobox: {
+    name: "Aranabilir seçim",
+    description: "Klavye navigasyonu ve boş durum içeren aranabilir seçenek listesi.",
+  },
+  "locale-selectors": {
+    name: "Dil ve para birimi seçicileri",
+    description: "Erişilebilir select temeliyle açık ve bağımsız yerel ayar kontrolleri.",
+  },
+  "search-results": {
+    name: "Arama sonucu durumları",
+    description: "Sonuç listesi, sonuç bulunamadı yönlendirmesi ve son aramalar.",
   },
   "hero-split": {
     name: "İkiye bölünmüş hero",

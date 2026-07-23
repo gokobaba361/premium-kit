@@ -44,14 +44,14 @@ content structure, accessible interaction and editable source code.
 
 As of 2026-07-23:
 
-- 59 registry items
+- 62 registry items
 - 39 full-page blocks
-- 11 grouped primitive families
+- 14 grouped primitive families
 - 6 motion components
 - 3 theme-system entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 207 statically generated routes
+- 216 statically generated routes
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
 - Build-time TypeScript AST prop documentation
@@ -146,15 +146,18 @@ scraping rendered pages.
 
 Status: In progress
 
+Latest completed batch: discovery primitives — combobox, popover/context menu, locale selectors
+and search-result states.
+
 - [x] Mega menu navigation.
 - [x] Command palette.
-- [ ] Combobox/autocomplete.
+- [x] Combobox/autocomplete.
 - [x] Date and time inputs.
 - [x] OTP input.
 - [x] Native file upload.
-- [ ] Popover and context menu.
-- [ ] Language and currency selector.
-- [ ] Search results and no-results patterns.
+- [x] Popover and context menu.
+- [x] Language and currency selector.
+- [x] Search results and no-results patterns.
 
 Exit condition: Common marketing, commerce and application interactions can be built without
 inventing new primitives.
@@ -267,6 +270,7 @@ Approved MIT-licensed references currently recorded in the product:
 Additional architecture references to audit before adaptation:
 
 - shadcn/ui registry and MCP documentation
+- Radix Primitives accessibility and interaction conventions
 - Motion Primitives
 - Next.js SaaS Starter
 - Spree Storefront

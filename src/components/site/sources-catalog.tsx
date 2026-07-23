@@ -7,6 +7,11 @@ const sourceTextTr: Record<
   string,
   { focus: string; fit: string; patterns: string[] }
 > = {
+  "Radix Primitives": {
+    focus: "Yönetilen odak ve klavye davranışına sahip, stilsiz ve erişilebilir React temelleri.",
+    fit: "Overlay, menü, seçici ve diğer bileşik kontroller için etkileşim temeli.",
+    patterns: ["Popover", "Bağlam menüsü", "Select ve odak yönetimi"],
+  },
   "Launch UI": {
     focus: "Next.js 16, React 19 ve Tailwind v4 tabanlı landing page bileşenleri.",
     fit: "Modern hero, navigasyon ve ürün gösterimi varyantları için en yakın teknik eşleşme.",
@@ -52,6 +57,7 @@ const backlogTextTr: Record<string, string> = {
   Pricing: "Fiyatlandırma",
   Commerce: "E-ticaret",
   Application: "Uygulama",
+  Overlay: "Overlay",
   Content: "İçerik",
   Event: "Etkinlik",
   Service: "Hizmet",
@@ -69,7 +75,11 @@ const backlogTextTr: Record<string, string> = {
   "Dashboard shell": "Dashboard iskeleti",
   "Authentication flow": "Kimlik doğrulama akışı",
   "Command palette": "Komut paleti",
+  "Search result states": "Arama sonucu durumları",
   "Filter toolbar": "Filtre araç çubuğu",
+  "Popover and context menu": "Popover ve bağlam menüsü",
+  "Combobox and autocomplete": "Combobox ve otomatik tamamlama",
+  "Language and currency selectors": "Dil ve para birimi seçicileri",
   "Documentation sidebar": "Dokümantasyon kenar menüsü",
   "Changelog list": "Değişiklik günlüğü",
   "Two-day schedule": "İki günlük program",

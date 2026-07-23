@@ -26,12 +26,12 @@ training knowledge.
 
 Latest fully validated state before the active batch:
 
-- Registry items: 59
+- Registry items: 62
 - Block entries: 39
-- Grouped primitive entries: 11
+- Grouped primitive entries: 14
 - Site skeletons: 10
 - Visual themes: 12
-- Static pages: 207/207
+- Static pages: 216/216
 - Lint: clean
 - Theme contrast audit: 0 WCAG AA failures
 - Key Turkish routes: HTTP 200
@@ -122,35 +122,30 @@ Latest fully validated state before the active batch:
 
 The current batch must complete these items:
 
-1. Add `PLAN.md` and `HANDOFF.md`.
+1. Add combobox/autocomplete with keyboard navigation and an empty state.
    Status: complete.
-2. Add `/r/catalog.json` metadata v2 with intended use, cautions, rendering cost and install URLs.
+2. Expand the overlay family with popover and context-menu primitives.
    Status: complete.
-3. Add mega menu block.
+3. Add language and currency selector patterns.
    Status: complete.
-4. Add command palette primitive.
+4. Add search results, no-results and recent-search patterns.
    Status: complete.
-5. Add advanced form primitives for date, OTP and file upload.
+5. Add English/Turkish registry copy, metadata and live previews.
    Status: complete.
-6. Add English/Turkish registry copy and previews.
+6. Record Radix provenance and dependency details.
    Status: complete.
-7. Update AI manifest and documentation counts.
-   Status: complete.
-8. Run lint, contrast audit, production build and route checks.
+7. Run lint, contrast audit, production build and route checks.
    Status: complete.
 
 ## 7. Exact next implementation order
 
-1. Add a combobox/autocomplete primitive with keyboard navigation and empty state.
-2. Add popover and context-menu primitives using the existing Radix conventions.
-3. Add language and currency selector patterns.
-4. Add search result, no-result and recent-search patterns.
-5. Add metadata v2 filters to the human component catalogue.
-6. Export one complete theme as `DESIGN.md`, validate the format, then generate all themes.
-7. Export a downloadable project recipe from the AI brief builder.
-8. Add Turkish and English documentation for the new discovery workflow.
-9. Run all validation.
-10. Update `PLAN.md` and this handoff before closing the batch.
+1. Add metadata v2 filters to the human component catalogue.
+2. Export one complete theme as `DESIGN.md`, validate the format, then generate all themes.
+3. Export a downloadable project recipe from the AI brief builder.
+4. Add Turkish and English documentation for the new discovery workflow.
+5. Add registry link and dependency audits.
+6. Run all validation.
+7. Update `PLAN.md` and this handoff before closing the batch.
 
 ## 8. Validation commands
 
@@ -165,20 +160,24 @@ npm run build
 Then verify at minimum:
 
 - `/tr/yapay-zeka`
-- `/tr/bilesenler/mega-nav`
-- `/tr/bilesenler/command-palette`
-- `/tr/bilesenler/advanced-form`
+- `/tr/bilesenler/combobox`
+- `/tr/bilesenler/locale-selectors`
+- `/tr/bilesenler/search-results`
+- `/tr/bilesenler/overlay`
 - `/r/catalog.json`
-- `/r/mega-nav.json`
-- `/r/command-palette.json`
-- `/r/advanced-form.json`
+- `/r/combobox.json`
+- `/r/locale-selectors.json`
+- `/r/search-results.json`
+- `/r/overlay.json`
 
 ## 9. Known constraints
 
 - The project is currently local and has no `.openai/hosting.json`.
-- The project is not under Git version control; rollback depends on local filesystem history.
+- The project is under Git version control and mirrored to a private GitHub repository.
 - Browser animation behaviour has not been explicitly requested for manual visual QA.
 - Registry homepage metadata still needs a real production domain before public distribution.
+- `npm audit --omit=dev` reports advisories in Next.js-owned PostCSS/Sharp versions. The offered
+  forced fix incorrectly downgrades Next.js to 9.3.3, so no unsafe automatic fix was applied.
 - Current site recipes are homepage/flow structures; most sector kits do not yet contain every
   interior route.
 - Metadata v2 is a Premium Kit discovery layer and must not break the official shadcn registry
@@ -236,3 +235,21 @@ Completed on 2026-07-23:
 - Licence: MIT
 
 Update `PLAN.md` and this file after every coherent batch.
+
+## 14. Discovery primitives batch
+
+Completed on 2026-07-23:
+
+- Added a searchable combobox with keyboard navigation, controlled/uncontrolled values,
+  disabled options and an explicit no-results state.
+- Expanded overlays with Radix Popover and Context Menu, including managed focus, keyboard
+  navigation and long-press support.
+- Added independent language and currency selector patterns.
+- Added server-rendered result, no-result and recent-search patterns.
+- Added English and Turkish catalogue copy, metadata v2 records and live previews.
+- Added Radix Primitives to the MIT provenance catalogue.
+- Registry total: 62 items; grouped primitive families: 14.
+- Lint and TypeScript clean.
+- Theme contrast audit: 0 failures.
+- Production build: 216/216 static pages.
+- New human and machine routes: HTTP 200.

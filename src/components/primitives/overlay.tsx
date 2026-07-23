@@ -1,8 +1,11 @@
 "use client";
 
+import { useId } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as MenuPrimitive from "@radix-ui/react-dropdown-menu";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { X } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/cn";
 
@@ -139,5 +142,126 @@ export function DropdownMenu({
         </MenuPrimitive.Content>
       </MenuPrimitive.Portal>
     </MenuPrimitive.Root>
+  );
+}
+
+/* -------------------------------------------------------------------------
+ * Popover
+ * For compact supporting controls and information. Use Dialog when the
+ * interaction needs a decision, a form with several fields or focus trapping.
+ * ---------------------------------------------------------------------- */
+
+export function Popover({
+  trigger,
+  title,
+  description,
+  children,
+  align = "start",
+  side = "bottom",
+}: {
+  trigger: React.ReactNode;
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+  align?: "start" | "center" | "end";
+  side?: "top" | "right" | "bottom" | "left";
+}) {
+  const id = useId();
+
+  return (
+    <PopoverPrimitive.Root>
+      <PopoverPrimitive.Trigger asChild>{trigger}</PopoverPrimitive.Trigger>
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Content
+          align={align}
+          side={side}
+          sideOffset={7}
+          collisionPadding={12}
+          aria-labelledby={`${id}-title`}
+          aria-describedby={description ? `${id}-description` : undefined}
+          className="z-50 w-[min(22rem,calc(100vw-2rem))] rounded-pk-sm border border-line bg-elevated p-5 shadow-pk-lift"
+        >
+          <div className="flex items-start justify-between gap-5">
+            <div>
+              <h2 id={`${id}-title`} className="text-sm font-medium">
+                {title}
+              </h2>
+              {description ? (
+                <p
+                  id={`${id}-description`}
+                  className="mt-1 text-sm leading-relaxed text-muted"
+                >
+                  {description}
+                </p>
+              ) : null}
+            </div>
+            <PopoverPrimitive.Close
+              aria-label="Close"
+              className="-mr-1 -mt-1 rounded-pk-sm p-1.5 text-muted transition-colors hover:bg-subtle hover:text-fg"
+            >
+              <X size={15} weight="bold" aria-hidden />
+            </PopoverPrimitive.Close>
+          </div>
+          {children ? <div className="mt-4">{children}</div> : null}
+          <PopoverPrimitive.Arrow className="fill-[var(--pk-line)]" />
+        </PopoverPrimitive.Content>
+      </PopoverPrimitive.Portal>
+    </PopoverPrimitive.Root>
+  );
+}
+
+export type ContextAction = {
+  label: string;
+  shortcut?: string;
+  onSelect?: () => void;
+  disabled?: boolean;
+  destructive?: boolean;
+  separatorBefore?: boolean;
+};
+
+export function ContextMenu({
+  trigger,
+  label,
+  items,
+}: {
+  trigger: React.ReactNode;
+  label: string;
+  items: ContextAction[];
+}) {
+  return (
+    <ContextMenuPrimitive.Root>
+      <ContextMenuPrimitive.Trigger asChild>{trigger}</ContextMenuPrimitive.Trigger>
+      <ContextMenuPrimitive.Portal>
+        <ContextMenuPrimitive.Content
+          collisionPadding={12}
+          className="z-50 min-w-56 rounded-pk-sm border border-line bg-elevated p-1.5 shadow-pk-lift"
+        >
+          <ContextMenuPrimitive.Label className="px-3 py-2 font-mono text-[0.6875rem] uppercase tracking-wide text-faint">
+            {label}
+          </ContextMenuPrimitive.Label>
+          {items.map((item) => (
+            <div key={item.label}>
+              {item.separatorBefore ? (
+                <ContextMenuPrimitive.Separator className="my-1.5 h-px bg-line" />
+              ) : null}
+              <ContextMenuPrimitive.Item
+                disabled={item.disabled}
+                onSelect={item.onSelect}
+                className={cn(
+                  "flex cursor-pointer items-center justify-between gap-6 rounded-pk-sm px-3 py-2 text-sm outline-none",
+                  "data-[highlighted]:bg-subtle data-[disabled]:cursor-not-allowed data-[disabled]:opacity-45",
+                  item.destructive && "text-accent",
+                )}
+              >
+                <span>{item.label}</span>
+                {item.shortcut ? (
+                  <kbd className="font-mono text-[0.6875rem] text-faint">{item.shortcut}</kbd>
+                ) : null}
+              </ContextMenuPrimitive.Item>
+            </div>
+          ))}
+        </ContextMenuPrimitive.Content>
+      </ContextMenuPrimitive.Portal>
+    </ContextMenuPrimitive.Root>
   );
 }

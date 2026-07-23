@@ -14,13 +14,29 @@ import { TextReveal } from "@/components/motion/text-reveal";
 import { AuroraBackground } from "@/components/motion/aurora-background";
 import { Button } from "@/components/primitives/button";
 import { Field, Input, Select, Switch } from "@/components/primitives/form";
-import { Dialog, Tooltip, TooltipProvider } from "@/components/primitives/overlay";
+import {
+  ContextMenu,
+  Dialog,
+  Popover,
+  Tooltip,
+  TooltipProvider,
+} from "@/components/primitives/overlay";
 import { Alert, EmptyState, SkeletonCard } from "@/components/primitives/feedback";
 import { Table, StatRow, Avatar, Tag, Breadcrumb } from "@/components/primitives/data";
 import { Slider, SegmentedControl } from "@/components/primitives/controls";
 import { Accordion } from "@/components/primitives/accordion";
 import { Tabs } from "@/components/primitives/tabs";
 import { CommandPalette } from "@/components/primitives/command-palette";
+import { Combobox } from "@/components/primitives/combobox";
+import {
+  CurrencySelector,
+  LanguageSelector,
+} from "@/components/primitives/locale-selectors";
+import {
+  NoSearchResults,
+  RecentSearches,
+  SearchResults,
+} from "@/components/primitives/search-results";
 import {
   DateInput,
   FileUpload,
@@ -161,6 +177,26 @@ const previews: Record<string, React.ReactNode> = {
         <Tooltip content="Environments are billed only while they run.">
           <Button variant="ghost">Hover me</Button>
         </Tooltip>
+        <Popover
+          trigger={<Button variant="soft">Deployment details</Button>}
+          title="Production deployment"
+          description="The latest validated commit is serving all regions."
+        >
+          <p className="text-sm text-muted">Validated commit · all quality checks passed</p>
+        </Popover>
+        <ContextMenu
+          label="Project actions"
+          trigger={
+            <div className="rounded-pk-sm border border-dashed border-strong px-4 py-2 text-sm text-muted">
+              Right-click or long-press
+            </div>
+          }
+          items={[
+            { label: "Open project", shortcut: "↵" },
+            { label: "Duplicate", shortcut: "⌘D" },
+            { label: "Archive", destructive: true, separatorBefore: true },
+          ]}
+        />
       </div>
     </TooltipProvider>
   ),
@@ -323,6 +359,109 @@ const previews: Record<string, React.ReactNode> = {
         helper="One PDF, up to 10 MB."
         accept=".pdf,application/pdf"
       />
+    </div>
+  ),
+
+  combobox: (
+    <div className="w-full max-w-md">
+      <Combobox
+        label="Deployment region"
+        placeholder="Choose a region"
+        searchPlaceholder="Search regions"
+        emptyLabel="No region matches that search."
+        resultsLabel="regions"
+        defaultValue="fra"
+        options={[
+          {
+            value: "fra",
+            label: "Frankfurt",
+            description: "Central Europe · eu-central",
+            keywords: ["Germany", "EU"],
+          },
+          {
+            value: "ist",
+            label: "Istanbul",
+            description: "Türkiye · eu-southeast",
+            keywords: ["Turkey", "TR"],
+          },
+          {
+            value: "lhr",
+            label: "London",
+            description: "United Kingdom · eu-west",
+            keywords: ["UK", "Britain"],
+          },
+          {
+            value: "iad",
+            label: "Virginia",
+            description: "United States · us-east",
+            keywords: ["USA", "America"],
+          },
+        ]}
+      />
+    </div>
+  ),
+
+  "locale-selectors": (
+    <div className="grid w-full gap-6 md:grid-cols-2">
+      <LanguageSelector
+        label="Interface language"
+        helper="Changes labels and documentation."
+        defaultValue="tr"
+        options={[
+          { value: "tr", label: "Türkçe" },
+          { value: "en", label: "English" },
+          { value: "de", label: "Deutsch" },
+        ]}
+      />
+      <CurrencySelector
+        label="Display currency"
+        helper="Does not change the interface language."
+        defaultValue="try"
+        options={[
+          { value: "try", label: "TRY · ₺ Türk lirası" },
+          { value: "eur", label: "EUR · € Euro" },
+          { value: "usd", label: "USD · $ US dollar" },
+        ]}
+      />
+    </div>
+  ),
+
+  "search-results": (
+    <div className="grid w-full gap-8 lg:grid-cols-[1.25fr_0.75fr]">
+      <SearchResults
+        query="navigation"
+        resultsLabel="matches"
+        results={[
+          {
+            title: "Mega navigation",
+            description: "Multi-column discovery for products, services and resources.",
+            href: "#",
+            category: "Block",
+            meta: "No client JS",
+          },
+          {
+            title: "Command palette",
+            description: "Keyboard-opened search across grouped pages and actions.",
+            href: "#",
+            category: "Primitive",
+            meta: "Interactive",
+          },
+        ]}
+      />
+      <div className="flex flex-col gap-4">
+        <NoSearchResults
+          query="carousel"
+          browseLabel="Browse all components"
+          browseHref="#"
+        />
+        <RecentSearches
+          searches={[
+            { label: "Pricing", href: "#" },
+            { label: "Forms", href: "#" },
+            { label: "Dashboard", href: "#" },
+          ]}
+        />
+      </div>
     </div>
   ),
 
