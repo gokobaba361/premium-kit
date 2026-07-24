@@ -22,6 +22,12 @@ Success means a user can say “build a calm Turkish dental clinic site” or �
 English SaaS launch site” and receive a result with a deliberate sitemap, visual system, real
 content structure, accessible interaction and editable source code.
 
+Owner's framing (2026-07-24): the site must hold **everything a person needs to build a website with
+AI**. If a capability is plausibly needed for AI-assisted site building, it belongs here. When
+scoping a batch, treat that as the tie-breaker, and add capabilities proactively. See HANDOFF section
+8 for the standing backlog this implies (curating open-source references through the provenance gate,
+closing the skeleton/template preview gaps, and the AI-manifest/bundle candidates).
+
 ## 2. Product principles
 
 1. **Plan before composition.** Audience, outcome, sitemap and content precede components.
@@ -167,8 +173,9 @@ inventing new primitives.
 
 Status: In progress
 
-Latest completed batch: the assembled `/demo/content` editorial flow, plus the count-label and
-prose code-block fixes it surfaced.
+Latest completed batch: the block preview system. Every whole-page block now renders in a framed,
+themeable viewer (`/preview/<slug>`) instead of a prose placeholder, so people and agents can see a
+block before installing it.
 
 - [x] Commerce: collection → product → cart → checkout → confirmation. All blocks
   ship, a cart-store shares live state, and /demo/commerce runs the flow end to end.
@@ -292,6 +299,31 @@ Exit condition: A registry item cannot be marked stable without passing repeatab
   while several customer projects are active at the same time.
 - Keep customer acquisition and opportunity-analysis agents outside the Premium Kit core as a
   possible future module.
+
+### Phase 6.5 — Discoverability and reference curation
+
+Status: In progress
+
+Raised by the owner on 2026-07-24: the catalogue must let a person or agent *see* what they are
+about to install, and it must draw on the best open-source work available.
+
+- [x] Framed, themeable block preview (`/preview/<slug>` + the detail-page viewer). Closes the
+  "code is there but the block is invisible" gap for every whole-page block.
+- [ ] Render `/skeletons` in the same framed viewer instead of text; a skeleton is a sequence of
+  blocks, so it reuses the preview infrastructure.
+- [ ] Add the 6 missing `/templates/<theme>` pages so all 12 themes have a full worked example.
+- [ ] **Open-source reference curation.** Widen `src/registry/research-sources.ts` with candidate
+  repos (skills, skeletons, blocks, effects) tagged high/medium/low priority and by licence. Per
+  accepted source: record provenance, confirm a permissive licence (MIT/OFL), then adapt into a
+  registry item or skill. Never bulk-copy; this passes the same gate as any external code
+  (principle: licence and provenance before adaptation). Multi-batch.
+- [ ] Candidate, confirm scope before building: an "install this whole recipe" bundle command; an
+  `llms.txt` / expanded AI manifest enumerating blocks with their example props in one fetch; an
+  asset-and-image guidance page (the kit ships picsum placeholders and an agent must be told how to
+  swap real assets in).
+
+Exit condition: nothing in the catalogue is invisible, and every external reference in the kit has a
+recorded licence and provenance.
 
 ### Phase 7 — Distribution and community
 

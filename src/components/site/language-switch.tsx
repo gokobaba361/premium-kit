@@ -31,6 +31,12 @@ function englishPath(pathname: string) {
 
 export function LanguageSwitch() {
   const pathname = usePathname();
+
+  /* Preview documents are rendered inside the catalogue's own iframe. Catalogue
+     chrome must not appear in them: what is on screen has to be the block and
+     nothing else. */
+  if (pathname.startsWith("/preview/")) return null;
+
   const turkish = pathname === "/tr" || pathname.startsWith("/tr/");
 
   return (

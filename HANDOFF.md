@@ -1,7 +1,7 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Phase 3 content flow assembled and proven end to end
+Current milestone: Every block is now visible in a framed, themeable preview
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -24,6 +24,8 @@ Validated inventory:
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
 - Turkish catalogue coverage: 73/73
 - Two assembled demo flows: `/demo/commerce` and `/demo/content`
+- Every catalogue block is now viewable: 31 have a boxed preview, and the 40 whole-page blocks
+  render in a framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch
 
 ## 2. Fixed architecture
 
@@ -114,62 +116,58 @@ Latest local result:
 - registry installation audit: 73/73, no errors
 - Turkish coverage: 73/73
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 197/197 static pages, dynamic registry endpoints
+- production build: 197/197 static pages, dynamic registry and preview endpoints
 - dynamic registry trace: shared CSS and representative block/primitive source included
 - clean `src` fixture: install, typecheck and build pass
 - clean non-`src` fixture: install, typecheck and build pass
+- preview system verified in a production server (not only dev): every `/preview/<slug>` returns
+  200 across themes; the desktop frame fills its column with no overflow and no scale transform on
+  first paint; tablet and mobile cap and centre; the theme switch reloads the iframe with the new
+  `data-theme`; no horizontal scroll inside the frame or on the page
 
 ## 6. Completed in the latest batch
 
-The content flow is now assembled and running, and assembling it surfaced three real defects that
-neither lint, TypeScript nor the build could see. All three are fixed in registry-owned source, so
-consumers get the fix too.
+Until now, 42 of the 73 registry items showed a paragraph of prose instead of the block, because a
+whole-page section cannot sit honestly in a boxed thumbnail. That was the catalogue's biggest gap:
+the code was there, but a person or an agent choosing a block could not see it. This batch closes
+it. (The previous batch, `/demo/content` plus the count-label and prose fixes, is in git history.)
 
-**The demo**
+**The preview system**
 
-- Added `/demo/content`, a fictional journal ("Kesit") on the `archive` theme, assembled only from
-  shipping blocks: `site-nav`, `page-header`, `blog-grid`, `content-index`, `search-results`,
-  `newsletter-signup` and `site-footer`.
-- Added `/demo/content/[slug]`, six statically generated articles rendered through `article-layout`
-  with real `.pk-prose` bodies (headings, lists, blockquote, links, a fenced code block).
-- Added `src/components/site/content-demo-data.tsx`: one article model feeds the index filter, the
-  featured grid, the search island and the reading page. That is the point of the demo — the blocks
-  are presentational, so no per-block adapter is needed.
-- Added `src/components/site/content-demo-search.tsx`, a client search island. Filtering is local
-  state rather than a `q` parameter on purpose: `searchParams` is a request-time API and would opt
-  the page into dynamic rendering. Both demo routes stay static.
-- The publication and its staff are fictional; no real customer, metric or endorsement is implied.
+- Added `/preview/<slug>`, a bare document (no catalogue chrome, no language switch, no footer) that
+  renders one block full width under a chosen theme. `?theme=<id>` selects one of the 12 systems and
+  falls back to `obsidian`. Marked `robots: noindex`. Renders per request rather than statically:
+  40 blocks across 12 themes is 480 documents, and the catalogue pages linking here are static.
+- Added `src/registry/block-examples.tsx`: one canonical, honest example per block. Brands and people
+  are fictional, every `source`-bearing stat carries a source, and integration/logo slugs name real
+  products being integrated with (a factual list, not borrowed credibility). 40 blocks covered; the
+  17 that already had template examples plus these means every whole-page block now has one.
+- Added `src/components/site/block-preview.tsx`, the viewer on the detail page: an iframe (so the
+  block's own `md:` breakpoints answer to a real viewport, which a scaled `div` cannot do), a quiet
+  viewport toggle (desktop / tablet / mobile) and a 12-theme `select`, plus a "new tab" link.
+- `LanguageSwitch` now hides itself under `/preview/`, so preview documents carry no catalogue
+  chrome.
+- The detail page shows the framed viewer for whole-page blocks, the existing boxed preview for the
+  31 that have one, and keeps the prose fallback only for anything with neither.
 
-**Defects the demo surfaced**
+**A real bug, found and fixed in-flight**
 
-1. Count nouns did not inflect: the UI read "1 articles", "1 options", "1 results". Turkish takes
-   the singular after any numeral, so the Turkish catalogue never exposed it. `content-index`,
-   `search-results`, `combobox` and `command-palette` now accept the count noun as
-   `string | ((count: number) => string)` and default to a correct English pluraliser. Passing a
-   plain string still works, so the change is backwards compatible.
-2. `.pk-prose` had no `pre` rule. A fenced code block inherited the inline-code chip styling and,
-   worse, had no `overflow-x`, so the longest code line — not the measure — would set the width of
-   the reading column. Added `pre` and `pre code` rules to `base.css` (registry-owned, ships with
-   `premium-kit-base`).
-3. `article-layout` keyed its tag list by `tag.href`. Several tags legitimately point at one
-   destination, which produced a duplicate-key error and unsupported reconciliation behaviour. Now
-   keyed by href and label together.
+- The first viewer scaled a 1280px iframe down to the column with a `ResizeObserver`. It measured on
+  mount, and if layout had not settled the width read 0, the effect bailed, and because its
+  dependencies never changed again it never retried. The frame stayed at 1:1 and overflowed its box.
+  Reproduced in a production server, not only dev. The fix removed the measurement entirely:
+  desktop simply fills the column (already a real desktop viewport) and the narrow viewports are
+  capped with `min(<w>px, 100%)` and centred. A width that needs no measurement cannot get stuck.
 
-**Small enhancement**
+**Verified in a production build (not only dev)**
 
-- `site-nav` accepts an optional `brandHref` (default `/`) so a site mounted under a sub-path can
-  point its wordmark at its own root instead of escaping to the host application.
-
-**Verified in-browser**
-
-- Category filter 6 → 2 for Typography, `aria-pressed` correct on all five buttons, polite status
-  reads "2 articles"; Materials reads "1 article".
-- Search: "typography" → 2 articles, "oak" → "1 article", "zzz" → the no-results state with a
-  recovery link.
-- Article page renders `.pk-prose` under the `archive` theme (EB Garamond display), the code block
-  has `overflow-x: auto` with the inline chip styling removed, and the measure holds at ~766px.
-- No horizontal page scroll at 1280px or 375px on either route.
-- Clean browser console on a fresh tab for both the index and an article.
+- Every `/preview/<slug>` returns 200 across themes; all 40 examples render with no runtime error.
+- Desktop frame fills its column (1182 of 1184px) with no overflow and no transform on first paint.
+- Tablet caps at 768, mobile at 375, both centred and within the column.
+- The theme `select` swaps the iframe's `data-theme` live (checked `neon` → dark violet ground).
+- No horizontal scroll inside the iframe or on the page; Turkish detail page renders the viewer with
+  Turkish chrome.
+- Examples audited: zero em-dashes, no generic placeholder names.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -206,11 +204,38 @@ Expected shape, following the commerce precedent:
 4. A shared booking store if the flow needs live state across blocks, mirroring `cart-store`.
 5. Then `/demo/booking` to prove it end to end.
 
-Note for that batch: the count-label pattern introduced here (`string | (count) => string`) is the
-convention for any new counted surface.
+Note for that batch: the count-label pattern (`string | (count) => string`) is the convention for
+any new counted surface, and every new whole-page block must get a `block-examples.tsx` entry in the
+same commit, so nothing regresses to the prose fallback.
 
 Before starting, re-read `PLAN.md`, this file and the relevant local Next.js docs under
 `node_modules/next/dist/docs/`.
+
+### North star (owner's framing, 2026-07-24)
+
+The owner's stated goal: **this site must hold everything a person needs to build a website with
+AI.** If something is plausibly needed for AI-assisted site building, it belongs here. Treat that as
+the tie-breaker when scoping future batches, and add capabilities proactively rather than waiting to
+be asked for each one.
+
+### Backlog raised by the owner (do not lose)
+
+1. **Curate open-source references into the kit.** The owner wants relevant open-source skills,
+   skeletons, blocks and effects (high/medium/low priority) pulled in as raw material. This does NOT
+   mean bulk-copying repositories. It goes through the existing gate: architecture decision #7 and
+   `src/registry/research-sources.ts` — record licence and provenance first, then adapt. Proposed
+   process: (a) widen `research-sources.ts` with candidate repos tagged by priority and licence;
+   (b) per accepted source, adapt into a registry item or skill with a provenance note; (c) only
+   MIT/OFL/permissive, never a copy without attribution. This is a multi-batch workstream.
+2. **Fill the remaining preview and template gaps.** `/skeletons` still renders as text with no
+   visual; only 6 of 12 themes have a `/templates/<theme>` page. The framed viewer built this batch
+   is the tool to close both — a skeleton is just a sequence of blocks, so it can render in the same
+   iframe.
+3. **Candidate additions the owner has not named but the north star implies** (agent's suggestions,
+   confirm before building): a copy-paste "install everything for this site recipe" bundle; an
+   `llms.txt` / expanded AI manifest so an agent can enumerate blocks and their example props in one
+   fetch; a booking/calendar primitive (overlaps the next batch); an image-and-asset guidance page
+   (the kit uses picsum placeholders — an agent needs to be told how to swap real assets in).
 
 ## 9. Source-control protocol
 

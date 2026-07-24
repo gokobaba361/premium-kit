@@ -14,6 +14,8 @@ import { extractPropsForFiles } from "@/registry/props";
 import { highlight, langFor } from "@/lib/highlight";
 import { Preview } from "@/registry/previews";
 import { previewSlugs } from "@/registry/preview-slugs";
+import { BlockPreview } from "@/components/site/block-preview";
+import { hasBlockExample } from "@/registry/block-examples";
 
 export async function ComponentDetailPage({
   slug,
@@ -28,6 +30,9 @@ export async function ComponentDetailPage({
 
   const sources = readSources(item.files);
   const hasPreview = previewSlugs.has(item.slug);
+  /* Whole page sections are shown in the framed viewer rather than a boxed
+     preview, so their real width and breakpoints survive. */
+  const hasFullPagePreview = !hasPreview && hasBlockExample(item.slug);
   const npmDeps = item.dependencies?.join(" ");
   const registryDeps = registryDependencySlugs(item);
   const propsTables = extractPropsForFiles(item.files);
@@ -75,6 +80,15 @@ export async function ComponentDetailPage({
                 </p>
               ) : null}
             </section>
+          ) : hasFullPagePreview ? (
+            <div className="flex flex-col gap-4">
+              <BlockPreview slug={item.slug} name={item.name} language={language} />
+              {item.note ? (
+                <p className="measure text-[0.9375rem] leading-relaxed text-muted">
+                  {item.note}
+                </p>
+              ) : null}
+            </div>
           ) : (
             <section className="rounded-pk border border-dashed border-strong bg-subtle p-6">
               <p className="text-[0.9375rem] leading-relaxed text-muted">
