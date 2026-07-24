@@ -1,7 +1,8 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Event flow complete and assembled end to end (`/demo/event`)
+Current milestone: Admin flow complete and assembled end to end (`/demo/admin`) — all six Phase 3
+product flows now ship
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -15,18 +16,21 @@ English human routes and machine-readable AI routes describe the same source of 
 
 Validated inventory:
 
-- 81 registry items
-- 54 full-page blocks
+- 85 registry items
+- 58 full-page blocks
 - 15 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes, each with a full worked `/templates/<theme>` page
 - 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
-- 241 statically generated documentation/product pages
+- 250 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
-- Turkish catalogue coverage: 81/81
-- Four assembled demo flows: `/demo/commerce`, `/demo/content`, `/demo/booking` and `/demo/event`
-- Every catalogue block is now viewable: 31 have a boxed preview, and the 40 whole-page blocks
-  render in a framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch
+- Turkish catalogue coverage: 85/85
+- Five assembled demo flows: `/demo/commerce`, `/demo/content`, `/demo/booking`, `/demo/event` and
+  `/demo/admin`
+- Every catalogue block is viewable: 31 have a boxed preview, 43 whole-page blocks render in a
+  framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch, and `confirm-dialog` shows
+  an honest prose fallback (a controlled dialog cannot be given a static example without crossing
+  the server/client boundary)
 - Every skeleton renders as an assembled page (`/preview/skeleton/<slug>`), shown in the same
   framed viewer on `/skeletons/<slug>` and `/tr/iskeletler/<slug>`
 
@@ -117,59 +121,67 @@ Latest local result:
 - lint: clean (including the React Compiler rules: no manual useMemo it cannot preserve, no
   setState synchronously inside an effect)
 - typecheck: clean
-- registry installation audit: 81/81, no errors
-- Turkish coverage: 81/81
+- registry installation audit: 85/85, no errors
+- Turkish coverage: 85/85
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 241/241 static pages, dynamic registry and preview endpoints
+- production build: 250/250 static pages, dynamic registry and preview endpoints
 - clean `src` and non-`src` consumer fixtures: install, typecheck and build pass
-- event flow verified end to end in the browser (`/demo/event`): the marketing sections render, the
-  sold-out tier is disabled and the "few left" badge shows, selecting Standard reveals the
-  registration form with the right ticket summary (€180.00), empty submit shows both field errors,
-  and a valid submit reaches the confirmation (RELAY-xxxx, "Saturday, 14 November 2026", UTC date
-  correct); clean console
-- all 3 new block previews return 200 with EN and TR detail pages; the booking flow (previous batch)
-  still verified
+- admin flow verified end to end in the browser (`/demo/admin`): list, search and role filter,
+  client pagination (7 seed users, page 2 correct), create (toast + audit entry), edit with correct
+  prefill, and delete with the type-to-confirm dialog (confirm button disabled until the exact name
+  is typed, then enabled; dialog closes, toast fires, audit records it, row is gone); a real 500 was
+  found and fixed here (see batch notes below); clean console after the fix
+- event flow (previous batch) still verified
 
 ## 6. Completed in the latest batch
 
-Built the event flow — the Phase 3 product flow after commerce, content and booking. Most of the
-event page already existed as blocks (`event-schedule`, `team-grid` for speakers, `location-grid`
-for the venue, `stats-band` for the facts), so this batch added the registration step that turns a
-marketing page into a real flow, plus the assembled demo. (The previous batch, the booking flow, is
-in git history.)
+Built the admin flow — the last of the six Phase 3 product flows (commerce, account, content,
+booking, event, admin all now ship). It leans on primitives already in the kit (`data`, `feedback`,
+`toast`, `dashboard-shell`) and adds the CRUD blocks and a real destructive-action pattern. (The
+previous batch, the event flow, is in git history.)
 
-**The registration blocks**
+**The admin blocks**
 
-- `ticket-tiers` (block): a radiogroup of event ticket tiers, each with price, inclusions and a
-  "few left" / "sold out" state. Distinct from `pricing-duo` (marketing pricing): these are
-  selectable to register from. Sold-out tiers stay visible but disabled. Money in integer minor
-  units. Presentational; the parent owns the selection.
-- `registration-form` (block): the attendee form with a live ticket summary and complete states
-  (idle, validation errors, submitting, registered). Collects attendee and contact detail only; any
-  payment for a paid ticket goes to a provider on submit. `onRegistered` lets the parent own the
-  confirmation, mirroring `checkout-form`'s `onPlaced`.
-- `registration-confirmation` (block, server component): the confirmation. Reference, event, date
-  (in the page locale), venue, ticket and attendee. No invented barcode or QR beyond the reference
-  the flow generated, mirroring `order-confirmation`'s honesty rules.
+- `resource-table` (block): an admin list. A table with a status pill column, per-row edit/delete
+  icon buttons and client pagination, with a real empty state. Presentational; owns no data. The
+  delete button only opens the parent's confirmation, never deletes directly, so a destructive
+  action always has a confirm step.
+- `record-form` (block): one field-config-driven form for both create and edit. Pass `values` to
+  prefill for an edit, omit it for a create, so the two modes cannot drift apart. Required fields
+  validate inline; the parent performs the write through `onSubmit`.
+- `confirm-dialog` (block): a controlled confirmation for a destructive or irreversible action. For
+  the highest-stakes actions, pass `confirmPhrase` to require typing the resource's name before the
+  confirm button enables, so a delete is never a reflexive click. Radix handles the focus trap,
+  escape and scroll lock.
+- `audit-log` (block, server component): a read-only trail — who did what, to what, when — rendered
+  from real events with ISO timestamps shown in the page locale. No numbered badges; the rail
+  carries the sequence.
 
-No new store: the flow is linear (tier → form → confirm), so the demo threads the selected tier
-through local state rather than adding a fourth module store. Not every flow needs one.
+**A real bug, found and fixed in-flight**
+
+- The first `confirm-dialog` example in `block-examples.tsx` passed `onOpenChange`/`onConfirm`
+  closures as props from the (server) preview route into the (client) block. Next.js correctly
+  rejected it at request time: `/preview/confirm-dialog` returned a real 500 ("Event handlers cannot
+  be passed to Client Component props"), not a build-time or type error, because a static example
+  cannot supply working closures to a controlled dialog without crossing the server/client boundary.
+  A controlled, callback-driven overlay is not representable as a static example. Fix: no
+  `confirm-dialog` entry in `block-examples.tsx`; its detail page correctly shows the honest prose
+  fallback instead. The flow itself is fully exercised in `/demo/admin`.
 
 **The demo**
 
-- `/demo/event` on the `signal` theme: a fictional product and engineering conference ("Relay
-  2026"). The existing event blocks carry the marketing page (facts, schedule, speakers, venue),
-  then `ticket-tiers` → `registration-form` → `registration-confirmation` complete the flow.
-  Selecting a tier reveals the form; a valid submit lands on the confirmation. Fictional brand and
-  speakers; the sold-out early-bird tier is kept only so the price ladder reads honestly.
+- `/demo/admin` on the `slate` theme: a fictional team-management page ("Relay Admin"), wrapped in
+  `ToastProvider`. Full CRUD: search and role filter, client-paginated list, create, edit with
+  prefill, and delete gated by typing the user's exact name. Every write also appends to a local
+  audit trail and fires a toast. State is local and in memory; nothing is persisted. Fictional
+  people.
 
 **Registry wiring**
 
-- All 3 items registered in `registry.ts`, `registry-tr.ts` and `registry-metadata.ts` (client
-  items, tags, avoid-when) and given `block-examples.tsx` entries, so they show in the framed viewer
-  rather than the prose fallback. `ticket-tiers` and `registration-form` are client;
-  `registration-confirmation` is a server component. Conventions held: money in minor units, dates
-  in UTC, the React Compiler rules (no unpreservable manual memo, no setState-in-effect).
+- All 4 items registered in `registry.ts`, `registry-tr.ts` and `registry-metadata.ts` (client
+  items, tags, avoid-when). `resource-table`, `record-form` and `confirm-dialog` are client;
+  `audit-log` is a server component. 3 of the 4 got `block-examples.tsx` entries (`confirm-dialog`
+  intentionally does not, see above).
 
 ## 7. Research decision and non-blocking quality work
 
@@ -192,29 +204,37 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-Booking and event are done. The one Phase 3 product flow left is **Admin** (list → filter → create
-→ edit → delete → audit). It is the largest of the flows and leans on primitives already in the kit:
-`data` (tables, states, pagination), `filter-toolbar`, `feedback` (empty/error/loading) and `toast`
-(action confirmations), inside `dashboard-shell`. The new work is mostly a create/edit form pattern,
-a delete confirmation (a destructive-action pattern worth getting right — a real confirm step, not a
-bare button), and an audit-trail list, then an assembled `/demo/admin`. Watch the destructive
-actions: the demo must not imply a real delete, and the confirmation copy must be honest.
+**Phase 3 is complete**: commerce, account, content, booking, event and admin all ship as full
+flows with an assembled demo each. There is no single mandated "next" flow anymore. Two real
+directions:
 
-Alternatively, the owner's backlog (below) — open-source reference curation, or the AI-manifest /
-recipe-bundle candidates — advances the north star directly. Confirm direction with the owner if
-unsure.
+1. **Phase 4 (sector site kits)** — the roadmap's next phase. Assemble full multi-page kits (SaaS,
+   agency, clinic, restaurant, etc.) from the now-complete block library. This is the more natural
+   "next phase" per `PLAN.md`.
+2. **The owner's backlog** (below) — open-source reference curation, or the AI-manifest /
+   recipe-bundle candidates — advances the north star ("everything needed to build a site with AI")
+   directly and does not require Phase 4 to start first.
+
+Confirm direction with the owner before starting either; both are legitimate, and neither was
+explicitly chosen yet.
 
 Conventions to carry forward for any batch:
 - The count-label pattern (`string | (count) => string`) is the convention for any new counted
   surface.
 - Every new whole-page block gets a `block-examples.tsx` entry in the same commit, so nothing
-  regresses to the prose fallback.
+  regresses to the prose fallback — **except** a block whose interactivity is entirely
+  callback-driven through a controlled `open`/`onOpenChange` (or similar) prop, like
+  `confirm-dialog`. That cannot be given a static example without a server-to-client closure leak,
+  which is a real 500 at request time, not a lint or type error. Leave those with the prose
+  fallback and exercise them in a demo instead.
 - Money in integer minor units; dates in UTC with the time zone carried as a label (see
   `availability-calendar`).
 - Shared cross-block state uses a module store read via `useSyncExternalStore` (see `cart-store`,
-  `booking-store`), never prop-threading or setState-in-effect.
+  `booking-store`), never prop-threading or setState-in-effect. Not every flow needs one: a linear
+  flow (see `registration-form` → `registration-confirmation`) can thread state locally in the demo.
 - The React Compiler is on: do not add a manual `useMemo`/`useCallback` it cannot preserve, and
-  never `setState` synchronously inside an effect (see the calendar's month-change reset).
+  never `setState` synchronously inside an effect (see the calendar's month-change reset, or
+  `confirm-dialog`'s reset-on-close in its `onOpenChange` handler instead of an effect).
 
 Before starting, re-read `PLAN.md`, this file and the relevant local Next.js docs under
 `node_modules/next/dist/docs/`.

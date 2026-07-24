@@ -51,6 +51,9 @@ const clientItems = new Set([
   "booking-store",
   "ticket-tiers",
   "registration-form",
+  "resource-table",
+  "record-form",
+  "confirm-dialog",
   "onboarding-flow",
   "settings-form",
   "content-index",
@@ -88,6 +91,10 @@ const avoidWhen: Record<string, string> = {
   "ticket-tiers": "Avoid hiding what a tier includes or its price; keep sold-out tiers visible but disabled.",
   "registration-form": "Never collect card details in this form; hand payment for a paid ticket to a provider on submit.",
   "registration-confirmation": "Avoid inventing a barcode, QR or door policy the ticketing system cannot honour.",
+  "resource-table": "Avoid deleting on the row button itself; route every destructive action through a confirmation.",
+  "record-form": "Avoid separate create and edit forms that drift apart; drive both from one field config.",
+  "confirm-dialog": "Avoid a bare confirm for a hard-to-undo action; require typing the resource name for the highest-stakes ones.",
+  "audit-log": "Avoid presenting reconstructed or partial history as a complete audit trail.",
 };
 
 const tags: Record<string, string[]> = {
@@ -111,6 +118,10 @@ const tags: Record<string, string[]> = {
   "ticket-tiers": ["event", "tickets", "radiogroup", "pricing"],
   "registration-form": ["event", "registration", "form", "attendee"],
   "registration-confirmation": ["event", "registration", "confirmation", "success"],
+  "resource-table": ["admin", "table", "crud", "pagination"],
+  "record-form": ["admin", "form", "create", "edit"],
+  "confirm-dialog": ["admin", "dialog", "destructive", "confirmation"],
+  "audit-log": ["admin", "audit", "activity", "timeline"],
   "onboarding-flow": ["account", "onboarding", "stepper", "form"],
   "settings-form": ["account", "settings", "tabs", "form"],
   "content-index": ["content", "category", "filter", "index", "empty-state"],

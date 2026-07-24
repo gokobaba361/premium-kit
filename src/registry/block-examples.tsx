@@ -1,6 +1,7 @@
 import { AnnouncementBar } from "@/components/blocks/announcement-bar";
 import { AppShowcaseHero } from "@/components/blocks/app-showcase-hero";
 import { ArticleLayout } from "@/components/blocks/article-layout";
+import { AuditLog } from "@/components/blocks/audit-log";
 import { AuthSplit } from "@/components/blocks/auth-split";
 import { AvailabilityCalendar } from "@/components/blocks/availability-calendar";
 import { BookingSummary } from "@/components/blocks/booking-summary";
@@ -31,8 +32,10 @@ import { PageHeader } from "@/components/blocks/page-header";
 import { PricingDuo } from "@/components/blocks/pricing-duo";
 import { ProductGrid } from "@/components/blocks/product-grid";
 import { ProofQuote } from "@/components/blocks/proof-quote";
+import { RecordForm } from "@/components/blocks/record-form";
 import { RegistrationConfirmation } from "@/components/blocks/registration-confirmation";
 import { RegistrationForm } from "@/components/blocks/registration-form";
+import { ResourceTable } from "@/components/blocks/resource-table";
 import { ServicePicker } from "@/components/blocks/service-picker";
 import { SiteFooter } from "@/components/blocks/site-footer";
 import { SiteNav } from "@/components/blocks/site-nav";
@@ -47,6 +50,7 @@ import { Timeline } from "@/components/blocks/timeline";
 import { ContentIndex } from "@/components/blocks/content-index";
 import { Button } from "@/components/primitives/button";
 import { Field, Input } from "@/components/primitives/form";
+import { Container } from "@/components/primitives/layout";
 
 /**
  * One canonical full-width example per block, rendered by /preview/<slug>.
@@ -798,6 +802,94 @@ export const blockExamples: Record<string, React.ReactNode> = {
         },
       ]}
     />
+  ),
+
+  "resource-table": (
+    <div className="py-section">
+      <Container>
+        <ResourceTable
+          columns={[
+            { key: "name", header: "Name" },
+            { key: "email", header: "Email" },
+            { key: "role", header: "Role" },
+            { key: "status", header: "Status" },
+          ]}
+          statusKey="status"
+          statusTones={{ Active: "positive", Invited: "warning", Suspended: "danger" }}
+          labelKey="name"
+          page={1}
+          pageCount={2}
+          rows={[
+            { id: "u1", name: "Elif Saral", email: "elif@relay.co", role: "Admin", status: "Active" },
+            { id: "u2", name: "Tomas Beck", email: "tomas@relay.co", role: "Editor", status: "Active" },
+            { id: "u3", name: "Aylin Demir", email: "aylin@relay.co", role: "Editor", status: "Invited" },
+            { id: "u6", name: "Deniz Kaya", email: "deniz@relay.co", role: "Editor", status: "Suspended" },
+          ]}
+        />
+      </Container>
+    </div>
+  ),
+
+  "record-form": (
+    <div className="py-section">
+      <Container className="max-w-xl">
+        <RecordForm
+          title="Edit user"
+          description="Update the user's details. Changes take effect immediately."
+          submitLabel="Save changes"
+          values={{ name: "Aylin Demir", email: "aylin@relay.co", role: "Editor", status: "Invited" }}
+          fields={[
+            { name: "name", label: "Full name", required: true },
+            { name: "email", label: "Email", type: "email", required: true },
+            {
+              name: "role",
+              label: "Role",
+              type: "select",
+              options: [
+                { value: "Admin", label: "Admin" },
+                { value: "Editor", label: "Editor" },
+                { value: "Viewer", label: "Viewer" },
+              ],
+            },
+          ]}
+        />
+      </Container>
+    </div>
+  ),
+
+  "audit-log": (
+    <div className="py-section">
+      <Container className="max-w-lg">
+        <AuditLog
+          title="Recent activity"
+          locale="en-GB"
+          entries={[
+            {
+              id: "a1",
+              actor: "You",
+              action: "removed",
+              target: "Deniz Kaya",
+              timestamp: "2026-07-24T10:12:00Z",
+            },
+            {
+              id: "a2",
+              actor: "Elif Saral",
+              action: "changed the role of",
+              target: "Tomas Beck",
+              detail: "from Viewer to Editor",
+              timestamp: "2026-07-22T09:14:00Z",
+            },
+            {
+              id: "a3",
+              actor: "Meral Yücel",
+              action: "invited",
+              target: "Lena Fischer",
+              timestamp: "2026-07-21T16:40:00Z",
+            },
+          ]}
+        />
+      </Container>
+    </div>
   ),
 
   /* -------------------------------------------------------------- editorial */

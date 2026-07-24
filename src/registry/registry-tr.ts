@@ -309,6 +309,22 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Kayıt onayı",
     description: "Referans, etkinlik, tarih, bilet ve katılımcıyla onay ekranı.",
   },
+  "resource-table": {
+    name: "Kayıt tablosu",
+    description: "Durum etiketi, satır başına düzenle/sil ve sayfalamayla yönetim listesi.",
+  },
+  "record-form": {
+    name: "Kayıt formu",
+    description: "Alan yapılandırmasıyla oluştur/düzenle formu ve satır içi doğrulama.",
+  },
+  "confirm-dialog": {
+    name: "Onay penceresi",
+    description: "Yıkıcı ya da geri alınamaz bir eylem için kontrollü onay.",
+  },
+  "audit-log": {
+    name: "Denetim kaydı",
+    description: "Salt okunur denetim izi: kim, neyi, ne zaman yaptı.",
+  },
   "onboarding-flow": {
     name: "Karşılama akışı",
     description: "İlerleme çubuğu, geri/devam ve tamamlanma durumuyla çok adımlı kurulum.",

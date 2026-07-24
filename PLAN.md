@@ -171,18 +171,18 @@ inventing new primitives.
 
 ### Phase 3 — Complete product flows
 
-Status: In progress
+Status: Complete
 
-Latest completed batch: the event flow. ticket-tiers, registration-form and registration-confirmation
-turn the existing event blocks (schedule, speakers, venue, facts) into a real flow, and `/demo/event`
-runs it end to end (browse → ticket → register → confirm) on the signal theme.
+Latest completed batch: the admin flow, the last of the six. resource-table, record-form,
+confirm-dialog and audit-log ship a real CRUD pattern (list, filter, paginate, create, edit, and a
+type-to-confirm delete), and `/demo/admin` runs it end to end with a live audit trail and toasts.
 
 - [x] Commerce: collection → product → cart → checkout → confirmation. All blocks
   ship, a cart-store shares live state, and /demo/commerce runs the flow end to end.
 - [x] Account: sign up → onboarding → dashboard → settings. auth-split, onboarding-flow,
   dashboard-shell and settings-form all ship. Remaining: an assembled account demo route.
 - [x] Content: index → category → article → search → subscription. blog-grid, content-index,
-  article-layout, search-results and newsletter-signup ship, and `/demo/content` runs the flow
+  article-layout, search-results and newsletter-signup ship, and /demo/content runs the flow
   end to end over six statically generated articles.
 - [x] Booking: service → staff/location → calendar → confirmation. service-picker, staff-picker,
   availability-calendar and booking-summary ship with a shared booking-store, and /demo/booking runs
@@ -190,9 +190,12 @@ runs it end to end (browse → ticket → register → confirm) on the signal th
 - [x] Event: schedule → speaker → venue → registration. The existing event blocks carry the
   marketing page; ticket-tiers, registration-form and registration-confirmation add the flow, and
   /demo/event runs it end to end.
-- [ ] Admin: list → filter → create → edit → delete → audit.
+- [x] Admin: list → filter → create → edit → delete → audit. resource-table, record-form,
+  confirm-dialog (with a required type-to-confirm phrase for high-stakes deletes) and audit-log
+  ship, and /demo/admin runs the full CRUD flow end to end with toasts and an audit trail.
 
-Exit condition: The library ships complete states and pages, not homepage-only compositions.
+Exit condition met: the library ships complete states and pages, not homepage-only compositions, for
+all six flows.
 
 ### Phase 4 — Sector site kits
 

@@ -782,6 +782,46 @@ export const registry: RegistryItem[] = [
     note: "The success end of the event flow. Date renders in the page locale. No invented barcode or QR beyond the reference the flow generated.",
   },
 
+  /* ------------------------------------------------------------------ admin */
+  {
+    slug: "resource-table",
+    name: "Resource table",
+    category: "block",
+    description: "An admin list with a status pill, per-row edit and delete, and pagination.",
+    files: ["src/components/blocks/resource-table.tsx"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    registryDependencies: ["feedback"],
+    note: "Presentational; it owns no data. The delete button only opens the parent's confirmation, so a destructive action always has a confirm step. Has a real empty state and client pagination.",
+  },
+  {
+    slug: "record-form",
+    name: "Record form",
+    category: "block",
+    description: "A create-or-edit form driven by a field config, with inline validation.",
+    files: ["src/components/blocks/record-form.tsx"],
+    registryDependencies: ["button", "form"],
+    note: "The same block serves create and edit: pass values to prefill for an edit, omit for a create. The parent performs the write through onSubmit.",
+  },
+  {
+    slug: "confirm-dialog",
+    name: "Confirm dialog",
+    category: "block",
+    description: "A controlled confirmation for a destructive or irreversible action.",
+    files: ["src/components/blocks/confirm-dialog.tsx"],
+    dependencies: ["@radix-ui/react-dialog", "@phosphor-icons/react", "clsx", "tailwind-merge"],
+    registryDependencies: ["button", "form"],
+    note: "A real confirm step, not a bare button. Pass confirmPhrase for high-stakes actions to require the user to type the resource name first. Radix handles focus trap, escape and scroll lock.",
+  },
+  {
+    slug: "audit-log",
+    name: "Audit log",
+    category: "block",
+    description: "A read-only audit trail: who did what, to what, and when.",
+    files: ["src/components/blocks/audit-log.tsx"],
+    registryDependencies: ["data"],
+    note: "Rendered from real events. Timestamps are machine-readable ISO strings shown in the page locale; the rail carries the sequence, so no numbered badges. Server component.",
+  },
+
   /* ---------------------------------------------------------------- account */
   {
     slug: "onboarding-flow",
