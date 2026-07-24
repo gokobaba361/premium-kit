@@ -1,7 +1,7 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Phase 3 content flow complete
+Current milestone: Phase 3 content flow assembled and proven end to end
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -20,9 +20,10 @@ Validated inventory:
 - 14 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes and 10 purpose-led site skeletons
-- 190 statically generated documentation/product pages
+- 197 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
 - Turkish catalogue coverage: 73/73
+- Two assembled demo flows: `/demo/commerce` and `/demo/content`
 
 ## 2. Fixed architecture
 
@@ -113,26 +114,62 @@ Latest local result:
 - registry installation audit: 73/73, no errors
 - Turkish coverage: 73/73
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 190/190 static pages, dynamic registry endpoints
+- production build: 197/197 static pages, dynamic registry endpoints
 - dynamic registry trace: shared CSS and representative block/primitive source included
 - clean `src` fixture: install, typecheck and build pass
 - clean non-`src` fixture: install, typecheck and build pass
 
 ## 6. Completed in the latest batch
 
-- Added `content-index`, a filterable editorial category/index block with realistic article data.
-- Kept the data model aligned with existing content blocks: title, excerpt, href, category, ISO
-  date and localised reading time.
-- Added explicit active-filter state, result count, a real empty category state and reset action.
-- Used native buttons, `aria-pressed`, `aria-controls` and a polite atomic status announcement.
-- Added configurable labels plus `Intl.DateTimeFormat` locale support with stable UTC date-only
-  formatting.
-- Added English and Turkish registry copy, metadata v2 tags/guidance and a live preview.
-- Kept the item dependency-free beyond the automatic `premium-kit-base` registry foundation.
-- Added `content-index` to both clean consumer fixtures and verified `src` and non-`src`
-  installation, TypeScript and production builds.
-- Verified long content, 375px mobile wrapping, no horizontal overflow and a clean browser error
-  log.
+The content flow is now assembled and running, and assembling it surfaced three real defects that
+neither lint, TypeScript nor the build could see. All three are fixed in registry-owned source, so
+consumers get the fix too.
+
+**The demo**
+
+- Added `/demo/content`, a fictional journal ("Kesit") on the `archive` theme, assembled only from
+  shipping blocks: `site-nav`, `page-header`, `blog-grid`, `content-index`, `search-results`,
+  `newsletter-signup` and `site-footer`.
+- Added `/demo/content/[slug]`, six statically generated articles rendered through `article-layout`
+  with real `.pk-prose` bodies (headings, lists, blockquote, links, a fenced code block).
+- Added `src/components/site/content-demo-data.tsx`: one article model feeds the index filter, the
+  featured grid, the search island and the reading page. That is the point of the demo — the blocks
+  are presentational, so no per-block adapter is needed.
+- Added `src/components/site/content-demo-search.tsx`, a client search island. Filtering is local
+  state rather than a `q` parameter on purpose: `searchParams` is a request-time API and would opt
+  the page into dynamic rendering. Both demo routes stay static.
+- The publication and its staff are fictional; no real customer, metric or endorsement is implied.
+
+**Defects the demo surfaced**
+
+1. Count nouns did not inflect: the UI read "1 articles", "1 options", "1 results". Turkish takes
+   the singular after any numeral, so the Turkish catalogue never exposed it. `content-index`,
+   `search-results`, `combobox` and `command-palette` now accept the count noun as
+   `string | ((count: number) => string)` and default to a correct English pluraliser. Passing a
+   plain string still works, so the change is backwards compatible.
+2. `.pk-prose` had no `pre` rule. A fenced code block inherited the inline-code chip styling and,
+   worse, had no `overflow-x`, so the longest code line — not the measure — would set the width of
+   the reading column. Added `pre` and `pre code` rules to `base.css` (registry-owned, ships with
+   `premium-kit-base`).
+3. `article-layout` keyed its tag list by `tag.href`. Several tags legitimately point at one
+   destination, which produced a duplicate-key error and unsupported reconciliation behaviour. Now
+   keyed by href and label together.
+
+**Small enhancement**
+
+- `site-nav` accepts an optional `brandHref` (default `/`) so a site mounted under a sub-path can
+  point its wordmark at its own root instead of escaping to the host application.
+
+**Verified in-browser**
+
+- Category filter 6 → 2 for Typography, `aria-pressed` correct on all five buttons, polite status
+  reads "2 articles"; Materials reads "1 article".
+- Search: "typography" → 2 articles, "oak" → "1 article", "zzz" → the no-results state with a
+  recovery link.
+- Article page renders `.pk-prose` under the `archive` theme (EB Garamond display), the code block
+  has `overflow-x: auto` with the inline chip styling removed, and the measure holds at ~766px.
+- No horizontal page scroll at 1280px or 375px on either route.
+- Clean browser console on a fresh tab for both the index and an article.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -155,13 +192,25 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-After this batch is committed, pushed and green in CI:
+After this batch is committed, pushed and green in CI, begin the **booking flow**:
+service → staff/location → calendar → confirmation.
 
-1. Optionally assemble `/demo/content` from blog-grid, content-index, article-layout,
-   search-results and newsletter-signup.
-2. Then begin the booking flow: service → staff/location → calendar → confirmation.
+Expected shape, following the commerce precedent:
 
-Before that next implementation, re-read `PLAN.md`, this file and relevant local Next.js docs.
+1. `service-picker` — selectable services with duration and price in integer minor units.
+2. `availability-calendar` — the hard one. A month grid with keyboard navigation, disabled and
+   fully-booked days, and an explicit time-zone. Decide early whether slots arrive pre-computed
+   from the parent (they should) rather than being derived in the block.
+3. `booking-summary` / confirmation, reusing `order-confirmation`'s honesty rules: no invented
+   reference numbers beyond the demo's own.
+4. A shared booking store if the flow needs live state across blocks, mirroring `cart-store`.
+5. Then `/demo/booking` to prove it end to end.
+
+Note for that batch: the count-label pattern introduced here (`string | (count) => string`) is the
+convention for any new counted surface.
+
+Before starting, re-read `PLAN.md`, this file and the relevant local Next.js docs under
+`node_modules/next/dist/docs/`.
 
 ## 9. Source-control protocol
 

@@ -200,6 +200,27 @@
   border-radius: var(--pk-radius-sm);
 }
 
+/* A code block scrolls inside its own box. Without this the longest line, not
+   the measure, would set the width of the reading column. */
+.pk-prose pre {
+  background: var(--pk-bg-subtle);
+  border: 1px solid var(--pk-line);
+  border-radius: var(--pk-radius);
+  padding: 1em 1.2em;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+/* Inside a block, the inline-code chip styling is wrong: pre already owns the
+   surface. */
+.pk-prose pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
 .pk-prose img {
   max-width: 100%;
   border-radius: var(--pk-radius);

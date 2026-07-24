@@ -86,7 +86,9 @@ export function ArticleLayout({
           <footer className="mt-12 flex flex-wrap gap-2 border-t border-line pt-8">
             {tags.map((tag) => (
               <Link
-                key={tag.href}
+                /* Several tags legitimately point at one destination, so the
+                   href alone is not a unique key. */
+                key={`${tag.href}-${tag.label}`}
                 href={tag.href}
                 className="rounded-pk-pill border border-line px-3.5 py-1.5 text-sm text-muted transition-colors hover:border-strong hover:text-fg"
               >

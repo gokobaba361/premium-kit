@@ -12,17 +12,23 @@ export type { NavItem } from "./nav-types";
  */
 export function SiteNav({
   brand,
+  brandHref = "/",
   items,
   cta,
 }: {
   brand: string;
+  /** Where the wordmark points. Set it when the site is mounted under a sub-path. */
+  brandHref?: string;
   items: NavItem[];
   cta?: { label: string; href: string };
 }) {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-md">
       <Container className="flex h-[68px] items-center justify-between gap-8">
-        <Link href="/" className="font-display text-[0.95rem] font-semibold tracking-tight">
+        <Link
+          href={brandHref}
+          className="font-display text-[0.95rem] font-semibold tracking-tight"
+        >
           {brand}
         </Link>
 

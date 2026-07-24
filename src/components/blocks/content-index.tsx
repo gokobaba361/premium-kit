@@ -15,10 +15,16 @@ export type ContentIndexItem = {
   readingTime: string;
 };
 
+/**
+ * A count noun. Pass a function when the language inflects for number: English
+ * needs "1 article" / "2 articles", Turkish takes the singular after any numeral.
+ */
+export type CountLabel = string | ((count: number) => string);
+
 export type ContentIndexLabels = {
   filters: string;
   all: string;
-  results: string;
+  results: CountLabel;
   emptyTitle: string;
   emptyDescription: string;
   reset: string;
@@ -27,7 +33,7 @@ export type ContentIndexLabels = {
 const defaultLabels: ContentIndexLabels = {
   filters: "Filter by category",
   all: "All",
-  results: "articles",
+  results: (count) => (count === 1 ? "article" : "articles"),
   emptyTitle: "No articles in this category",
   emptyDescription: "Choose another category or show all articles.",
   reset: "Show all articles",
@@ -140,7 +146,10 @@ export function ContentIndex({
               aria-atomic="true"
               className="text-right text-sm tabular-nums text-muted"
             >
-              {visibleItems.length} {copy.results}
+              {visibleItems.length}{" "}
+              {typeof copy.results === "function"
+                ? copy.results(visibleItems.length)
+                : copy.results}
               <span className="sr-only"> · {activeLabel}</span>
             </p>
           </div>

@@ -167,16 +167,16 @@ inventing new primitives.
 
 Status: In progress
 
-Latest completed batch: filterable content category/index with localised dates, active state,
-result announcements and an empty category state.
+Latest completed batch: the assembled `/demo/content` editorial flow, plus the count-label and
+prose code-block fixes it surfaced.
 
 - [x] Commerce: collection → product → cart → checkout → confirmation. All blocks
   ship, a cart-store shares live state, and /demo/commerce runs the flow end to end.
 - [x] Account: sign up → onboarding → dashboard → settings. auth-split, onboarding-flow,
   dashboard-shell and settings-form all ship. Remaining: an assembled account demo route.
 - [x] Content: index → category → article → search → subscription. blog-grid, content-index,
-  article-layout, search-results and newsletter-signup ship. An assembled `/demo/content` route
-  remains optional.
+  article-layout, search-results and newsletter-signup ship, and `/demo/content` runs the flow
+  end to end over six statically generated articles.
 - [ ] Booking: service → staff/location → calendar → confirmation.
 - [ ] Event: schedule → speaker → venue → registration.
 - [ ] Admin: list → filter → create → edit → delete → audit.

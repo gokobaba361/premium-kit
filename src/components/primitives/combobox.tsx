@@ -19,7 +19,7 @@ export function Combobox({
   placeholder = "Choose an option",
   searchPlaceholder = "Search options",
   emptyLabel = "No matching options.",
-  resultsLabel = "options",
+  resultsLabel = (count) => (count === 1 ? "option" : "options"),
   value,
   defaultValue,
   disabled,
@@ -33,7 +33,8 @@ export function Combobox({
   placeholder?: string;
   searchPlaceholder?: string;
   emptyLabel?: string;
-  resultsLabel?: string;
+  /** Pass a function when the language inflects for number. */
+  resultsLabel?: string | ((count: number) => string);
   value?: string;
   defaultValue?: string;
   disabled?: boolean;
@@ -246,7 +247,10 @@ export function Combobox({
             </div>
 
             <p className="border-t border-line px-3 py-2 text-xs text-faint" aria-live="polite">
-              {filteredOptions.length} {resultsLabel}
+              {filteredOptions.length}{" "}
+              {typeof resultsLabel === "function"
+                ? resultsLabel(filteredOptions.length)
+                : resultsLabel}
             </p>
           </PopoverPrimitive.Content>
         </PopoverPrimitive.Portal>

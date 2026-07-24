@@ -14,15 +14,25 @@ export type SearchResultItem = {
   meta?: string;
 };
 
+/**
+ * A count noun. Pass a function when the language inflects for number: English
+ * needs "1 result" / "2 results", Turkish takes the singular after any numeral.
+ */
+export type CountLabel = string | ((count: number) => string);
+
+function countLabel(label: CountLabel, count: number) {
+  return typeof label === "function" ? label(count) : label;
+}
+
 export function SearchResults({
   query,
   results,
-  resultsLabel = "results",
+  resultsLabel = (count) => (count === 1 ? "result" : "results"),
   className,
 }: {
   query: string;
   results: SearchResultItem[];
-  resultsLabel?: string;
+  resultsLabel?: CountLabel;
   className?: string;
 }) {
   return (
@@ -35,7 +45,7 @@ export function SearchResults({
           </h2>
         </div>
         <p className="text-sm text-muted">
-          {results.length} {resultsLabel}
+          {results.length} {countLabel(resultsLabel, results.length)}
         </p>
       </div>
 

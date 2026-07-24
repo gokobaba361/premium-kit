@@ -288,7 +288,7 @@ export const registry: RegistryItem[] = [
     description: "Results, no-results guidance and recent-search links.",
     files: ["src/components/primitives/search-results.tsx"],
     dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
-    note: "Result counts, query context and a recovery path remain visible. Recent searches are ordinary links and require no client state.",
+    note: "Result counts, query context and a recovery path remain visible. Recent searches are ordinary links and require no client state. The count noun accepts a function of the count, so English pluralises and Turkish stays singular after a numeral.",
   },
 
   /* ----------------------------------------------------------------- blocks */
@@ -732,7 +732,7 @@ export const registry: RegistryItem[] = [
     category: "block",
     description: "Filterable editorial index with result counts and a complete empty state.",
     files: ["src/components/blocks/content-index.tsx"],
-    note: "Use for category-led discovery. The active filter and result count remain visible and programmatically available.",
+    note: "Use for category-led discovery. The active filter and result count remain visible and programmatically available. The count noun accepts a function of the count, so English pluralises and Turkish stays singular after a numeral. See /demo/content for the assembled flow.",
   },
   {
     slug: "article-layout",
@@ -741,7 +741,7 @@ export const registry: RegistryItem[] = [
     description: "Long-form reading layout with author attribution and prose typography.",
     files: ["src/components/blocks/article-layout.tsx"],
     registryDependencies: ["data"],
-    note: "The body uses the shared .pk-prose rules from globals.css, so Markdown-rendered content and hand-written JSX read the same. Server component; no client JavaScript.",
+    note: "The body uses the shared .pk-prose rules from globals.css, so Markdown-rendered content and hand-written JSX read the same, including fenced code blocks that scroll inside their own box. Server component; no client JavaScript. See /demo/content for the assembled flow.",
   },
 
   /* ------------------------------------------------------------------ theme */

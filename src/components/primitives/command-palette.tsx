@@ -21,7 +21,7 @@ export function CommandPalette({
   triggerLabel = "Search",
   searchPlaceholder = "Search pages and actions",
   emptyLabel = "No matching results.",
-  resultsLabel = "results",
+  resultsLabel = (count) => (count === 1 ? "result" : "results"),
   closeLabel = "Close search",
   closeHint = "Esc to close",
   className,
@@ -30,7 +30,8 @@ export function CommandPalette({
   triggerLabel?: string;
   searchPlaceholder?: string;
   emptyLabel?: string;
-  resultsLabel?: string;
+  /** Pass a function when the language inflects for number. */
+  resultsLabel?: string | ((count: number) => string);
   closeLabel?: string;
   closeHint?: string;
   className?: string;
@@ -170,7 +171,10 @@ export function CommandPalette({
 
           <footer className="flex items-center justify-between border-t border-line px-4 py-2 text-xs text-faint">
             <span aria-live="polite">
-              {resultCount} {resultsLabel}
+              {resultCount}{" "}
+              {typeof resultsLabel === "function"
+                ? resultsLabel(resultCount)
+                : resultsLabel}
             </span>
             <span>{closeHint}</span>
           </footer>
