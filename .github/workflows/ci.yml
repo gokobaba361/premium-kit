@@ -43,6 +43,9 @@ jobs:
       - name: Audit Turkish coverage
         run: npm run audit:i18n
 
+      - name: Audit site kit references
+        run: npm run audit:kits
+
       - name: Build
         run: npm run build
 

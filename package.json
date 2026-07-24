@@ -11,8 +11,9 @@
     "lint": "eslint",
     "audit:contrast": "node scripts/contrast-audit.mjs",
     "audit:registry": "node scripts/registry-audit.mjs",
-    "audit": "npm run audit:contrast && npm run audit:registry && npm run audit:i18n",
-    "audit:i18n": "node scripts/i18n-audit.mjs"
+    "audit": "npm run audit:contrast && npm run audit:registry && npm run audit:i18n && npm run audit:kits",
+    "audit:i18n": "node scripts/i18n-audit.mjs",
+    "audit:kits": "node scripts/kit-audit.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

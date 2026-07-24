@@ -52,6 +52,9 @@ export default function KitIndex() {
           <ButtonLink href="/skeletons" size="lg" variant="secondary">
             Site skeletons
           </ButtonLink>
+          <ButtonLink href="/kits" size="lg" variant="secondary">
+            Sector site kits
+          </ButtonLink>
           <ButtonLink href="/sources" size="lg" variant="secondary">
             Open-source research
           </ButtonLink>

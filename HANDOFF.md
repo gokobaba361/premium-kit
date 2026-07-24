@@ -1,8 +1,8 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Admin flow complete and assembled end to end (`/demo/admin`) — all six Phase 3
-product flows now ship
+Current milestone: Phase 4 started — the multi-page site kit layer ships with its first 4 sector
+kits, in EN, TR and as machine-readable JSON
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -22,7 +22,10 @@ Validated inventory:
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes, each with a full worked `/templates/<theme>` page
 - 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
-- 250 statically generated documentation/product pages
+- 4 of the 18 planned sector site kits, each with its route tree, content model, structured-data
+  types, forms, legal surfaces and operational states (EN + TR detail pages, plus
+  `/r/site-kits.json`)
+- 261 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
 - Turkish catalogue coverage: 85/85
 - Five assembled demo flows: `/demo/commerce`, `/demo/content`, `/demo/booking`, `/demo/event` and
@@ -123,65 +126,67 @@ Latest local result:
 - typecheck: clean
 - registry installation audit: 85/85, no errors
 - Turkish coverage: 85/85
+- site kit reference audit: 4 kits, 0 broken references
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 250/250 static pages, dynamic registry and preview endpoints
+- production build: 261/261 static pages, dynamic registry and preview endpoints
 - clean `src` and non-`src` consumer fixtures: install, typecheck and build pass
-- admin flow verified end to end in the browser (`/demo/admin`): list, search and role filter,
-  client pagination (7 seed users, page 2 correct), create (toast + audit entry), edit with correct
-  prefill, and delete with the type-to-confirm dialog (confirm button disabled until the exact name
-  is typed, then enabled; dialog closes, toast fires, audit records it, row is gone); a real 500 was
-  found and fixed here (see batch notes below); clean console after the fix
-- event flow (previous batch) still verified
+- site kits verified in the browser: EN and TR index and detail pages render every section, the
+  route table's skeleton and block pills resolve (spot-checked `/skeletons/service-business`,
+  `/components/availability-calendar`, `/components/booking-store`, `/templates/clinic` and the TR
+  equivalents, all 200), the language switch maps `/kits/<slug>` to `/tr/kitler/<slug>`, the TR page
+  resolves block names into Turkish, `/r/site-kits.json` returns the full contract, no horizontal
+  page scroll at 1280px or 375px (the wide route table scrolls in its own box), clean console
+- admin flow (previous batch) still verified end to end
 
 ## 6. Completed in the latest batch
 
-Built the admin flow — the last of the six Phase 3 product flows (commerce, account, content,
-booking, event, admin all now ship). It leans on primitives already in the kit (`data`, `feedback`,
-`toast`, `dashboard-shell`) and adds the CRUD blocks and a real destructive-action pattern. (The
-previous batch, the event flow, is in git history.)
+Started Phase 4 by building the layer the sector kits need, then the first 4 kits. (The previous
+batch, the admin flow that completed Phase 3, is in git history.)
 
-**The admin blocks**
+**What a kit is, and why it is not a skeleton**
 
-- `resource-table` (block): an admin list. A table with a status pill column, per-row edit/delete
-  icon buttons and client pagination, with a real empty state. Presentational; owns no data. The
-  delete button only opens the parent's confirmation, never deletes directly, so a destructive
-  action always has a confirm step.
-- `record-form` (block): one field-config-driven form for both create and edit. Pass `values` to
-  prefill for an edit, omit it for a create, so the two modes cannot drift apart. Required fields
-  validate inline; the parent performs the write through `onSubmit`.
-- `confirm-dialog` (block): a controlled confirmation for a destructive or irreversible action. For
-  the highest-stakes actions, pass `confirmPhrase` to require typing the resource's name before the
-  confirm button enables, so a delete is never a reflexive click. Radix handles the focus trap,
-  escape and scroll lock.
-- `audit-log` (block, server component): a read-only trail — who did what, to what, when — rendered
-  from real events with ISO timestamps shown in the page locale. No numbered badges; the rail
-  carries the sequence.
+A skeleton is one page's section order. A kit is a whole site, which is the thing Phase 4 asks for:
+which routes exist and in what build order, which skeleton or registry items drive each route, the
+content model behind them, the schema.org type each route emits, what each form collects and where
+that data actually goes, the legal surfaces the sector genuinely requires, and the operational
+states that must exist before the build is done.
 
-**A real bug, found and fixed in-flight**
+**The data layer**
 
-- The first `confirm-dialog` example in `block-examples.tsx` passed `onOpenChange`/`onConfirm`
-  closures as props from the (server) preview route into the (client) block. Next.js correctly
-  rejected it at request time: `/preview/confirm-dialog` returned a real 500 ("Event handlers cannot
-  be passed to Client Component props"), not a build-time or type error, because a static example
-  cannot supply working closures to a controlled dialog without crossing the server/client boundary.
-  A controlled, callback-driven overlay is not representable as a static example. Fix: no
-  `confirm-dialog` entry in `block-examples.tsx`; its detail page correctly shows the honest prose
-  fallback instead. The flow itself is fully exercised in `/demo/admin`.
+- `src/registry/site-kits.ts` — the `SiteKit` model plus the first four kits. Routes carry a
+  `required` flag, so a kit states its core set and keeps the rest as an explicit backlog rather
+  than an implied promise.
+- `src/registry/site-kits-tr.ts` — Turkish kit copy, one source shared by the TR index and detail.
+- The kits are **Turkey-first in the legal layer**: `KVKK aydınlatma metni` for anything collecting
+  personal data, `açık rıza` for the clinic (health data is özel nitelikli kişisel veri and needs
+  separate explicit consent), `mesafeli satış sözleşmesi` and `ön bilgilendirme formu` for commerce,
+  allergen information for hospitality. Every page in that list says why the sector needs it. Both
+  the pages and the JSON state plainly that this is a build checklist, not legal advice.
 
-**The demo**
+**The first four kits**
 
-- `/demo/admin` on the `slate` theme: a fictional team-management page ("Relay Admin"), wrapped in
-  `ToastProvider`. Full CRUD: search and role filter, client-paginated list, create, edit with
-  prefill, and delete gated by typing the user's exact name. Every write also appends to a local
-  audit trail and fires a toast. State is local and in memory; nothing is persisted. Fictional
-  people.
+`saas-product` (8 routes), `clinic-healthcare` (6), `ecommerce-store` (8), `restaurant-hospitality`
+(5). They deliberately consume the Phase 3 flows: the clinic kit's `/randevu` route is built from
+the booking blocks, the commerce kit's checkout path from the commerce blocks.
 
-**Registry wiring**
+**Surfaces**
 
-- All 4 items registered in `registry.ts`, `registry-tr.ts` and `registry-metadata.ts` (client
-  items, tags, avoid-when). `resource-table`, `record-form` and `confirm-dialog` are client;
-  `audit-log` is a server component. 3 of the 4 got `block-examples.tsx` entries (`confirm-dialog`
-  intentionally does not, see above).
+- `/kits` and `/kits/<slug>` (EN), `/tr/kitler` and `/tr/kitler/<slug>` (TR). The detail page renders
+  the route table (each route linking to its skeleton and registry items), content model, forms with
+  their real destinations, legal surfaces and operational states.
+- `/r/site-kits.json` — the whole contract for agents, with install URLs resolved per route and per
+  form. Registered in the AI manifest's `endpoints` and `inventory`.
+- Language switch now maps `/kits/<slug>` and `/skeletons/<slug>` to their TR equivalents (the
+  skeleton detail mapping was missing since those pages were added).
+
+**A new audit, because nothing else could catch this**
+
+- `scripts/kit-audit.mjs` (`npm run audit:kits`, wired into `npm run audit` and CI). A kit route
+  points at a skeleton slug and registry slugs as plain strings. The registry audit does not see
+  kits (they are catalogue data, not installable entries) and TypeScript cannot check a string
+  against another file's data, so a rename would silently produce a kit linking nowhere. The audit
+  fails on any unknown skeleton slug, registry slug or preset id. Verified by deliberately breaking
+  a slug: it exited 1 with the correct message, then passed again once restored.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -204,21 +209,35 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-**Phase 3 is complete**: commerce, account, content, booking, event and admin all ship as full
-flows with an assembled demo each. There is no single mandated "next" flow anymore. Two real
-directions:
+**Phase 4 is under way**: the kit layer ships and 4 of the 18 planned sector kits are written. The
+obvious continuation is **the next batch of kits**, since the model, the audit, both language
+surfaces and the AI endpoint already exist — adding a kit is now editing one data file and letting
+the audit check it.
 
-1. **Phase 4 (sector site kits)** — the roadmap's next phase. Assemble full multi-page kits (SaaS,
-   agency, clinic, restaurant, etc.) from the now-complete block library. This is the more natural
-   "next phase" per `PLAN.md`.
-2. **The owner's backlog** (below) — open-source reference curation, or the AI-manifest /
-   recipe-bundle candidates — advances the north star ("everything needed to build a site with AI")
-   directly and does not require Phase 4 to start first.
+Remaining 14, roughly in descending order of how well the current block library already covers them
+(so the early ones need no new blocks):
 
-Confirm direction with the owner before starting either; both are legitimate, and neither was
-explicitly chosen yet.
+- Agency and creative studio, Freelancer and portfolio, Consultant and professional service —
+  covered by `studio-portfolio` and the proof/contact blocks.
+- Blog/publication/newsletter, Documentation and developer portal — covered by `publication`,
+  `documentation-hub` and the content flow.
+- Event and conference — covered by the event flow shipped two batches ago.
+- Education and online course, Non-profit and donation, Real estate and architecture, Hotel and
+  travel, Legal and financial service, Creator and personal brand, Marketplace and community,
+  Dashboard and internal tool.
+
+Watch for kits that genuinely need a block the library lacks (a course curriculum list, a donation
+form with amount tiers, a property listing card). When that happens, build the block first with a
+`block-examples.tsx` entry, then write the kit, so the kit never references a slug that does not
+exist.
+
+The alternative remains the owner's backlog below (open-source reference curation, the AI-manifest /
+recipe-bundle candidates). Confirm with the owner if unsure.
 
 Conventions to carry forward for any batch:
+- A new kit is a `site-kits.ts` entry plus a `site-kits-tr.ts` translation, and `npm run audit:kits`
+  must stay green. Kit legal surfaces are stated as sector obligations in Türkiye and always framed
+  as a checklist, never as legal advice.
 - The count-label pattern (`string | (count) => string`) is the convention for any new counted
   surface.
 - Every new whole-page block gets a `block-examples.tsx` entry in the same commit, so nothing

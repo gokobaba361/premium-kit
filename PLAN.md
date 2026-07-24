@@ -199,31 +199,43 @@ all six flows.
 
 ### Phase 4 — Sector site kits
 
-Status: Planned
+Status: In progress (4 of 18)
+
+Latest completed batch: the kit layer itself plus the first four kits. `src/registry/site-kits.ts`
+defines the `SiteKit` model, `/kits` and `/tr/kitler` render it for people, `/r/site-kits.json`
+serves it to agents, and `npm run audit:kits` fails the build if a kit references a skeleton,
+registry item or theme that does not exist.
+
+A kit is deliberately the layer above a skeleton: a skeleton is one page's section order, a kit is
+the whole site.
 
 Target kits:
 
-- SaaS and AI product
-- Agency and creative studio
-- Freelancer and portfolio
-- E-commerce
-- Clinic, dentist and healthcare
-- Consultant and professional service
-- Restaurant, cafe and hospitality
-- Hotel and travel
-- Event and conference
-- Education and online course
-- Blog, publication and newsletter
-- Real estate and architecture
-- Legal and financial service
-- Non-profit and donation
-- Documentation and developer portal
-- Dashboard and internal tool
-- Marketplace and community
-- Creator and personal brand
+- [x] SaaS and AI product
+- [ ] Agency and creative studio
+- [ ] Freelancer and portfolio
+- [x] E-commerce
+- [x] Clinic, dentist and healthcare
+- [ ] Consultant and professional service
+- [x] Restaurant, cafe and hospitality
+- [ ] Hotel and travel
+- [ ] Event and conference
+- [ ] Education and online course
+- [ ] Blog, publication and newsletter
+- [ ] Real estate and architecture
+- [ ] Legal and financial service
+- [ ] Non-profit and donation
+- [ ] Documentation and developer portal
+- [ ] Dashboard and internal tool
+- [ ] Marketplace and community
+- [ ] Creator and personal brand
 
 Each kit must include its required routes, content model, structured data type, forms, legal
 surfaces and operational states.
+
+Legal surfaces are Turkey-first and named for the real obligation (KVKK aydınlatma metni, açık rıza
+for health data, mesafeli satış sözleşmesi and ön bilgilendirme formu for distance selling). They
+are stated as a build checklist so nothing is forgotten at launch, never as legal advice.
 
 ### Phase 5 — Visual-system breadth
 

@@ -1,6 +1,7 @@
 import { presets } from "@/design/presets";
 import { registry } from "@/registry/registry";
 import { skeletons } from "@/registry/skeletons";
+import { siteKits } from "@/registry/site-kits";
 import { buildPhases, qualityGates } from "@/registry/site-planning";
 
 export const dynamic = "force-static";
@@ -25,6 +26,7 @@ export function GET() {
       registry: "/r/registry.json",
       catalog: "/r/catalog.json",
       recipes: "/r/site-recipes.json",
+      siteKits: "/r/site-kits.json",
       guide: "/r/AI-GUIDE.md",
       guideTr: "/r/AI-GUIDE.tr.md",
       briefTemplate: "/r/SITE-BRIEF.md",
@@ -35,6 +37,7 @@ export function GET() {
     inventory: {
       items: registry.length,
       recipes: skeletons.length,
+      siteKits: siteKits.length,
       themes: presets.length,
     },
     themes: presets.map((preset) => ({

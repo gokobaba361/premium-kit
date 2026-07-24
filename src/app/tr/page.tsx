@@ -54,6 +54,9 @@ export default function TurkishKitIndex() {
           <ButtonLink href="/tr/iskeletler" size="lg" variant="secondary">
             Site iskeletleri
           </ButtonLink>
+          <ButtonLink href="/tr/kitler" size="lg" variant="secondary">
+            Sektör site kitleri
+          </ButtonLink>
           <ButtonLink href="/tr/kaynaklar" size="lg" variant="secondary">
             GitHub kaynakları
           </ButtonLink>

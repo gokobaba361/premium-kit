@@ -11,6 +11,11 @@ function turkishPath(pathname: string) {
   }
   if (pathname === "/blocks") return "/tr/bloklar";
   if (pathname === "/skeletons") return "/tr/iskeletler";
+  if (pathname.startsWith("/skeletons/")) {
+    return pathname.replace("/skeletons/", "/tr/iskeletler/");
+  }
+  if (pathname === "/kits") return "/tr/kitler";
+  if (pathname.startsWith("/kits/")) return pathname.replace("/kits/", "/tr/kitler/");
   if (pathname === "/sources") return "/tr/kaynaklar";
   if (pathname === "/ai") return "/tr/yapay-zeka";
   return "/tr";
@@ -24,6 +29,11 @@ function englishPath(pathname: string) {
   }
   if (pathname === "/tr/bloklar") return "/blocks";
   if (pathname === "/tr/iskeletler") return "/skeletons";
+  if (pathname.startsWith("/tr/iskeletler/")) {
+    return pathname.replace("/tr/iskeletler/", "/skeletons/");
+  }
+  if (pathname === "/tr/kitler") return "/kits";
+  if (pathname.startsWith("/tr/kitler/")) return pathname.replace("/tr/kitler/", "/kits/");
   if (pathname === "/tr/kaynaklar") return "/sources";
   if (pathname === "/tr/yapay-zeka") return "/ai";
   return "/";
