@@ -1,8 +1,7 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Nothing in the catalogue is invisible — blocks, skeletons and all 12 themes
-have a worked, viewable example
+Current milestone: Booking flow complete and assembled end to end (`/demo/booking`)
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -16,16 +15,16 @@ English human routes and machine-readable AI routes describe the same source of 
 
 Validated inventory:
 
-- 73 registry items
-- 47 full-page blocks
-- 14 grouped primitive families
+- 78 registry items
+- 51 full-page blocks
+- 15 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
-- 12 visual themes, each with a full worked `/templates/<theme>` page (was 6)
+- 12 visual themes, each with a full worked `/templates/<theme>` page
 - 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
-- 223 statically generated documentation/product pages
+- 234 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
-- Turkish catalogue coverage: 73/73
-- Two assembled demo flows: `/demo/commerce` and `/demo/content`
+- Turkish catalogue coverage: 78/78
+- Three assembled demo flows: `/demo/commerce`, `/demo/content` and `/demo/booking`
 - Every catalogue block is now viewable: 31 have a boxed preview, and the 40 whole-page blocks
   render in a framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch
 - Every skeleton renders as an assembled page (`/preview/skeleton/<slug>`), shown in the same
@@ -115,66 +114,65 @@ npm run test:consumer-registry
 
 Latest local result:
 
-- lint: clean
+- lint: clean (including the React Compiler rules: no manual useMemo it cannot preserve, no
+  setState synchronously inside an effect)
 - typecheck: clean
-- registry installation audit: 73/73, no errors
-- Turkish coverage: 73/73
+- registry installation audit: 78/78, no errors
+- Turkish coverage: 78/78
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 223/223 static pages, dynamic registry and preview endpoints
-- dynamic registry trace: shared CSS and representative block/primitive source included
-- clean `src` fixture: install, typecheck and build pass
-- clean non-`src` fixture: install, typecheck and build pass
-- preview system verified in a production server (not only dev): every `/preview/<slug>` returns
-  200 across themes; the desktop frame fills its column with no overflow and no scale transform on
-  first paint; tablet and mobile cap and centre; the theme switch reloads the iframe with the new
-  `data-theme`; no horizontal scroll inside the frame or on the page
-- all 6 previously-404 template routes now return 200; the home page shows "View template" for all
-  12 themes with no "template pending" state; every skeleton detail page renders the assembled
-  preview and switches theme
+- production build: 234/234 static pages, dynamic registry and preview endpoints
+- clean `src` and non-`src` consumer fixtures: install, typecheck and build pass
+- booking flow verified end to end in the browser (`/demo/booking`): progressive disclosure reveals
+  each step, the calendar shows exactly the open days with an explicit time zone, UTC date maths
+  gives the right weekday (2026-08-11 is a Tuesday), arrow keys move between open days skipping
+  closed ones, empty confirm shows a validation error, and a valid submit reaches the summary
+  (VIRA-xxxx, €90.00, "Tuesday, 11 August 2026, 09:45"); clean console
+- all 4 new block previews return 200 and their detail pages render the framed viewer;
+  `/preview/booking-store` is 404 by design (a primitive with no visual example, like cart-store)
 
 ## 6. Completed in the latest batch
 
-Closed the two remaining discoverability gaps: skeletons were shown as a text diagram with no
-visual, and 6 of the 12 themes had no `/templates/<theme>` page (those routes 404'd). Both are now
-worked, viewable examples. (The previous batch, the block preview system, is in git history.)
+Built the booking flow — the next Phase 3 product flow after commerce and content — following the
+commerce precedent exactly (presentational blocks, a shared store, one assembled demo). (The
+previous batch, skeleton previews and the 6 templates, is in git history.)
 
-**Skeleton previews**
+**The booking blocks**
 
-- Added `/preview/skeleton/<slug>`: a bare document that assembles a skeleton from its section
-  blocks, in order, under one theme. Reuses `block-examples.tsx` — a skeleton is just a sequence of
-  blocks. Same contract as `/preview/<slug>`: no chrome, noindex, rendered per request. The theme
-  defaults to the skeleton's first recommended system, overridable with `?theme=`.
-- Four skeleton sections are interactive primitives (`data`, `feedback`, `toast`, `tabs`) with no
-  single page-section example. Those render an honest labelled placeholder naming the primitive,
-  not a faked-up section (`src/registry/skeleton-examples.tsx`).
-- Added skeleton detail pages `/skeletons/<slug>` (EN) and `/tr/iskeletler/<slug>` (TR): the framed
-  viewer (reusing `BlockPreview`, now with a `previewPath` prop and a taller `tall` frame) plus the
-  section breakdown. Both index pages link their cards to the detail page.
-- Extracted the Turkish skeleton copy to `src/registry/skeletons-tr.ts` so the TR index and TR
-  detail page share one source.
+- `service-picker` (block): a radiogroup of services, each with duration and price in integer minor
+  units. Presentational; the parent owns the selection.
+- `staff-picker` (block): choose a practitioner or location, with avatars and an "any available"
+  option for businesses that assign.
+- `availability-calendar` (block): the hard one. A month grid where **slots are pre-computed by the
+  parent and passed in**, never derived in the block. **All date maths is UTC** so a day never
+  shifts across time zones; the passed time zone is a label for the slots, shown explicitly. Arrow
+  keys move between open days (roving tabindex, skipping closed days). Navigation is bounded to the
+  months that actually contain availability. Selecting a day reveals that day's time slots.
+- `booking-summary` (block, server component): the confirmation. Reference, service, practitioner,
+  time (in the page locale and the booking's time zone), duration and price. No invented reference
+  beyond the one the flow generated, mirroring `order-confirmation`'s honesty rules.
+- `booking-store` (primitive): a shared booking read through `useBooking` via `useSyncExternalStore`,
+  mirroring `cart-store`. No setState-in-effect, no hydration mismatch.
 
-**The 6 missing templates**
+**The demo**
 
-- Added bespoke `/templates/<theme>` pages for slate, signal, ember, ivory, archive and neon, each
-  matching the theme's sector: an architecture practice (slate), a consumer planner app (signal), a
-  strength gym (ember), a skincare brand (ivory), a harbour museum (archive), a co-op game launch
-  (neon). Built only from shipping blocks, one CTA intent each, fictional brands, sourced stats, and
-  logo/integration slugs that name real products only where that is a factual integration list.
-- Updated the `built` set on both home pages to all 12 themes, so every theme card links to a real
-  template and the "template pending" state is gone. The gate stays so a future theme without a
-  template still degrades cleanly.
+- `/demo/booking` on the `clinic` theme: a physiotherapy clinic ("Vira Clinic"). Progressive
+  disclosure gates each step on the last (service → staff → calendar → a small contact fieldset →
+  confirm), all sharing the booking store, ending on the summary. Fictional brand and staff.
 
-**Verified**
+**React Compiler notes (for the next batch)**
 
-- All 6 previously-404 template routes now return 200; the home page shows 12 "View template" links
-  and no "template pending" text.
-- Skeleton preview assembles in order (saas-launch: 12 sections; application-dashboard shows the 3
-  primitive placeholders honestly); detail pages render the viewer, default to the right theme and
-  switch theme live (checked EN and TR).
-- Ember (dark) and Ivory (light) templates render with the correct theme ground, no horizontal
-  scroll at 1280px or 375px, and a clean console.
-- Lint, typecheck, all audits and the build (197 → 223 static pages) pass; new content audited for
-  zero em-dashes.
+- This repo runs the React Compiler. Two of its lint rules bit during this batch and are worth
+  remembering: it rejects a manual `useMemo`/`useCallback` it cannot preserve (just compute the
+  value directly — the compiler memoizes), and it rejects calling `setState` synchronously inside an
+  effect. The calendar needed to reset its roving-focus target when the month changes; the fix is
+  the React-endorsed "adjust state during render" pattern (compare the previous month in render and
+  `setState` there), not an effect.
+
+**Registry wiring**
+
+- All 5 items registered in `registry.ts`, `registry-tr.ts` and `registry-metadata.ts` (client
+  items, tags, avoid-when). The 4 whole-page blocks each got a `block-examples.tsx` entry, so they
+  show in the framed viewer rather than the prose fallback; `booking-store` has none by design.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -197,23 +195,28 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-After this batch is committed, pushed and green in CI, begin the **booking flow**:
-service → staff/location → calendar → confirmation.
+The booking flow is done. Phase 3 product flows now remaining: **Event** (schedule → speaker →
+venue → registration) and **Admin** (list → filter → create → edit → delete → audit). Event is the
+smaller of the two and most of its blocks already exist (`event-schedule`, `team-grid` for speakers,
+`location-grid` for the venue, `stats-band` for the facts), so the batch is mostly a registration
+step plus an assembled `/demo/event`. Admin is larger and leans on the `data`, `feedback` and
+`toast` primitives already in the kit.
 
-Expected shape, following the commerce precedent:
+Either is a valid next step. Alternatively, the owner's backlog (below) — open-source reference
+curation, or the AI-manifest / recipe-bundle candidates — advances the north star directly. Confirm
+direction with the owner if unsure.
 
-1. `service-picker` — selectable services with duration and price in integer minor units.
-2. `availability-calendar` — the hard one. A month grid with keyboard navigation, disabled and
-   fully-booked days, and an explicit time-zone. Decide early whether slots arrive pre-computed
-   from the parent (they should) rather than being derived in the block.
-3. `booking-summary` / confirmation, reusing `order-confirmation`'s honesty rules: no invented
-   reference numbers beyond the demo's own.
-4. A shared booking store if the flow needs live state across blocks, mirroring `cart-store`.
-5. Then `/demo/booking` to prove it end to end.
-
-Note for that batch: the count-label pattern (`string | (count) => string`) is the convention for
-any new counted surface, and every new whole-page block must get a `block-examples.tsx` entry in the
-same commit, so nothing regresses to the prose fallback.
+Conventions to carry forward for any batch:
+- The count-label pattern (`string | (count) => string`) is the convention for any new counted
+  surface.
+- Every new whole-page block gets a `block-examples.tsx` entry in the same commit, so nothing
+  regresses to the prose fallback.
+- Money in integer minor units; dates in UTC with the time zone carried as a label (see
+  `availability-calendar`).
+- Shared cross-block state uses a module store read via `useSyncExternalStore` (see `cart-store`,
+  `booking-store`), never prop-threading or setState-in-effect.
+- The React Compiler is on: do not add a manual `useMemo`/`useCallback` it cannot preserve, and
+  never `setState` synchronously inside an effect (see the calendar's month-change reset).
 
 Before starting, re-read `PLAN.md`, this file and the relevant local Next.js docs under
 `node_modules/next/dist/docs/`.

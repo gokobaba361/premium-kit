@@ -704,6 +704,54 @@ export const registry: RegistryItem[] = [
     note: "In-memory module store read via useSyncExternalStore, so no setState-in-effect and no hydration mismatch. See /demo/commerce for the assembled flow.",
   },
 
+  /* ---------------------------------------------------------------- booking */
+  {
+    slug: "service-picker",
+    name: "Service picker",
+    category: "block",
+    description: "A radiogroup of services with duration and price, in integer minor units.",
+    files: ["src/components/blocks/service-picker.tsx"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    note: "The first booking step. Presentational: the parent owns the selection and is handed the chosen service through onSelect. Money stays in integer minor units.",
+  },
+  {
+    slug: "staff-picker",
+    name: "Staff picker",
+    category: "block",
+    description: "Choose a practitioner or location, with an 'any available' option.",
+    files: ["src/components/blocks/staff-picker.tsx"],
+    dependencies: ["clsx", "tailwind-merge"],
+    registryDependencies: ["data"],
+    note: "The second booking step. Include an 'any available' entry in the list when the business assigns. Presentational; the parent owns the selection.",
+  },
+  {
+    slug: "availability-calendar",
+    name: "Availability calendar",
+    category: "block",
+    description: "A month grid with keyboard navigation, closed days and time slots.",
+    files: ["src/components/blocks/availability-calendar.tsx"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    note: "Slots are pre-computed by the parent and passed in, never derived in the block. All date maths is UTC so a day never shifts across time zones; the passed time zone is a label for the slots. Arrow keys move between open days.",
+  },
+  {
+    slug: "booking-summary",
+    name: "Booking summary",
+    category: "block",
+    description: "Confirmation with the reference, service, practitioner, time and price.",
+    files: ["src/components/blocks/booking-summary.tsx"],
+    dependencies: ["@phosphor-icons/react"],
+    registryDependencies: ["button"],
+    note: "The success end of the booking flow. Date and time render in the page locale and the booking's own time zone. No invented reference beyond the one the flow generated.",
+  },
+  {
+    slug: "booking-store",
+    name: "Booking store",
+    category: "primitive",
+    description: "A shared booking with a useBooking hook, so the booking blocks share live state.",
+    files: ["src/components/primitives/booking-store.tsx"],
+    note: "In-memory module store read via useSyncExternalStore, mirroring cart-store: no setState-in-effect and no hydration mismatch. See /demo/booking for the assembled flow.",
+  },
+
   /* ---------------------------------------------------------------- account */
   {
     slug: "onboarding-flow",

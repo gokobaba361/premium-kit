@@ -45,6 +45,10 @@ const clientItems = new Set([
   "cart-drawer",
   "checkout-form",
   "cart-store",
+  "service-picker",
+  "staff-picker",
+  "availability-calendar",
+  "booking-store",
   "onboarding-flow",
   "settings-form",
   "content-index",
@@ -75,6 +79,10 @@ const avoidWhen: Record<string, string> = {
   "checkout-form": "Never collect card details in this form; hand payment to a provider on submit.",
   "order-confirmation": "Avoid inventing tracking numbers or delivery promises the fulfilment cannot keep.",
   "content-index": "Avoid when the collection is too small to benefit from category-led discovery.",
+  "service-picker": "Avoid hiding the duration or price; both belong on the option, not a later step.",
+  "staff-picker": "Avoid forcing a choice when the business assigns; offer an 'any available' option.",
+  "availability-calendar": "Avoid deriving open slots in the block; compute them server-side and pass them in. Always state the time zone.",
+  "booking-summary": "Avoid inventing a reference or a policy the booking system cannot honour.",
 };
 
 const tags: Record<string, string[]> = {
@@ -90,6 +98,11 @@ const tags: Record<string, string[]> = {
   "checkout-form": ["commerce", "checkout", "form", "payment"],
   "order-confirmation": ["commerce", "checkout", "confirmation", "success"],
   "cart-store": ["commerce", "cart", "state", "hook"],
+  "service-picker": ["booking", "service", "radiogroup", "pricing"],
+  "staff-picker": ["booking", "staff", "location", "radiogroup"],
+  "availability-calendar": ["booking", "calendar", "scheduling", "keyboard"],
+  "booking-summary": ["booking", "confirmation", "success"],
+  "booking-store": ["booking", "state", "hook"],
   "onboarding-flow": ["account", "onboarding", "stepper", "form"],
   "settings-form": ["account", "settings", "tabs", "form"],
   "content-index": ["content", "category", "filter", "index", "empty-state"],

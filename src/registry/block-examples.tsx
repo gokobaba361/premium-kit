@@ -2,6 +2,8 @@ import { AnnouncementBar } from "@/components/blocks/announcement-bar";
 import { AppShowcaseHero } from "@/components/blocks/app-showcase-hero";
 import { ArticleLayout } from "@/components/blocks/article-layout";
 import { AuthSplit } from "@/components/blocks/auth-split";
+import { AvailabilityCalendar } from "@/components/blocks/availability-calendar";
+import { BookingSummary } from "@/components/blocks/booking-summary";
 import { BlogGrid } from "@/components/blocks/blog-grid";
 import { CaseStudyGrid } from "@/components/blocks/case-study-grid";
 import { ChangelogList } from "@/components/blocks/changelog-list";
@@ -29,8 +31,10 @@ import { PageHeader } from "@/components/blocks/page-header";
 import { PricingDuo } from "@/components/blocks/pricing-duo";
 import { ProductGrid } from "@/components/blocks/product-grid";
 import { ProofQuote } from "@/components/blocks/proof-quote";
+import { ServicePicker } from "@/components/blocks/service-picker";
 import { SiteFooter } from "@/components/blocks/site-footer";
 import { SiteNav } from "@/components/blocks/site-nav";
+import { StaffPicker } from "@/components/blocks/staff-picker";
 import { SpecGrouped } from "@/components/blocks/spec-grouped";
 import { StatsBand } from "@/components/blocks/stats-band";
 import { StepsFlow } from "@/components/blocks/steps-flow";
@@ -500,6 +504,98 @@ export const blockExamples: Record<string, React.ReactNode> = {
         { label: "Accountant access", values: [false, true] },
         { label: "Audit trail", values: [false, true] },
       ]}
+    />
+  ),
+
+  /* ---------------------------------------------------------------- booking */
+
+  "service-picker": (
+    <ServicePicker
+      title="Choose a service"
+      body="Physiotherapy at the Vira Clinic. Pick the appointment that fits."
+      currency="EUR"
+      locale="en-GB"
+      selectedId="assessment"
+      services={[
+        {
+          id: "assessment",
+          name: "Initial assessment",
+          description: "A full first appointment: history, movement screen and a plan.",
+          durationMin: 60,
+          priceMinor: 9000,
+        },
+        {
+          id: "physio",
+          name: "Physiotherapy session",
+          description: "A follow-up treatment session for an existing plan.",
+          durationMin: 45,
+          priceMinor: 6500,
+        },
+        {
+          id: "review",
+          name: "Progress review",
+          description: "A shorter check-in to adjust the plan.",
+          durationMin: 30,
+          priceMinor: 4500,
+        },
+      ]}
+    />
+  ),
+
+  "staff-picker": (
+    <StaffPicker
+      title="Choose a practitioner"
+      body="Or let us assign the first one free."
+      selectedId="elif"
+      staff={[
+        { id: "any", name: "Any available", role: "First free practitioner" },
+        {
+          id: "elif",
+          name: "Elif Saral",
+          role: "Musculoskeletal physio",
+          photo: { src: "https://picsum.photos/seed/vira-elif/200/200", alt: "Elif Saral" },
+        },
+        {
+          id: "tomas",
+          name: "Tomas Beck",
+          role: "Sports physio",
+          photo: { src: "https://picsum.photos/seed/vira-tomas/200/200", alt: "Tomas Beck" },
+        },
+      ]}
+    />
+  ),
+
+  "availability-calendar": (
+    <AvailabilityCalendar
+      title="Choose a time"
+      body="Open times for the next few weeks."
+      timeZone="Europe/Istanbul"
+      locale="en-GB"
+      initialMonth="2026-08"
+      selectedDate="2026-08-11"
+      selectedTime="09:45"
+      availability={{
+        "2026-08-11": ["09:00", "09:45", "11:30", "14:00", "15:30"],
+        "2026-08-12": ["09:30", "10:15", "13:00", "16:00"],
+        "2026-08-13": ["09:00", "10:30", "14:30"],
+        "2026-08-17": ["09:15", "11:00", "13:30", "15:00"],
+        "2026-08-18": ["10:00", "11:45", "14:15"],
+        "2026-08-20": ["09:00", "09:45", "10:30", "13:15"],
+      }}
+    />
+  ),
+
+  "booking-summary": (
+    <BookingSummary
+      reference="VIRA-4820"
+      timeZone="Europe/Istanbul"
+      currency="EUR"
+      locale="en-GB"
+      email="you@example.com"
+      service={{ name: "Initial assessment", durationMin: 60, priceMinor: 9000 }}
+      staff={{ name: "Elif Saral", role: "Musculoskeletal physio" }}
+      slot={{ date: "2026-08-11", time: "09:45" }}
+      manageHref="#"
     />
   ),
 

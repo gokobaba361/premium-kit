@@ -173,9 +173,9 @@ inventing new primitives.
 
 Status: In progress
 
-Latest completed batch: closed the discoverability gaps. Skeletons now render as assembled pages in
-the framed viewer, and all 12 themes have a worked `/templates/<theme>` page (was 6). Nothing in the
-catalogue is invisible.
+Latest completed batch: the booking flow. service-picker, staff-picker, availability-calendar and
+booking-summary ship with a shared booking-store, and `/demo/booking` runs the flow end to end
+(service → staff → calendar → confirm) on the clinic theme.
 
 - [x] Commerce: collection → product → cart → checkout → confirmation. All blocks
   ship, a cart-store shares live state, and /demo/commerce runs the flow end to end.
@@ -184,7 +184,9 @@ catalogue is invisible.
 - [x] Content: index → category → article → search → subscription. blog-grid, content-index,
   article-layout, search-results and newsletter-signup ship, and `/demo/content` runs the flow
   end to end over six statically generated articles.
-- [ ] Booking: service → staff/location → calendar → confirmation.
+- [x] Booking: service → staff/location → calendar → confirmation. service-picker, staff-picker,
+  availability-calendar and booking-summary ship with a shared booking-store, and /demo/booking runs
+  the flow end to end.
 - [ ] Event: schedule → speaker → venue → registration.
 - [ ] Admin: list → filter → create → edit → delete → audit.
 

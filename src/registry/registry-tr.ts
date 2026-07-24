@@ -277,6 +277,26 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Sepet deposu",
     description: "useCart kancasıyla paylaşılan sepet; ticaret blokları canlı durumu paylaşır.",
   },
+  "service-picker": {
+    name: "Hizmet seçici",
+    description: "Süre ve fiyatıyla hizmetlerden oluşan bir radyo grubu, tam sayı kuruş biriminde.",
+  },
+  "staff-picker": {
+    name: "Uzman seçici",
+    description: "Bir uzman ya da konum seç; 'ilk uygun' seçeneğiyle.",
+  },
+  "availability-calendar": {
+    name: "Uygunluk takvimi",
+    description: "Klavyeyle gezilebilen ay ızgarası, kapalı günler ve saat dilimleri.",
+  },
+  "booking-summary": {
+    name: "Randevu özeti",
+    description: "Referans, hizmet, uzman, saat ve fiyatla onay ekranı.",
+  },
+  "booking-store": {
+    name: "Randevu deposu",
+    description: "useBooking kancasıyla paylaşılan randevu; randevu blokları canlı durumu paylaşır.",
+  },
   "onboarding-flow": {
     name: "Karşılama akışı",
     description: "İlerleme çubuğu, geri/devam ve tamamlanma durumuyla çok adımlı kurulum.",
