@@ -1,8 +1,8 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Phase 4 started — the multi-page site kit layer ships with its first 4 sector
-kits, in EN, TR and as machine-readable JSON
+Current milestone: Phase 4 at 10 of 18 sector kits — every kit that the existing block library
+already covers is written
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -22,10 +22,10 @@ Validated inventory:
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes, each with a full worked `/templates/<theme>` page
 - 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
-- 4 of the 18 planned sector site kits, each with its route tree, content model, structured-data
+- 10 of the 18 planned sector site kits, each with its route tree, content model, structured-data
   types, forms, legal surfaces and operational states (EN + TR detail pages, plus
   `/r/site-kits.json`)
-- 261 statically generated documentation/product pages
+- 273 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
 - Turkish catalogue coverage: 85/85
 - Five assembled demo flows: `/demo/commerce`, `/demo/content`, `/demo/booking`, `/demo/event` and
@@ -126,67 +126,59 @@ Latest local result:
 - typecheck: clean
 - registry installation audit: 85/85, no errors
 - Turkish coverage: 85/85
-- site kit reference audit: 4 kits, 0 broken references
+- site kit reference audit: 10 kits, 0 broken references, 0 missing Turkish entries
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 261/261 static pages, dynamic registry and preview endpoints
+- production build: 273/273 static pages, dynamic registry and preview endpoints
 - clean `src` and non-`src` consumer fixtures: install, typecheck and build pass
-- site kits verified in the browser: EN and TR index and detail pages render every section, the
-  route table's skeleton and block pills resolve (spot-checked `/skeletons/service-business`,
-  `/components/availability-calendar`, `/components/booking-store`, `/templates/clinic` and the TR
-  equivalents, all 200), the language switch maps `/kits/<slug>` to `/tr/kitler/<slug>`, the TR page
-  resolves block names into Turkish, `/r/site-kits.json` returns the full contract, no horizontal
-  page scroll at 1280px or 375px (the wide route table scrolls in its own box), clean console
+- site kits verified in the browser: all 6 new kits return 200 in EN and TR, the index lists 10
+  cards, every outbound link from the new kits was checked by HTTP (22 distinct skeleton, block and
+  template routes, all 200), the TR pages resolve block names into Turkish and show the sector's
+  Turkish legal surfaces, `/r/site-kits.json` returns 10 kits, no horizontal page scroll, clean
+  console on a fresh tab
 - admin flow (previous batch) still verified end to end
 
 ## 6. Completed in the latest batch
 
-Started Phase 4 by building the layer the sector kits need, then the first 4 kits. (The previous
-batch, the admin flow that completed Phase 3, is in git history.)
+Wrote the 6 sector kits that the existing block library already covers completely, taking Phase 4
+from 4 to 10 of 18. No new blocks were needed, which was the selection rule for this batch. (The
+previous batch, the kit layer itself plus the first 4 kits, is in git history.)
 
-**What a kit is, and why it is not a skeleton**
+**The six kits**
 
-A skeleton is one page's section order. A kit is a whole site, which is the thing Phase 4 asks for:
-which routes exist and in what build order, which skeleton or registry items drive each route, the
-content model behind them, the schema.org type each route emits, what each form collects and where
-that data actually goes, the legal surfaces the sector genuinely requires, and the operational
-states that must exist before the build is done.
+- `agency-studio` (6 routes) and `freelancer-portfolio` (5): both on `studio-portfolio`, but they
+  are genuinely different sites. The agency kit qualifies an enquiry with a budget band and has a
+  case-study route; the freelancer kit carries an availability field that drives a banner, and its
+  project model records **role**, because on a one-person site what you did matters more than what
+  the team did.
+- `professional-service` (6): consulting and regulated advice. Uses the booking blocks for the first
+  consultation, and its content model notes that a regulated profession must state its real chamber
+  or bar registration rather than decorate it.
+- `publication-newsletter` (7): the content flow as a whole publication, with an archive, topic
+  pages and a real newsletter route.
+- `developer-docs` (6): documentation with `appliesToVersion` in the content model, which is what
+  stops a doc site silently describing a release nobody runs.
+- `event-conference` (7): consumes the event flow shipped two batches ago end to end
+  (`ticket-tiers` → `registration-form` → `registration-confirmation`).
 
-**The data layer**
+**Two Turkey-specific findings while writing them**
 
-- `src/registry/site-kits.ts` — the `SiteKit` model plus the first four kits. Routes carry a
-  `required` flag, so a kit states its core set and keeps the rest as an explicit backlog rather
-  than an implied promise.
-- `src/registry/site-kits-tr.ts` — Turkish kit copy, one source shared by the TR index and detail.
-- The kits are **Turkey-first in the legal layer**: `KVKK aydınlatma metni` for anything collecting
-  personal data, `açık rıza` for the clinic (health data is özel nitelikli kişisel veri and needs
-  separate explicit consent), `mesafeli satış sözleşmesi` and `ön bilgilendirme formu` for commerce,
-  allergen information for hospitality. Every page in that list says why the sector needs it. Both
-  the pages and the JSON state plainly that this is a build checklist, not legal advice.
+- Writing the publication kit surfaced **İYS (İleti Yönetim Sistemi)**: commercial email or SMS to
+  recipients in Türkiye needs consent registered there, with an opt-out in every message. That
+  applies to any kit with a newsletter, so the existing `ecommerce-store` kit was missing it too and
+  has been corrected. Both now carry a `/ileti-izni` legal surface.
+- The publication kit also carries an editorial-standards page covering funding, corrections and
+  sponsored-content labelling. That one is stated as a credibility obligation, not a legal one.
 
-**The first four kits**
+**Two real defects caught in-flight**
 
-`saas-product` (8 routes), `clinic-healthcare` (6), `ecommerce-store` (8), `restaurant-hospitality`
-(5). They deliberately consume the Phase 3 flows: the clinic kit's `/randevu` route is built from
-the booking blocks, the commerce kit's checkout path from the commerce blocks.
-
-**Surfaces**
-
-- `/kits` and `/kits/<slug>` (EN), `/tr/kitler` and `/tr/kitler/<slug>` (TR). The detail page renders
-  the route table (each route linking to its skeleton and registry items), content model, forms with
-  their real destinations, legal surfaces and operational states.
-- `/r/site-kits.json` — the whole contract for agents, with install URLs resolved per route and per
-  form. Registered in the AI manifest's `endpoints` and `inventory`.
-- Language switch now maps `/kits/<slug>` and `/skeletons/<slug>` to their TR equivalents (the
-  skeleton detail mapping was missing since those pages were added).
-
-**A new audit, because nothing else could catch this**
-
-- `scripts/kit-audit.mjs` (`npm run audit:kits`, wired into `npm run audit` and CI). A kit route
-  points at a skeleton slug and registry slugs as plain strings. The registry audit does not see
-  kits (they are catalogue data, not installable entries) and TypeScript cannot check a string
-  against another file's data, so a rename would silently produce a kit linking nowhere. The audit
-  fails on any unknown skeleton slug, registry slug or preset id. Verified by deliberately breaking
-  a slug: it exited 1 with the correct message, then passed again once restored.
+1. The kits were first appended with `siteKits.push(...)`. That compiles and renders fine, but
+   `kit-audit.mjs` reads the `siteKits` **array literal** through the TypeScript AST, so it would
+   have silently kept auditing only the original 4 and reported "OK" while 6 kits went unchecked.
+   Fixed by folding them into the array literal; the audit then correctly reported 10.
+2. A missing Turkish entry would crash the TR index (`siteKitTr[kit.slug].sector` on undefined) and
+   404 the TR detail page, and nothing caught it — the i18n audit covers registry items, not kits.
+   `kit-audit.mjs` now also fails on a missing or empty Turkish field and warns on a stale entry.
+   Verified by deleting a translation: it failed with the right message, then passed once restored.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -209,27 +201,34 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-**Phase 4 is under way**: the kit layer ships and 4 of the 18 planned sector kits are written. The
-obvious continuation is **the next batch of kits**, since the model, the audit, both language
-surfaces and the AI endpoint already exist — adding a kit is now editing one data file and letting
-the audit check it.
+**Phase 4 is at 10 of 18.** Every kit the existing block library already covered is written, so the
+easy half is done and the remaining 8 are a different shape: each one needs at least one block the
+library does not have. The next batch is therefore **blocks first, then the kits that use them**,
+never a kit referencing a slug that does not exist yet.
 
-Remaining 14, roughly in descending order of how well the current block library already covers them
-(so the early ones need no new blocks):
+Remaining 8, grouped by the block they need:
 
-- Agency and creative studio, Freelancer and portfolio, Consultant and professional service —
-  covered by `studio-portfolio` and the proof/contact blocks.
-- Blog/publication/newsletter, Documentation and developer portal — covered by `publication`,
-  `documentation-hub` and the content flow.
-- Event and conference — covered by the event flow shipped two batches ago.
-- Education and online course, Non-profit and donation, Real estate and architecture, Hotel and
-  travel, Legal and financial service, Creator and personal brand, Marketplace and community,
-  Dashboard and internal tool.
+- **Education and online course** — a curriculum/module list (nested lessons with duration and a
+  completion state) and a lesson player shell. `steps-flow` is not a substitute; a curriculum is
+  hierarchical and stateful.
+- **Non-profit and donation** — a donation form with amount tiers, one-off versus monthly, and a
+  gift-aid-style consent. Money in integer minor units like everywhere else. Turkish charities
+  collecting donations online have their own permit rules worth stating in the legal surfaces.
+- **Real estate and architecture** — a property listing card and a property detail (specs, floor
+  plan, location map) plus a viewing-request form. `product-grid` is close but a property has
+  different facts and no cart.
+- **Hotel and travel** — a room type card and a date-range availability search. The existing
+  `availability-calendar` is single-date; a stay needs check-in and check-out, which is a real
+  extension rather than a new block.
+- **Legal and financial service** — mostly covered by `professional-service`, but regulated
+  disclosure surfaces differ enough to be worth their own kit once written.
+- **Creator and personal brand** — a link-hub block and a membership/subscription tier block.
+- **Marketplace and community** — a seller/member profile and a listing index with facets.
+- **Dashboard and internal tool** — largely covered by the admin flow; needs a kit write-up rather
+  than new blocks, so it can be done at any time.
 
-Watch for kits that genuinely need a block the library lacks (a course curriculum list, a donation
-form with amount tiers, a property listing card). When that happens, build the block first with a
-`block-examples.tsx` entry, then write the kit, so the kit never references a slug that does not
-exist.
+Suggested order: `dashboard-internal` first (no new blocks), then education, non-profit, real
+estate, the rest.
 
 The alternative remains the owner's backlog below (open-source reference curation, the AI-manifest /
 recipe-bundle candidates). Confirm with the owner if unsure.

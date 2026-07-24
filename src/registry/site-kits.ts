@@ -478,6 +478,11 @@ export const siteKits: SiteKit[] = [
         name: "Delivery",
         why: "Carriers, timings and costs, so the checkout total is never a surprise.",
       },
+      {
+        path: "/ileti-izni",
+        name: "Ticari elektronik ileti izni",
+        why: "The store sends marketing email, so consent must be registered through İYS (İleti Yönetim Sistemi) with an opt-out in every message.",
+      },
     ],
     operationalStates: [
       "Product: in stock, variant sold out, whole product sold out, back-order",
@@ -589,6 +594,648 @@ export const siteKits: SiteKit[] = [
       "Reservation confirmation: instant versus on reply, said plainly either way",
       "Menu: current, seasonal item unavailable, kitchen closed but bar open",
       "Enquiry form: idle, validation errors, sending, sent",
+    ],
+  },
+
+  /* ---------------------------------------------------------------- agency */
+  {
+    slug: "agency-studio",
+    name: "Agency and creative studio",
+    sector: "Design, brand and digital studios",
+    description:
+      "A studio site that makes the point of view visible before the work, then qualifies the enquiry so the first call is with the right client.",
+    outcome: "Qualified project enquiry",
+    themes: ["bone", "archive", "obsidian"],
+    routes: [
+      {
+        path: "/",
+        name: "Home",
+        purpose: "Point of view first, then selected work and one enquiry intent.",
+        skeleton: "studio-portfolio",
+        structuredData: "ProfessionalService",
+        required: true,
+      },
+      {
+        path: "/isler",
+        name: "Work",
+        purpose: "The full index of selected projects, not just the three on the home page.",
+        blocks: ["page-header", "case-study-grid", "filter-toolbar"],
+        structuredData: "CollectionPage",
+        required: true,
+      },
+      {
+        path: "/isler/[slug]",
+        name: "Case study",
+        purpose: "One project in depth: the brief, the argument, the outcome.",
+        blocks: ["article-layout", "gallery-strip", "stats-band", "proof-quote"],
+        structuredData: "CreativeWork",
+        required: true,
+      },
+      {
+        path: "/studyo",
+        name: "Studio",
+        purpose: "How the studio works and who does the work.",
+        blocks: ["page-header", "features-split", "team-grid", "timeline"],
+        structuredData: "AboutPage",
+        required: true,
+      },
+      {
+        path: "/iletisim",
+        name: "Contact",
+        purpose: "Qualification, not a bare mail link: budget, timing and scope.",
+        blocks: ["page-header", "contact-form", "location-grid"],
+        structuredData: "ContactPage",
+        required: true,
+      },
+      {
+        path: "/yazilar",
+        name: "Writing",
+        purpose: "The thinking behind the work, for search and for credibility.",
+        skeleton: "publication",
+        structuredData: "Blog",
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Case study",
+        fields: ["slug", "client", "title", "outcome", "cover", "gallery[]", "body", "services[]", "year"],
+        note: "Outcome is a sentence about what changed, not a metric you cannot source.",
+      },
+      {
+        name: "Service",
+        fields: ["name", "description", "deliverables[]"],
+      },
+      {
+        name: "Team member",
+        fields: ["name", "role", "photo?"],
+      },
+      {
+        name: "Enquiry",
+        fields: ["name", "email", "company", "budgetBand", "timing", "scope"],
+        note: "Budget as a band, not a free-text number. It qualifies without feeling like an interrogation.",
+      },
+    ],
+    forms: [
+      {
+        name: "Project enquiry",
+        route: "/iletisim",
+        registryItem: "contact-form",
+        collects: ["name", "email", "company", "budget band", "timing", "project description"],
+        destination:
+          "Your CRM or a shared studio inbox. State the reply window in the confirmation and keep it.",
+      },
+    ],
+    legal: [...baseLegal],
+    operationalStates: [
+      "Work index: filtered to a service with no matches, with a reset",
+      "Enquiry form: idle, validation errors, sending, sent with a stated reply window",
+      "Case study: published, in progress with client permission pending, under NDA and therefore unlisted",
+      "Capacity: taking work, booked until a stated month, said plainly either way",
+    ],
+  },
+
+  /* ------------------------------------------------------------ freelancer */
+  {
+    slug: "freelancer-portfolio",
+    name: "Freelancer and portfolio",
+    sector: "Independent designers, developers and writers",
+    description:
+      "A one-person site that proves the work quickly, says what the person is available for, and makes hiring them a single obvious step.",
+    outcome: "Direct hire enquiry",
+    themes: ["bone", "ivory", "slate"],
+    routes: [
+      {
+        path: "/",
+        name: "Home",
+        purpose: "Who, what for, and the work. Availability stated where it cannot be missed.",
+        skeleton: "studio-portfolio",
+        structuredData: "Person",
+        required: true,
+      },
+      {
+        path: "/isler/[slug]",
+        name: "Project",
+        purpose: "One project told properly, including what you actually did on it.",
+        blocks: ["article-layout", "gallery-strip"],
+        structuredData: "CreativeWork",
+        required: true,
+      },
+      {
+        path: "/hakkinda",
+        name: "About",
+        purpose: "The background, the tools and the working arrangement.",
+        blocks: ["page-header", "features-split", "timeline"],
+        structuredData: "AboutPage",
+        required: true,
+      },
+      {
+        path: "/iletisim",
+        name: "Contact",
+        purpose: "One route in, with enough detail to reply usefully.",
+        blocks: ["page-header", "contact-form"],
+        structuredData: "ContactPage",
+        required: true,
+      },
+      {
+        path: "/yazilar",
+        name: "Writing",
+        purpose: "Notes and articles, if writing is part of how you are found.",
+        skeleton: "publication",
+        structuredData: "Blog",
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Project",
+        fields: ["slug", "title", "client?", "role", "year", "cover", "gallery[]", "body"],
+        note: "Role matters most on a freelance site: say what you did, not what the team did.",
+      },
+      {
+        name: "Availability",
+        fields: ["status", "fromDate?", "note"],
+        note: "One field that drives the banner. Stale availability is worse than none.",
+      },
+      {
+        name: "Skill or service",
+        fields: ["name", "description"],
+      },
+    ],
+    forms: [
+      {
+        name: "Hire enquiry",
+        route: "/iletisim",
+        registryItem: "contact-form",
+        collects: ["name", "email", "project description", "timing", "budget band"],
+        destination: "Your own inbox. One person means one honest reply window.",
+      },
+    ],
+    legal: [...baseLegal],
+    operationalStates: [
+      "Availability: open, booked until a date, not taking work",
+      "Enquiry form: idle, validation errors, sending, sent",
+      "Project: public, client-confidential and therefore summarised only",
+    ],
+  },
+
+  /* --------------------------------------------------------- professional */
+  {
+    slug: "professional-service",
+    name: "Consultant and professional service",
+    sector: "Consultants, accountants, lawyers and advisors",
+    description:
+      "An advisory site that makes an intangible service legible: what you do, how the engagement runs, what it costs to start, and how to book the first conversation.",
+    outcome: "Booked consultation",
+    themes: ["slate", "clinic", "cobalt"],
+    routes: [
+      {
+        path: "/",
+        name: "Home",
+        purpose: "The problem you solve, the process, and one booking intent.",
+        skeleton: "service-business",
+        structuredData: "ProfessionalService",
+        required: true,
+      },
+      {
+        path: "/hizmetler",
+        name: "Services",
+        purpose: "Each engagement type, its shape and what starting it involves.",
+        blocks: ["page-header", "service-picker", "faq-accordion"],
+        structuredData: "Service",
+        required: true,
+      },
+      {
+        path: "/gorusme",
+        name: "Book a consultation",
+        purpose: "The first conversation, booked without an email exchange.",
+        blocks: ["service-picker", "availability-calendar", "booking-summary", "booking-store"],
+        required: true,
+      },
+      {
+        path: "/ekip",
+        name: "People",
+        purpose: "Credentials and fit. Advisory work is bought from people.",
+        blocks: ["page-header", "team-grid"],
+        structuredData: "Person",
+        required: true,
+      },
+      {
+        path: "/iletisim",
+        name: "Contact",
+        purpose: "A non-booking route in, plus the registered office.",
+        blocks: ["page-header", "contact-form", "location-grid"],
+        structuredData: "ContactPage",
+        required: true,
+      },
+      {
+        path: "/icgoruler",
+        name: "Insights",
+        purpose: "Published thinking, which is how advisory work is usually found.",
+        skeleton: "publication",
+        structuredData: "Blog",
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Engagement type",
+        fields: ["id", "name", "description", "durationMin", "priceMinor?"],
+        note: "If the fee is genuinely scoped per client, say that instead of inventing a number.",
+      },
+      {
+        name: "Advisor",
+        fields: ["id", "name", "role", "credentials[]", "photo?"],
+        note: "Regulated professions must state the real registration; do not decorate it.",
+      },
+      {
+        name: "Availability",
+        fields: ["date", "times[]", "advisorId"],
+      },
+      {
+        name: "Insight",
+        fields: ["slug", "title", "excerpt", "body", "date", "author"],
+      },
+    ],
+    forms: [
+      {
+        name: "Consultation booking",
+        route: "/gorusme",
+        registryItem: "booking-summary",
+        collects: ["name", "email", "phone", "chosen engagement type and slot", "brief context"],
+        destination:
+          "Your practice calendar and CRM. Client matters can be confidential; keep them out of a marketing tool.",
+      },
+      {
+        name: "Enquiry",
+        route: "/iletisim",
+        registryItem: "contact-form",
+        collects: ["name", "email", "subject", "message"],
+        destination:
+          "A monitored inbox. Tell people not to send confidential case detail before an engagement exists.",
+      },
+    ],
+    legal: [
+      ...baseLegal,
+      {
+        path: "/mesleki-sorumluluk",
+        name: "Professional disclaimer",
+        why: "Content on an advisory site is general information, not advice for a specific client. Regulated professions may also have to state their chamber or bar registration.",
+      },
+    ],
+    operationalStates: [
+      "Calendar: open slots, no availability this month, holiday closure",
+      "Booking: confirmed, rescheduled, cancelled by either side",
+      "Enquiry: idle, validation errors, sending, sent with a stated reply window",
+      "Conflict check: a stated step before an engagement is accepted, where the profession requires one",
+    ],
+  },
+
+  /* ------------------------------------------------------------ publication */
+  {
+    slug: "publication-newsletter",
+    name: "Blog, publication and newsletter",
+    sector: "Editorial brands, research and independent writers",
+    description:
+      "A publication that puts the newest thinking first, makes the archive genuinely navigable, and converts a reader into a subscriber without a popup.",
+    outcome: "Article read and subscription",
+    themes: ["archive", "ivory", "bone"],
+    routes: [
+      {
+        path: "/",
+        name: "Home",
+        purpose: "The current issue or latest pieces, and the editorial position.",
+        skeleton: "publication",
+        structuredData: "Blog",
+        required: true,
+      },
+      {
+        path: "/arsiv",
+        name: "Archive",
+        purpose: "Everything published, filterable by section.",
+        blocks: ["page-header", "content-index"],
+        structuredData: "CollectionPage",
+        required: true,
+      },
+      {
+        path: "/yazi/[slug]",
+        name: "Article",
+        purpose: "The reading page. The whole site exists to deliver this well.",
+        blocks: ["article-layout", "newsletter-signup"],
+        structuredData: "BlogPosting",
+        required: true,
+      },
+      {
+        path: "/ara",
+        name: "Search",
+        purpose: "Finding a piece by memory of a phrase, with a real no-results path.",
+        blocks: ["page-header", "search-results"],
+        structuredData: "SearchResultsPage",
+        required: true,
+      },
+      {
+        path: "/bulten",
+        name: "Newsletter",
+        purpose: "What the email is, how often, and a real archive of past issues.",
+        blocks: ["page-header", "newsletter-signup", "blog-grid"],
+        required: true,
+      },
+      {
+        path: "/hakkinda",
+        name: "About and masthead",
+        purpose: "Who publishes this, funded how, and the editorial standards.",
+        blocks: ["page-header", "features-split", "team-grid"],
+        structuredData: "AboutPage",
+        required: true,
+      },
+      {
+        path: "/konu/[slug]",
+        name: "Topic",
+        purpose: "A durable landing page per subject, once the archive is deep enough to need one.",
+        blocks: ["page-header", "content-index"],
+        structuredData: "CollectionPage",
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Article",
+        fields: ["slug", "title", "standfirst", "body", "category", "tags[]", "author", "date", "readingTime", "cover?"],
+        note: "Reading time is stored per article, not estimated in the browser, so it is stable and translatable.",
+      },
+      {
+        name: "Author",
+        fields: ["id", "name", "role", "bio", "photo?"],
+        note: "A real byline. An article with no accountable author is worth less than no article.",
+      },
+      {
+        name: "Newsletter issue",
+        fields: ["number", "date", "subject", "body", "articles[]"],
+      },
+      {
+        name: "Topic",
+        fields: ["slug", "name", "description"],
+      },
+    ],
+    forms: [
+      {
+        name: "Newsletter subscription",
+        route: "/bulten",
+        registryItem: "newsletter-signup",
+        collects: ["email"],
+        destination:
+          "Your email provider with a double opt-in. Commercial email to Turkish recipients must be registered through İYS, and every send needs a working unsubscribe.",
+      },
+    ],
+    legal: [
+      ...baseLegal,
+      {
+        path: "/ileti-izni",
+        name: "Ticari elektronik ileti izni",
+        why: "Commercial email and SMS to recipients in Türkiye require consent registered with İYS (İleti Yönetim Sistemi), with an opt-out in every message.",
+      },
+      {
+        path: "/yayin-ilkeleri",
+        name: "Editorial standards",
+        why: "States who funds the publication, how corrections are handled and how sponsored content is labelled. A publication that takes money and does not say so has a credibility problem, not a legal one.",
+      },
+    ],
+    operationalStates: [
+      "Archive: filtered to a category with no articles, with a reset",
+      "Search: results, no results with a browse fallback",
+      "Article: published, updated with a visible correction note, unpublished",
+      "Subscription: idle, invalid email, sending, confirmation email sent, already subscribed",
+    ],
+  },
+
+  /* ------------------------------------------------------------------ docs */
+  {
+    slug: "developer-docs",
+    name: "Documentation and developer portal",
+    sector: "Developer tools, APIs and product manuals",
+    description:
+      "A documentation site where orientation, navigation and version history stay available without competing with the technical content.",
+    outcome: "Successful implementation",
+    themes: ["cobalt", "obsidian", "archive"],
+    routes: [
+      {
+        path: "/",
+        name: "Docs home",
+        purpose: "Orientation: what this is, and the three paths people arrive wanting.",
+        skeleton: "documentation-hub",
+        structuredData: "TechArticle",
+        required: true,
+      },
+      {
+        path: "/rehber/[slug]",
+        name: "Guide",
+        purpose: "The reading page, with grouped navigation and code variants.",
+        blocks: ["docs-sidebar", "tabs", "article-layout"],
+        structuredData: "TechArticle",
+        required: true,
+      },
+      {
+        path: "/baslangic",
+        name: "Quickstart",
+        purpose: "Install to first working result, with nothing optional in the way.",
+        blocks: ["page-header", "steps-flow", "tabs"],
+        structuredData: "HowTo",
+        required: true,
+      },
+      {
+        path: "/surum-notlari",
+        name: "Changelog",
+        purpose: "What changed, when, and what it breaks.",
+        blocks: ["page-header", "changelog-list"],
+        required: true,
+      },
+      {
+        path: "/ara",
+        name: "Search",
+        purpose: "Documentation is used by search first and navigation second.",
+        blocks: ["page-header", "search-results", "command-palette"],
+        structuredData: "SearchResultsPage",
+        required: true,
+      },
+      {
+        path: "/api/[slug]",
+        name: "API reference",
+        purpose: "Generated reference, kept beside the hand-written guides.",
+        blocks: ["docs-sidebar", "tabs"],
+        structuredData: "TechArticle",
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Guide page",
+        fields: ["slug", "group", "title", "body", "updatedAt", "appliesToVersion"],
+        note: "appliesToVersion is what stops a doc site silently describing a release nobody runs.",
+      },
+      {
+        name: "Navigation group",
+        fields: ["title", "items[]", "order"],
+      },
+      {
+        name: "Code sample",
+        fields: ["language", "label", "code", "runnable?"],
+        note: "One sample per language variant, rendered in tabs. Highlighting happens at build time.",
+      },
+      {
+        name: "Release",
+        fields: ["version", "date", "title", "body", "changes[]", "breaking"],
+      },
+    ],
+    forms: [
+      {
+        name: "Docs feedback",
+        route: "/rehber/[slug]",
+        registryItem: "contact-form",
+        collects: ["was this page useful", "what was missing", "page URL"],
+        destination:
+          "Your issue tracker, with the page URL attached automatically so the report is actionable.",
+      },
+      {
+        name: "Release subscription",
+        route: "/surum-notlari",
+        registryItem: "newsletter-signup",
+        collects: ["email"],
+        destination: "Your email provider, with a double opt-in.",
+      },
+    ],
+    legal: [...baseLegal],
+    operationalStates: [
+      "Search: results, no results with a browse fallback",
+      "Guide: current, applies to an older version with a visible banner, deprecated with a link to the replacement",
+      "Code sample: copied confirmation, copy unavailable without JavaScript",
+      "Feedback: idle, sending, sent, already reported",
+    ],
+  },
+
+  /* ----------------------------------------------------------------- event */
+  {
+    slug: "event-conference",
+    name: "Event and conference",
+    sector: "Conferences, festivals and professional gatherings",
+    description:
+      "An event site that establishes the promise, makes the programme scannable, keeps venue detail beside registration, and sells the ticket without leaving the site.",
+    outcome: "Completed registration",
+    themes: ["signal", "neon", "ember"],
+    routes: [
+      {
+        path: "/",
+        name: "Home",
+        purpose: "The promise, the facts, the programme and one registration intent.",
+        skeleton: "event-conference",
+        structuredData: "Event",
+        required: true,
+      },
+      {
+        path: "/program",
+        name: "Programme",
+        purpose: "Sessions by day and time, scannable before it is browsable.",
+        blocks: ["page-header", "event-schedule", "filter-toolbar"],
+        structuredData: "Event",
+        required: true,
+      },
+      {
+        path: "/konusmacilar",
+        name: "Speakers",
+        purpose: "Who is speaking and why that is worth the ticket.",
+        blocks: ["page-header", "team-grid"],
+        structuredData: "Person",
+        required: true,
+      },
+      {
+        path: "/biletler",
+        name: "Tickets",
+        purpose: "The price ladder, what each tier includes, and what is left.",
+        blocks: ["page-header", "ticket-tiers", "faq-accordion"],
+        structuredData: "Offer",
+        required: true,
+      },
+      {
+        path: "/kayit",
+        name: "Registration",
+        purpose: "Attendee details, then confirmation with the reference to quote.",
+        blocks: ["registration-form", "registration-confirmation"],
+        required: true,
+      },
+      {
+        path: "/mekan",
+        name: "Venue",
+        purpose: "Address, transport, access and accommodation.",
+        blocks: ["page-header", "location-grid", "gallery-strip"],
+        structuredData: "Place",
+        required: true,
+      },
+      {
+        path: "/sponsorlar",
+        name: "Sponsors",
+        purpose: "Sponsor tiers and a route to the prospectus.",
+        blocks: ["page-header", "logo-wall", "contact-form"],
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Session",
+        fields: ["id", "day", "time", "title", "speakerIds[]", "track?", "recorded"],
+      },
+      {
+        name: "Speaker",
+        fields: ["id", "name", "role", "organisation", "bio", "photo?"],
+      },
+      {
+        name: "Ticket tier",
+        fields: ["id", "name", "priceMinor", "includes[]", "availability", "salesEndAt"],
+        note: "Availability drives the sold-out state. A tier that sold out stays visible so the ladder still reads honestly.",
+      },
+      {
+        name: "Registration",
+        fields: ["reference", "tierId", "attendeeName", "email", "organisation?", "accessNeeds?"],
+      },
+    ],
+    forms: [
+      {
+        name: "Attendee registration",
+        route: "/kayit",
+        registryItem: "registration-form",
+        collects: ["name", "email", "organisation", "access or dietary needs"],
+        destination:
+          "Your ticketing system, then a payment provider for paid tiers. Access needs go to the venue, not to marketing.",
+      },
+      {
+        name: "Sponsor enquiry",
+        route: "/sponsorlar",
+        registryItem: "contact-form",
+        collects: ["company", "contact name", "email", "tier of interest"],
+        destination: "The sponsorship inbox, with the prospectus sent on reply.",
+      },
+    ],
+    legal: [
+      ...baseLegal,
+      {
+        path: "/mesafeli-satis-sozlesmesi",
+        name: "Mesafeli satış sözleşmesi",
+        why: "A paid ticket sold online is distance selling: the contract must be presented and accepted before payment.",
+      },
+      {
+        path: "/iade-kosullari",
+        name: "Ticket refunds and transfers",
+        why: "State the refund window and whether a ticket can be transferred to a colleague, before someone buys ten.",
+      },
+      {
+        path: "/katilim-kurallari",
+        name: "Code of conduct",
+        why: "Expected of professional events, and it needs a named contact and a real reporting route to mean anything.",
+      },
+    ],
+    operationalStates: [
+      "Tickets: available, few left, sold out, sales closed",
+      "Registration: idle, validation errors, submitting, confirmed, payment failed",
+      "Programme: published, session moved, speaker cancelled with a replacement",
+      "Event: upcoming, running today, finished with recordings linked",
     ],
   },
 ];

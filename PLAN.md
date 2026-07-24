@@ -199,43 +199,46 @@ all six flows.
 
 ### Phase 4 — Sector site kits
 
-Status: In progress (4 of 18)
+Status: In progress (10 of 18)
 
-Latest completed batch: the kit layer itself plus the first four kits. `src/registry/site-kits.ts`
-defines the `SiteKit` model, `/kits` and `/tr/kitler` render it for people, `/r/site-kits.json`
-serves it to agents, and `npm run audit:kits` fails the build if a kit references a skeleton,
-registry item or theme that does not exist.
+Latest completed batch: the 6 kits the existing block library already covered completely. Every
+remaining kit needs at least one new block, so the next batch is blocks first, then the kits that
+use them.
 
 A kit is deliberately the layer above a skeleton: a skeleton is one page's section order, a kit is
-the whole site.
+the whole site. `src/registry/site-kits.ts` defines the `SiteKit` model, `/kits` and `/tr/kitler`
+render it for people, `/r/site-kits.json` serves it to agents, and `npm run audit:kits` fails the
+build if a kit references a skeleton, registry item or theme that does not exist, or is missing its
+Turkish copy.
 
 Target kits:
 
 - [x] SaaS and AI product
-- [ ] Agency and creative studio
-- [ ] Freelancer and portfolio
+- [x] Agency and creative studio
+- [x] Freelancer and portfolio
 - [x] E-commerce
 - [x] Clinic, dentist and healthcare
-- [ ] Consultant and professional service
+- [x] Consultant and professional service
 - [x] Restaurant, cafe and hospitality
-- [ ] Hotel and travel
-- [ ] Event and conference
-- [ ] Education and online course
-- [ ] Blog, publication and newsletter
-- [ ] Real estate and architecture
-- [ ] Legal and financial service
-- [ ] Non-profit and donation
-- [ ] Documentation and developer portal
-- [ ] Dashboard and internal tool
-- [ ] Marketplace and community
-- [ ] Creator and personal brand
+- [ ] Hotel and travel — needs a room-type card and date-range availability
+- [x] Event and conference
+- [ ] Education and online course — needs a curriculum list and lesson shell
+- [x] Blog, publication and newsletter
+- [ ] Real estate and architecture — needs a property listing and detail
+- [ ] Legal and financial service — regulated disclosure surfaces
+- [ ] Non-profit and donation — needs a donation form with amount tiers
+- [x] Documentation and developer portal
+- [ ] Dashboard and internal tool — covered by the admin flow, needs the write-up
+- [ ] Marketplace and community — needs a member profile and faceted listing
+- [ ] Creator and personal brand — needs a link hub and membership tiers
 
 Each kit must include its required routes, content model, structured data type, forms, legal
 surfaces and operational states.
 
 Legal surfaces are Turkey-first and named for the real obligation (KVKK aydınlatma metni, açık rıza
-for health data, mesafeli satış sözleşmesi and ön bilgilendirme formu for distance selling). They
-are stated as a build checklist so nothing is forgotten at launch, never as legal advice.
+for health data, mesafeli satış sözleşmesi and ön bilgilendirme formu for distance selling, İYS
+registration for any commercial email or SMS). They are stated as a build checklist so nothing is
+forgotten at launch, never as legal advice.
 
 ### Phase 5 — Visual-system breadth
 

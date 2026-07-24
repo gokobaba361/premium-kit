@@ -14,10 +14,16 @@ import ts from "typescript";
  *
  * This audit fails when a kit references a skeleton or registry slug that does
  * not exist, or a theme that is not a real preset id.
+ *
+ * It also fails on a missing Turkish translation. That is not cosmetic: the
+ * Turkish index reads `siteKitTr[kit.slug].sector` directly, so a missing entry
+ * is a crash, and the Turkish detail page would 404. Nothing else catches it,
+ * because the i18n audit covers registry items rather than kits.
  */
 
 const root = process.cwd();
 const kitsPath = path.join(root, "src/registry/site-kits.ts");
+const kitsTrPath = path.join(root, "src/registry/site-kits-tr.ts");
 const registryPath = path.join(root, "src/registry/registry.ts");
 const skeletonsPath = path.join(root, "src/registry/skeletons.ts");
 const presetsPath = path.join(root, "src/lib/premium-kit/presets.ts");
@@ -157,10 +163,54 @@ function readKits() {
   return kits;
 }
 
+/** The keys of the Turkish kit copy map, with the fields each one must fill. */
+function turkishKits() {
+  const source = sourceOf(kitsTrPath);
+  const entries = new Map();
+
+  function visit(node) {
+    if (
+      ts.isVariableDeclaration(node) &&
+      node.name.getText(source) === "siteKitTr" &&
+      node.initializer
+    ) {
+      const objectLiteral = ts.isAsExpression(node.initializer)
+        ? node.initializer.expression
+        : node.initializer;
+      if (!ts.isObjectLiteralExpression(objectLiteral)) return;
+
+      for (const property of objectLiteral.properties) {
+        if (!ts.isPropertyAssignment(property)) continue;
+        const key = ts.isStringLiteral(property.name)
+          ? property.name.text
+          : property.name.getText(source).replace(/^["']|["']$/g, "");
+        const filled = new Set();
+        if (ts.isObjectLiteralExpression(property.initializer)) {
+          for (const field of property.initializer.properties) {
+            if (!ts.isPropertyAssignment(field)) continue;
+            const text = field.initializer.getText(source);
+            // A present-but-empty string is as broken as a missing key.
+            if (text.trim() !== '""' && text.trim() !== "''") {
+              filled.add(field.name.getText(source));
+            }
+          }
+        }
+        entries.set(key, filled);
+      }
+    }
+    ts.forEachChild(node, visit);
+  }
+
+  visit(source);
+  return entries;
+}
+
 const registrySlugs = new Set(slugsFrom(registryPath, "registry"));
 const skeletonSlugs = new Set(slugsFrom(skeletonsPath, "skeletons"));
 const themeIds = new Set(presetIds());
 const kits = readKits();
+const turkish = turkishKits();
+const requiredTrFields = ["name", "sector", "description", "outcome"];
 
 const errors = [];
 
@@ -184,6 +234,23 @@ for (const kit of kits) {
     if (!themeIds.has(theme)) {
       errors.push(`${kit.slug}: theme "${theme}" is not a preset id`);
     }
+  }
+
+  const tr = turkish.get(kit.slug);
+  if (!tr) {
+    errors.push(`${kit.slug}: no Turkish entry in site-kits-tr.ts`);
+  } else {
+    for (const field of requiredTrFields) {
+      if (!tr.has(field)) {
+        errors.push(`${kit.slug}: Turkish entry is missing "${field}"`);
+      }
+    }
+  }
+}
+
+for (const key of turkish.keys()) {
+  if (!kits.some((kit) => kit.slug === key)) {
+    console.warn(`  warn   stale Turkish entry "${key}" matches no kit`);
   }
 }
 

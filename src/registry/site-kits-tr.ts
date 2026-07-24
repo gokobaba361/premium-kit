@@ -36,4 +36,46 @@ export const siteKitTr: Record<
       "İnsanların gerçekten sorduğu dört soruyu yanıtlayan bir mekân sitesi: yemek ne, neredesiniz, ne zaman açıksınız ve masa bulabilir miyim.",
     outcome: "Rezervasyon veya ziyaret",
   },
+  "agency-studio": {
+    name: "Ajans ve yaratıcı stüdyo",
+    sector: "Tasarım, marka ve dijital stüdyolar",
+    description:
+      "İşi göstermeden önce bakış açısını görünür kılan, ardından gelen talebi niteleyerek ilk görüşmenin doğru müşteriyle yapılmasını sağlayan bir stüdyo sitesi.",
+    outcome: "Nitelikli proje talebi",
+  },
+  "freelancer-portfolio": {
+    name: "Serbest çalışan ve portfolyo",
+    sector: "Bağımsız tasarımcılar, geliştiriciler ve yazarlar",
+    description:
+      "İşi hızla kanıtlayan, kişinin neye açık olduğunu söyleyen ve işe almayı tek bir bariz adıma indiren tek kişilik site.",
+    outcome: "Doğrudan iş talebi",
+  },
+  "professional-service": {
+    name: "Danışmanlık ve profesyonel hizmet",
+    sector: "Danışmanlar, mali müşavirler, avukatlar ve uzmanlar",
+    description:
+      "Soyut bir hizmeti anlaşılır kılan danışmanlık sitesi: ne yapıyorsun, süreç nasıl işliyor, başlamak ne tutuyor ve ilk görüşme nasıl alınıyor.",
+    outcome: "Alınmış görüşme",
+  },
+  "publication-newsletter": {
+    name: "Blog, yayın ve bülten",
+    sector: "Editoryal markalar, araştırma ve bağımsız yazarlar",
+    description:
+      "En yeni içeriği öne koyan, arşivi gerçekten gezilebilir kılan ve okuyucuyu açılır pencere olmadan aboneye dönüştüren bir yayın.",
+    outcome: "İçerik okuma ve abonelik",
+  },
+  "developer-docs": {
+    name: "Dokümantasyon ve geliştirici portalı",
+    sector: "Geliştirici araçları, API'ler ve ürün kılavuzları",
+    description:
+      "Yönlendirmenin, navigasyonun ve sürüm geçmişinin teknik içerikle yarışmadan erişilebilir kaldığı bir dokümantasyon sitesi.",
+    outcome: "Başarılı uygulama",
+  },
+  "event-conference": {
+    name: "Etkinlik ve konferans",
+    sector: "Konferanslar, festivaller ve profesyonel buluşmalar",
+    description:
+      "Etkinlik vaadini kuran, programı taranabilir yapan, mekân bilgisini kayda yakın tutan ve bileti siteden çıkmadan satan bir etkinlik sitesi.",
+    outcome: "Tamamlanmış kayıt",
+  },
 };
