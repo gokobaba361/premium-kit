@@ -752,6 +752,36 @@ export const registry: RegistryItem[] = [
     note: "In-memory module store read via useSyncExternalStore, mirroring cart-store: no setState-in-effect and no hydration mismatch. See /demo/booking for the assembled flow.",
   },
 
+  /* -------------------------------------------------------- event registration */
+  {
+    slug: "ticket-tiers",
+    name: "Ticket tiers",
+    category: "block",
+    description: "Selectable event ticket tiers with price, inclusions and sold-out state.",
+    files: ["src/components/blocks/ticket-tiers.tsx"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    note: "Distinct from pricing-duo (marketing pricing): a radiogroup the visitor registers from. Sold-out tiers stay visible but disabled. Presentational; the parent owns the selection. Money in integer minor units.",
+  },
+  {
+    slug: "registration-form",
+    name: "Registration form",
+    category: "block",
+    description: "Attendee details with a live ticket summary and complete states.",
+    files: ["src/components/blocks/registration-form.tsx"],
+    registryDependencies: ["button", "form", "feedback"],
+    note: "Collects attendee and contact detail only. Any payment for a paid ticket goes to a provider on submit, never on this page. onRegistered lets the parent own the confirmation.",
+  },
+  {
+    slug: "registration-confirmation",
+    name: "Registration confirmation",
+    category: "block",
+    description: "Success state with the reference, event, date, ticket and attendee.",
+    files: ["src/components/blocks/registration-confirmation.tsx"],
+    dependencies: ["@phosphor-icons/react"],
+    registryDependencies: ["button"],
+    note: "The success end of the event flow. Date renders in the page locale. No invented barcode or QR beyond the reference the flow generated.",
+  },
+
   /* ---------------------------------------------------------------- account */
   {
     slug: "onboarding-flow",

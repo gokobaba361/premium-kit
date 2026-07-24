@@ -49,6 +49,8 @@ const clientItems = new Set([
   "staff-picker",
   "availability-calendar",
   "booking-store",
+  "ticket-tiers",
+  "registration-form",
   "onboarding-flow",
   "settings-form",
   "content-index",
@@ -83,6 +85,9 @@ const avoidWhen: Record<string, string> = {
   "staff-picker": "Avoid forcing a choice when the business assigns; offer an 'any available' option.",
   "availability-calendar": "Avoid deriving open slots in the block; compute them server-side and pass them in. Always state the time zone.",
   "booking-summary": "Avoid inventing a reference or a policy the booking system cannot honour.",
+  "ticket-tiers": "Avoid hiding what a tier includes or its price; keep sold-out tiers visible but disabled.",
+  "registration-form": "Never collect card details in this form; hand payment for a paid ticket to a provider on submit.",
+  "registration-confirmation": "Avoid inventing a barcode, QR or door policy the ticketing system cannot honour.",
 };
 
 const tags: Record<string, string[]> = {
@@ -103,6 +108,9 @@ const tags: Record<string, string[]> = {
   "availability-calendar": ["booking", "calendar", "scheduling", "keyboard"],
   "booking-summary": ["booking", "confirmation", "success"],
   "booking-store": ["booking", "state", "hook"],
+  "ticket-tiers": ["event", "tickets", "radiogroup", "pricing"],
+  "registration-form": ["event", "registration", "form", "attendee"],
+  "registration-confirmation": ["event", "registration", "confirmation", "success"],
   "onboarding-flow": ["account", "onboarding", "stepper", "form"],
   "settings-form": ["account", "settings", "tabs", "form"],
   "content-index": ["content", "category", "filter", "index", "empty-state"],

@@ -1,7 +1,7 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Booking flow complete and assembled end to end (`/demo/booking`)
+Current milestone: Event flow complete and assembled end to end (`/demo/event`)
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -15,16 +15,16 @@ English human routes and machine-readable AI routes describe the same source of 
 
 Validated inventory:
 
-- 78 registry items
-- 51 full-page blocks
+- 81 registry items
+- 54 full-page blocks
 - 15 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes, each with a full worked `/templates/<theme>` page
 - 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
-- 234 statically generated documentation/product pages
+- 241 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
-- Turkish catalogue coverage: 78/78
-- Three assembled demo flows: `/demo/commerce`, `/demo/content` and `/demo/booking`
+- Turkish catalogue coverage: 81/81
+- Four assembled demo flows: `/demo/commerce`, `/demo/content`, `/demo/booking` and `/demo/event`
 - Every catalogue block is now viewable: 31 have a boxed preview, and the 40 whole-page blocks
   render in a framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch
 - Every skeleton renders as an assembled page (`/preview/skeleton/<slug>`), shown in the same
@@ -117,62 +117,59 @@ Latest local result:
 - lint: clean (including the React Compiler rules: no manual useMemo it cannot preserve, no
   setState synchronously inside an effect)
 - typecheck: clean
-- registry installation audit: 78/78, no errors
-- Turkish coverage: 78/78
+- registry installation audit: 81/81, no errors
+- Turkish coverage: 81/81
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 234/234 static pages, dynamic registry and preview endpoints
+- production build: 241/241 static pages, dynamic registry and preview endpoints
 - clean `src` and non-`src` consumer fixtures: install, typecheck and build pass
-- booking flow verified end to end in the browser (`/demo/booking`): progressive disclosure reveals
-  each step, the calendar shows exactly the open days with an explicit time zone, UTC date maths
-  gives the right weekday (2026-08-11 is a Tuesday), arrow keys move between open days skipping
-  closed ones, empty confirm shows a validation error, and a valid submit reaches the summary
-  (VIRA-xxxx, €90.00, "Tuesday, 11 August 2026, 09:45"); clean console
-- all 4 new block previews return 200 and their detail pages render the framed viewer;
-  `/preview/booking-store` is 404 by design (a primitive with no visual example, like cart-store)
+- event flow verified end to end in the browser (`/demo/event`): the marketing sections render, the
+  sold-out tier is disabled and the "few left" badge shows, selecting Standard reveals the
+  registration form with the right ticket summary (€180.00), empty submit shows both field errors,
+  and a valid submit reaches the confirmation (RELAY-xxxx, "Saturday, 14 November 2026", UTC date
+  correct); clean console
+- all 3 new block previews return 200 with EN and TR detail pages; the booking flow (previous batch)
+  still verified
 
 ## 6. Completed in the latest batch
 
-Built the booking flow — the next Phase 3 product flow after commerce and content — following the
-commerce precedent exactly (presentational blocks, a shared store, one assembled demo). (The
-previous batch, skeleton previews and the 6 templates, is in git history.)
+Built the event flow — the Phase 3 product flow after commerce, content and booking. Most of the
+event page already existed as blocks (`event-schedule`, `team-grid` for speakers, `location-grid`
+for the venue, `stats-band` for the facts), so this batch added the registration step that turns a
+marketing page into a real flow, plus the assembled demo. (The previous batch, the booking flow, is
+in git history.)
 
-**The booking blocks**
+**The registration blocks**
 
-- `service-picker` (block): a radiogroup of services, each with duration and price in integer minor
+- `ticket-tiers` (block): a radiogroup of event ticket tiers, each with price, inclusions and a
+  "few left" / "sold out" state. Distinct from `pricing-duo` (marketing pricing): these are
+  selectable to register from. Sold-out tiers stay visible but disabled. Money in integer minor
   units. Presentational; the parent owns the selection.
-- `staff-picker` (block): choose a practitioner or location, with avatars and an "any available"
-  option for businesses that assign.
-- `availability-calendar` (block): the hard one. A month grid where **slots are pre-computed by the
-  parent and passed in**, never derived in the block. **All date maths is UTC** so a day never
-  shifts across time zones; the passed time zone is a label for the slots, shown explicitly. Arrow
-  keys move between open days (roving tabindex, skipping closed days). Navigation is bounded to the
-  months that actually contain availability. Selecting a day reveals that day's time slots.
-- `booking-summary` (block, server component): the confirmation. Reference, service, practitioner,
-  time (in the page locale and the booking's time zone), duration and price. No invented reference
-  beyond the one the flow generated, mirroring `order-confirmation`'s honesty rules.
-- `booking-store` (primitive): a shared booking read through `useBooking` via `useSyncExternalStore`,
-  mirroring `cart-store`. No setState-in-effect, no hydration mismatch.
+- `registration-form` (block): the attendee form with a live ticket summary and complete states
+  (idle, validation errors, submitting, registered). Collects attendee and contact detail only; any
+  payment for a paid ticket goes to a provider on submit. `onRegistered` lets the parent own the
+  confirmation, mirroring `checkout-form`'s `onPlaced`.
+- `registration-confirmation` (block, server component): the confirmation. Reference, event, date
+  (in the page locale), venue, ticket and attendee. No invented barcode or QR beyond the reference
+  the flow generated, mirroring `order-confirmation`'s honesty rules.
+
+No new store: the flow is linear (tier → form → confirm), so the demo threads the selected tier
+through local state rather than adding a fourth module store. Not every flow needs one.
 
 **The demo**
 
-- `/demo/booking` on the `clinic` theme: a physiotherapy clinic ("Vira Clinic"). Progressive
-  disclosure gates each step on the last (service → staff → calendar → a small contact fieldset →
-  confirm), all sharing the booking store, ending on the summary. Fictional brand and staff.
-
-**React Compiler notes (for the next batch)**
-
-- This repo runs the React Compiler. Two of its lint rules bit during this batch and are worth
-  remembering: it rejects a manual `useMemo`/`useCallback` it cannot preserve (just compute the
-  value directly — the compiler memoizes), and it rejects calling `setState` synchronously inside an
-  effect. The calendar needed to reset its roving-focus target when the month changes; the fix is
-  the React-endorsed "adjust state during render" pattern (compare the previous month in render and
-  `setState` there), not an effect.
+- `/demo/event` on the `signal` theme: a fictional product and engineering conference ("Relay
+  2026"). The existing event blocks carry the marketing page (facts, schedule, speakers, venue),
+  then `ticket-tiers` → `registration-form` → `registration-confirmation` complete the flow.
+  Selecting a tier reveals the form; a valid submit lands on the confirmation. Fictional brand and
+  speakers; the sold-out early-bird tier is kept only so the price ladder reads honestly.
 
 **Registry wiring**
 
-- All 5 items registered in `registry.ts`, `registry-tr.ts` and `registry-metadata.ts` (client
-  items, tags, avoid-when). The 4 whole-page blocks each got a `block-examples.tsx` entry, so they
-  show in the framed viewer rather than the prose fallback; `booking-store` has none by design.
+- All 3 items registered in `registry.ts`, `registry-tr.ts` and `registry-metadata.ts` (client
+  items, tags, avoid-when) and given `block-examples.tsx` entries, so they show in the framed viewer
+  rather than the prose fallback. `ticket-tiers` and `registration-form` are client;
+  `registration-confirmation` is a server component. Conventions held: money in minor units, dates
+  in UTC, the React Compiler rules (no unpreservable manual memo, no setState-in-effect).
 
 ## 7. Research decision and non-blocking quality work
 
@@ -195,16 +192,17 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-The booking flow is done. Phase 3 product flows now remaining: **Event** (schedule → speaker →
-venue → registration) and **Admin** (list → filter → create → edit → delete → audit). Event is the
-smaller of the two and most of its blocks already exist (`event-schedule`, `team-grid` for speakers,
-`location-grid` for the venue, `stats-band` for the facts), so the batch is mostly a registration
-step plus an assembled `/demo/event`. Admin is larger and leans on the `data`, `feedback` and
-`toast` primitives already in the kit.
+Booking and event are done. The one Phase 3 product flow left is **Admin** (list → filter → create
+→ edit → delete → audit). It is the largest of the flows and leans on primitives already in the kit:
+`data` (tables, states, pagination), `filter-toolbar`, `feedback` (empty/error/loading) and `toast`
+(action confirmations), inside `dashboard-shell`. The new work is mostly a create/edit form pattern,
+a delete confirmation (a destructive-action pattern worth getting right — a real confirm step, not a
+bare button), and an audit-trail list, then an assembled `/demo/admin`. Watch the destructive
+actions: the demo must not imply a real delete, and the confirmation copy must be honest.
 
-Either is a valid next step. Alternatively, the owner's backlog (below) — open-source reference
-curation, or the AI-manifest / recipe-bundle candidates — advances the north star directly. Confirm
-direction with the owner if unsure.
+Alternatively, the owner's backlog (below) — open-source reference curation, or the AI-manifest /
+recipe-bundle candidates — advances the north star directly. Confirm direction with the owner if
+unsure.
 
 Conventions to carry forward for any batch:
 - The count-label pattern (`string | (count) => string`) is the convention for any new counted

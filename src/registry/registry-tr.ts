@@ -297,6 +297,18 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Randevu deposu",
     description: "useBooking kancasıyla paylaşılan randevu; randevu blokları canlı durumu paylaşır.",
   },
+  "ticket-tiers": {
+    name: "Bilet kademeleri",
+    description: "Fiyat, kapsam ve tükendi durumuyla seçilebilir etkinlik bilet kademeleri.",
+  },
+  "registration-form": {
+    name: "Kayıt formu",
+    description: "Katılımcı bilgileri, canlı bilet özeti ve eksiksiz durumlar.",
+  },
+  "registration-confirmation": {
+    name: "Kayıt onayı",
+    description: "Referans, etkinlik, tarih, bilet ve katılımcıyla onay ekranı.",
+  },
   "onboarding-flow": {
     name: "Karşılama akışı",
     description: "İlerleme çubuğu, geri/devam ve tamamlanma durumuyla çok adımlı kurulum.",

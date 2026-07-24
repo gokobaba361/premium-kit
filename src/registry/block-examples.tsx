@@ -31,6 +31,8 @@ import { PageHeader } from "@/components/blocks/page-header";
 import { PricingDuo } from "@/components/blocks/pricing-duo";
 import { ProductGrid } from "@/components/blocks/product-grid";
 import { ProofQuote } from "@/components/blocks/proof-quote";
+import { RegistrationConfirmation } from "@/components/blocks/registration-confirmation";
+import { RegistrationForm } from "@/components/blocks/registration-form";
 import { ServicePicker } from "@/components/blocks/service-picker";
 import { SiteFooter } from "@/components/blocks/site-footer";
 import { SiteNav } from "@/components/blocks/site-nav";
@@ -40,6 +42,7 @@ import { StatsBand } from "@/components/blocks/stats-band";
 import { StepsFlow } from "@/components/blocks/steps-flow";
 import { TeamGrid } from "@/components/blocks/team-grid";
 import { TestimonialGrid } from "@/components/blocks/testimonial-grid";
+import { TicketTiers } from "@/components/blocks/ticket-tiers";
 import { Timeline } from "@/components/blocks/timeline";
 import { ContentIndex } from "@/components/blocks/content-index";
 import { Button } from "@/components/primitives/button";
@@ -596,6 +599,69 @@ export const blockExamples: Record<string, React.ReactNode> = {
       staff={{ name: "Elif Saral", role: "Musculoskeletal physio" }}
       slot={{ date: "2026-08-11", time: "09:45" }}
       manageHref="#"
+    />
+  ),
+
+  /* -------------------------------------------------------- event registration */
+
+  "ticket-tiers": (
+    <TicketTiers
+      title="Choose a ticket"
+      body="One price ladder, no hidden fees. Recordings are included from Standard up."
+      currency="EUR"
+      locale="en-GB"
+      selectedId="standard"
+      tiers={[
+        {
+          id: "early",
+          name: "Early bird",
+          priceMinor: 12000,
+          summary: "Gone, but here so the price ladder is honest.",
+          includes: ["Both days", "All talks", "Lunch included"],
+          availability: "sold-out",
+        },
+        {
+          id: "standard",
+          name: "Standard",
+          priceMinor: 18000,
+          summary: "Full access to both days.",
+          includes: ["Both days", "All talks", "Lunch included", "Recordings afterwards"],
+          availability: "limited",
+          featured: true,
+        },
+        {
+          id: "student",
+          name: "Student",
+          priceMinor: 6000,
+          summary: "With a valid student email.",
+          includes: ["Both days", "All talks", "Recordings afterwards"],
+        },
+      ]}
+    />
+  ),
+
+  "registration-form": (
+    <RegistrationForm
+      title="Register"
+      body="One Standard ticket. Enter the attendee's details to finish."
+      currency="EUR"
+      locale="en-GB"
+      ticket={{ name: "Standard", priceMinor: 18000 }}
+    />
+  ),
+
+  "registration-confirmation": (
+    <RegistrationConfirmation
+      reference="RELAY-4820"
+      eventName="Relay 2026"
+      eventDate="2026-11-14"
+      venue="Tersane Istanbul"
+      ticketName="Standard"
+      attendeeName="Aylin Demir"
+      email="you@example.com"
+      locale="en-GB"
+      addToCalendarHref="#"
+      continueHref="#"
     />
   ),
 
