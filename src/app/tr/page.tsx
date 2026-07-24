@@ -11,7 +11,20 @@ export const metadata: Metadata = {
   description: "Türkçe bileşen, blok, site iskeleti ve sektör teması kataloğu.",
 };
 
-const built = new Set(["obsidian", "bone", "forest", "cobalt", "clinic", "terracotta"]);
+const built = new Set([
+  "obsidian",
+  "bone",
+  "forest",
+  "cobalt",
+  "clinic",
+  "terracotta",
+  "slate",
+  "signal",
+  "ember",
+  "ivory",
+  "archive",
+  "neon",
+]);
 
 export default function TurkishKitIndex() {
   return (

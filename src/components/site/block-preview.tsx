@@ -34,10 +34,18 @@ type Viewport = {
   icon: React.ComponentType<{ size?: number; weight?: "bold"; "aria-hidden"?: boolean }>;
 };
 
-const viewports: Viewport[] = [
+/* A single block is roughly a screen tall; an assembled skeleton is a whole
+   page, so it gets a taller frame and scrolls inside it. */
+const blockViewports: Viewport[] = [
   { id: "desktop", label: "Desktop", width: null, height: 820, icon: Monitor },
   { id: "tablet", label: "Tablet", width: 768, height: 900, icon: DeviceTablet },
   { id: "mobile", label: "Mobile", width: 375, height: 760, icon: DeviceMobile },
+];
+
+const pageViewports: Viewport[] = [
+  { id: "desktop", label: "Desktop", width: null, height: 1400, icon: Monitor },
+  { id: "tablet", label: "Tablet", width: 768, height: 1200, icon: DeviceTablet },
+  { id: "mobile", label: "Mobile", width: 375, height: 1000, icon: DeviceMobile },
 ];
 
 export function BlockPreview({
@@ -45,19 +53,26 @@ export function BlockPreview({
   name,
   defaultTheme = "obsidian",
   language = "en",
+  previewPath = "/preview",
+  tall = false,
 }: {
   slug: string;
   name: string;
   defaultTheme?: string;
   language?: "en" | "tr";
+  /** The route family that renders the document, without the slug. */
+  previewPath?: string;
+  /** Use the taller frame for whole-page skeletons. */
+  tall?: boolean;
 }) {
   const tr = language === "tr";
   const themeLabelId = useId();
+  const viewports = tall ? pageViewports : blockViewports;
   const [viewport, setViewport] = useState<Viewport>(viewports[0]);
   const [theme, setTheme] = useState(defaultTheme);
   const [loaded, setLoaded] = useState(false);
 
-  const src = `/preview/${slug}?theme=${theme}`;
+  const src = `${previewPath}/${slug}?theme=${theme}`;
 
   return (
     <section className="flex flex-col gap-4">

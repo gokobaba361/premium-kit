@@ -1,81 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { PageHeader } from "@/components/blocks/page-header";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container } from "@/components/primitives/layout";
 import { skeletons } from "@/registry/skeletons";
+import { skeletonTr as text } from "@/registry/skeletons-tr";
 import { itemBySlugTr } from "@/registry/registry-tr";
 
 export const metadata: Metadata = {
   title: "Site iskeletleri",
   description: "Pazarlama, e-ticaret, uygulama, dokümantasyon, etkinlik ve kurumsal siteler için bölüm sıraları.",
-};
-
-const text: Record<
-  string,
-  { name: string; audience: string; description: string; outcome: string }
-> = {
-  "saas-launch": {
-    name: "SaaS lansmanı",
-    audience: "Yazılım ürünleri",
-    description: "Ürünü açıkla, güven oluştur ve nitelikli ziyaretçiyi denemeye yönlendir.",
-    outcome: "Deneme veya demo talebi",
-  },
-  "product-story": {
-    name: "Ürün hikâyesi",
-    audience: "E-ticaret ve zanaat ürünleri",
-    description: "Önce arzu oluştur, ardından malzeme ayrıntısı ve kanıtla satın almayı destekle.",
-    outcome: "Ürün satın alma",
-  },
-  "studio-portfolio": {
-    name: "Stüdyo portfolyosu",
-    audience: "Ajanslar ve bağımsız stüdyolar",
-    description: "Yetenekleri ve seçilmiş işleri göstermeden önce bakış açısını görünür kıl.",
-    outcome: "Nitelikli proje talebi",
-  },
-  "service-business": {
-    name: "Hizmet işletmesi",
-    audience: "Klinikler, danışmanlar ve yerel hizmetler",
-    description: "Süreci anlaşılır kıl ve iletişim öncesindeki belirsizliği azalt.",
-    outcome: "Randevu veya görüşme",
-  },
-  publication: {
-    name: "Yayın",
-    audience: "Bloglar, araştırma ve editoryal markalar",
-    description: "Yeni içerikleri öne çıkarırken konu ve abonelik yollarını kolay bulunur tut.",
-    outcome: "İçerik okuma ve abonelik",
-  },
-  "company-profile": {
-    name: "Şirket profili",
-    audience: "Kurumsal ve kurumsal ölçekli siteler",
-    description: "Teklifi; kanıt, geçmiş ve sorumluluk sahibi ekip ile dengeli biçimde anlat.",
-    outcome: "Ortaklık veya satın alma görüşmesi",
-  },
-  "commerce-store": {
-    name: "E-ticaret mağazası",
-    audience: "Ürün koleksiyonları ve doğrudan tüketici markaları",
-    description: "Sayfayı promosyon duvarına çevirmeden koleksiyon keşfinden ürün güvenine ilerle.",
-    outcome: "Koleksiyon inceleme ve satın alma",
-  },
-  "application-dashboard": {
-    name: "Uygulama dashboard'u",
-    audience: "SaaS ürünleri ve iç araçlar",
-    description: "Özel iş akışlarından önce sabit çerçeve, güncel metrikler ve paylaşılabilir filtreler sun.",
-    outcome: "Görev tamamlama ve izleme",
-  },
-  "documentation-hub": {
-    name: "Dokümantasyon merkezi",
-    audience: "Geliştirici araçları, API'ler ve ürün kılavuzları",
-    description: "Teknik içerikle yarışmadan yönlendirme, navigasyon ve sürüm geçmişini erişilebilir tut.",
-    outcome: "Başarılı uygulama",
-  },
-  "event-conference": {
-    name: "Etkinlik ve konferans",
-    audience: "Konferanslar, festivaller ve profesyonel buluşmalar",
-    description: "Etkinlik vaadini kur, programı taranabilir yap ve mekân bilgisini kayda yakın tut.",
-    outcome: "Kayıt",
-  },
 };
 
 export default function TurkishSkeletonsPage() {
@@ -114,10 +49,25 @@ export default function TurkishSkeletonsPage() {
                   className="rounded-pk border border-line bg-elevated p-6"
                 >
                   <p className="font-mono text-xs text-accent">{localized.audience}</p>
-                  <h2 className="mt-2 display-3">{localized.name}</h2>
+                  <h2 className="mt-2 display-3">
+                    <Link
+                      href={`/tr/iskeletler/${skeleton.slug}`}
+                      className="hover:text-accent"
+                    >
+                      {localized.name}
+                    </Link>
+                  </h2>
                   <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted">
                     {localized.description}
                   </p>
+
+                  <Link
+                    href={`/tr/iskeletler/${skeleton.slug}`}
+                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium hover:text-accent"
+                  >
+                    Canlı önizleme
+                    <ArrowUpRight size={15} weight="bold" aria-hidden />
+                  </Link>
 
                   <div className="mt-5 flex items-center justify-between border-y border-line py-3 text-sm">
                     <span className="text-faint">Ana hedef</span>

@@ -1,7 +1,8 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-07-24
-Current milestone: Every block is now visible in a framed, themeable preview
+Current milestone: Nothing in the catalogue is invisible — blocks, skeletons and all 12 themes
+have a worked, viewable example
 Project path: `C:\Users\TC-ICT\projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -19,13 +20,16 @@ Validated inventory:
 - 47 full-page blocks
 - 14 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
-- 12 visual themes and 10 purpose-led site skeletons
-- 197 statically generated documentation/product pages
+- 12 visual themes, each with a full worked `/templates/<theme>` page (was 6)
+- 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
+- 223 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
 - Turkish catalogue coverage: 73/73
 - Two assembled demo flows: `/demo/commerce` and `/demo/content`
 - Every catalogue block is now viewable: 31 have a boxed preview, and the 40 whole-page blocks
   render in a framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch
+- Every skeleton renders as an assembled page (`/preview/skeleton/<slug>`), shown in the same
+  framed viewer on `/skeletons/<slug>` and `/tr/iskeletler/<slug>`
 
 ## 2. Fixed architecture
 
@@ -116,7 +120,7 @@ Latest local result:
 - registry installation audit: 73/73, no errors
 - Turkish coverage: 73/73
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 197/197 static pages, dynamic registry and preview endpoints
+- production build: 223/223 static pages, dynamic registry and preview endpoints
 - dynamic registry trace: shared CSS and representative block/primitive source included
 - clean `src` fixture: install, typecheck and build pass
 - clean non-`src` fixture: install, typecheck and build pass
@@ -124,50 +128,53 @@ Latest local result:
   200 across themes; the desktop frame fills its column with no overflow and no scale transform on
   first paint; tablet and mobile cap and centre; the theme switch reloads the iframe with the new
   `data-theme`; no horizontal scroll inside the frame or on the page
+- all 6 previously-404 template routes now return 200; the home page shows "View template" for all
+  12 themes with no "template pending" state; every skeleton detail page renders the assembled
+  preview and switches theme
 
 ## 6. Completed in the latest batch
 
-Until now, 42 of the 73 registry items showed a paragraph of prose instead of the block, because a
-whole-page section cannot sit honestly in a boxed thumbnail. That was the catalogue's biggest gap:
-the code was there, but a person or an agent choosing a block could not see it. This batch closes
-it. (The previous batch, `/demo/content` plus the count-label and prose fixes, is in git history.)
+Closed the two remaining discoverability gaps: skeletons were shown as a text diagram with no
+visual, and 6 of the 12 themes had no `/templates/<theme>` page (those routes 404'd). Both are now
+worked, viewable examples. (The previous batch, the block preview system, is in git history.)
 
-**The preview system**
+**Skeleton previews**
 
-- Added `/preview/<slug>`, a bare document (no catalogue chrome, no language switch, no footer) that
-  renders one block full width under a chosen theme. `?theme=<id>` selects one of the 12 systems and
-  falls back to `obsidian`. Marked `robots: noindex`. Renders per request rather than statically:
-  40 blocks across 12 themes is 480 documents, and the catalogue pages linking here are static.
-- Added `src/registry/block-examples.tsx`: one canonical, honest example per block. Brands and people
-  are fictional, every `source`-bearing stat carries a source, and integration/logo slugs name real
-  products being integrated with (a factual list, not borrowed credibility). 40 blocks covered; the
-  17 that already had template examples plus these means every whole-page block now has one.
-- Added `src/components/site/block-preview.tsx`, the viewer on the detail page: an iframe (so the
-  block's own `md:` breakpoints answer to a real viewport, which a scaled `div` cannot do), a quiet
-  viewport toggle (desktop / tablet / mobile) and a 12-theme `select`, plus a "new tab" link.
-- `LanguageSwitch` now hides itself under `/preview/`, so preview documents carry no catalogue
-  chrome.
-- The detail page shows the framed viewer for whole-page blocks, the existing boxed preview for the
-  31 that have one, and keeps the prose fallback only for anything with neither.
+- Added `/preview/skeleton/<slug>`: a bare document that assembles a skeleton from its section
+  blocks, in order, under one theme. Reuses `block-examples.tsx` — a skeleton is just a sequence of
+  blocks. Same contract as `/preview/<slug>`: no chrome, noindex, rendered per request. The theme
+  defaults to the skeleton's first recommended system, overridable with `?theme=`.
+- Four skeleton sections are interactive primitives (`data`, `feedback`, `toast`, `tabs`) with no
+  single page-section example. Those render an honest labelled placeholder naming the primitive,
+  not a faked-up section (`src/registry/skeleton-examples.tsx`).
+- Added skeleton detail pages `/skeletons/<slug>` (EN) and `/tr/iskeletler/<slug>` (TR): the framed
+  viewer (reusing `BlockPreview`, now with a `previewPath` prop and a taller `tall` frame) plus the
+  section breakdown. Both index pages link their cards to the detail page.
+- Extracted the Turkish skeleton copy to `src/registry/skeletons-tr.ts` so the TR index and TR
+  detail page share one source.
 
-**A real bug, found and fixed in-flight**
+**The 6 missing templates**
 
-- The first viewer scaled a 1280px iframe down to the column with a `ResizeObserver`. It measured on
-  mount, and if layout had not settled the width read 0, the effect bailed, and because its
-  dependencies never changed again it never retried. The frame stayed at 1:1 and overflowed its box.
-  Reproduced in a production server, not only dev. The fix removed the measurement entirely:
-  desktop simply fills the column (already a real desktop viewport) and the narrow viewports are
-  capped with `min(<w>px, 100%)` and centred. A width that needs no measurement cannot get stuck.
+- Added bespoke `/templates/<theme>` pages for slate, signal, ember, ivory, archive and neon, each
+  matching the theme's sector: an architecture practice (slate), a consumer planner app (signal), a
+  strength gym (ember), a skincare brand (ivory), a harbour museum (archive), a co-op game launch
+  (neon). Built only from shipping blocks, one CTA intent each, fictional brands, sourced stats, and
+  logo/integration slugs that name real products only where that is a factual integration list.
+- Updated the `built` set on both home pages to all 12 themes, so every theme card links to a real
+  template and the "template pending" state is gone. The gate stays so a future theme without a
+  template still degrades cleanly.
 
-**Verified in a production build (not only dev)**
+**Verified**
 
-- Every `/preview/<slug>` returns 200 across themes; all 40 examples render with no runtime error.
-- Desktop frame fills its column (1182 of 1184px) with no overflow and no transform on first paint.
-- Tablet caps at 768, mobile at 375, both centred and within the column.
-- The theme `select` swaps the iframe's `data-theme` live (checked `neon` → dark violet ground).
-- No horizontal scroll inside the iframe or on the page; Turkish detail page renders the viewer with
-  Turkish chrome.
-- Examples audited: zero em-dashes, no generic placeholder names.
+- All 6 previously-404 template routes now return 200; the home page shows 12 "View template" links
+  and no "template pending" text.
+- Skeleton preview assembles in order (saas-launch: 12 sections; application-dashboard shows the 3
+  primitive placeholders honestly); detail pages render the viewer, default to the right theme and
+  switch theme live (checked EN and TR).
+- Ember (dark) and Ivory (light) templates render with the correct theme ground, no horizontal
+  scroll at 1280px or 375px, and a clean console.
+- Lint, typecheck, all audits and the build (197 → 223 static pages) pass; new content audited for
+  zero em-dashes.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -227,10 +234,9 @@ be asked for each one.
    process: (a) widen `research-sources.ts` with candidate repos tagged by priority and licence;
    (b) per accepted source, adapt into a registry item or skill with a provenance note; (c) only
    MIT/OFL/permissive, never a copy without attribution. This is a multi-batch workstream.
-2. **Fill the remaining preview and template gaps.** `/skeletons` still renders as text with no
-   visual; only 6 of 12 themes have a `/templates/<theme>` page. The framed viewer built this batch
-   is the tool to close both — a skeleton is just a sequence of blocks, so it can render in the same
-   iframe.
+2. ~~Fill the remaining preview and template gaps.~~ **Done this batch:** skeletons render in the
+   framed viewer (`/preview/skeleton/<slug>` + EN/TR detail pages) and all 12 themes now have a
+   `/templates/<theme>` page.
 3. **Candidate additions the owner has not named but the north star implies** (agent's suggestions,
    confirm before building): a copy-paste "install everything for this site recipe" bundle; an
    `llms.txt` / expanded AI manifest so an agent can enumerate blocks and their example props in one

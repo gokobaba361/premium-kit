@@ -5,9 +5,22 @@ import { Container } from "@/components/primitives/layout";
 import { ButtonLink } from "@/components/primitives/button";
 import { Rule } from "@/components/primitives/surface";
 
-// Presets with a full page composition under /templates. The rest ship the
-// theme only: every block already works with them, they just have no demo page.
-const built = new Set(["obsidian", "bone", "forest", "cobalt", "clinic", "terracotta"]);
+// Presets with a full page composition under /templates. All 12 now have one;
+// the gate stays so a future theme added without a template degrades cleanly.
+const built = new Set([
+  "obsidian",
+  "bone",
+  "forest",
+  "cobalt",
+  "clinic",
+  "terracotta",
+  "slate",
+  "signal",
+  "ember",
+  "ivory",
+  "archive",
+  "neon",
+]);
 
 export default function KitIndex() {
   return (

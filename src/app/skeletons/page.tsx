@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { PageHeader } from "@/components/blocks/page-header";
 import { ButtonLink } from "@/components/primitives/button";
 import { Container } from "@/components/primitives/layout";
@@ -72,14 +72,35 @@ export default function SkeletonsPage() {
                 key={skeleton.slug}
                 className="grid gap-6 rounded-pk border border-line bg-elevated p-5 sm:grid-cols-[12rem_1fr] md:p-6"
               >
-                <SkeletonDiagram skeleton={skeleton} />
+                <Link
+                  href={`/skeletons/${skeleton.slug}`}
+                  aria-label={`${skeleton.name} live preview`}
+                  className="group block rounded-pk outline-none ring-accent transition-shadow focus-visible:ring-2"
+                >
+                  <SkeletonDiagram skeleton={skeleton} />
+                </Link>
 
                 <div className="flex min-w-0 flex-col">
                   <p className="font-mono text-xs text-accent">{skeleton.audience}</p>
-                  <h2 className="mt-2 display-3">{skeleton.name}</h2>
+                  <h2 className="mt-2 display-3">
+                    <Link
+                      href={`/skeletons/${skeleton.slug}`}
+                      className="hover:text-accent"
+                    >
+                      {skeleton.name}
+                    </Link>
+                  </h2>
                   <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted">
                     {skeleton.description}
                   </p>
+
+                  <Link
+                    href={`/skeletons/${skeleton.slug}`}
+                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium hover:text-accent"
+                  >
+                    Live preview
+                    <ArrowUpRight size={15} weight="bold" aria-hidden />
+                  </Link>
 
                   <dl className="mt-5 border-t border-line pt-4 text-sm">
                     <div className="flex justify-between gap-4">

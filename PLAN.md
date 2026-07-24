@@ -173,9 +173,9 @@ inventing new primitives.
 
 Status: In progress
 
-Latest completed batch: the block preview system. Every whole-page block now renders in a framed,
-themeable viewer (`/preview/<slug>`) instead of a prose placeholder, so people and agents can see a
-block before installing it.
+Latest completed batch: closed the discoverability gaps. Skeletons now render as assembled pages in
+the framed viewer, and all 12 themes have a worked `/templates/<theme>` page (was 6). Nothing in the
+catalogue is invisible.
 
 - [x] Commerce: collection → product → cart → checkout → confirmation. All blocks
   ship, a cart-store shares live state, and /demo/commerce runs the flow end to end.
@@ -309,9 +309,9 @@ about to install, and it must draw on the best open-source work available.
 
 - [x] Framed, themeable block preview (`/preview/<slug>` + the detail-page viewer). Closes the
   "code is there but the block is invisible" gap for every whole-page block.
-- [ ] Render `/skeletons` in the same framed viewer instead of text; a skeleton is a sequence of
-  blocks, so it reuses the preview infrastructure.
-- [ ] Add the 6 missing `/templates/<theme>` pages so all 12 themes have a full worked example.
+- [x] Render skeletons in the framed viewer (`/preview/skeleton/<slug>` + EN/TR detail pages); a
+  skeleton is a sequence of blocks, so it reuses the block-example infrastructure.
+- [x] Add the 6 missing `/templates/<theme>` pages so all 12 themes have a full worked example.
 - [ ] **Open-source reference curation.** Widen `src/registry/research-sources.ts` with candidate
   repos (skills, skeletons, blocks, effects) tagged high/medium/low priority and by licence. Per
   accepted source: record provenance, confirm a permissive licence (MIT/OFL), then adapt into a
