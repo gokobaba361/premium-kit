@@ -1671,6 +1671,194 @@ export const siteKits: SiteKit[] = [
       "Transcript and captions: present, or missing with the gap stated rather than hidden",
     ],
   },
+  /* ------------------------------------------------------------- non-profit */
+  {
+    slug: "nonprofit-donation",
+    name: "Non-profit and donation",
+    sector: "Associations, foundations and campaigns",
+    description:
+      "A site that earns trust before it asks for money: what the organisation does, what it costs, who checks the books — and then a donation flow that treats a monthly gift as the commitment it actually is.",
+    outcome: "A donation, and preferably a recurring one",
+    themes: ["forest", "bone", "ivory"],
+    routes: [
+      {
+        path: "/",
+        name: "Home",
+        purpose:
+          "What the organisation does, the evidence it works, and one clear way to help. The ask comes after the reason, not before it.",
+        skeleton: "company-profile",
+        structuredData: "NGO",
+        required: true,
+      },
+      {
+        path: "/bagis",
+        name: "Donate",
+        purpose:
+          "The amount ladder, the frequency choice and the consents each needs. No JSON-LD: a donation is an action, and marking it up as a product misdescribes it.",
+        blocks: ["page-header", "donation-form", "faq-accordion"],
+        required: true,
+      },
+      {
+        path: "/bagis/tesekkurler",
+        name: "Thank you",
+        purpose:
+          "Reference, when the receipt arrives, when the first monthly charge lands and how to stop it. Reuses order-confirmation because that block already carries a reference and a what-happens-next list; the words change, the shape does not.",
+        blocks: ["order-confirmation"],
+        required: true,
+      },
+      {
+        path: "/calismalarimiz",
+        name: "Our work",
+        purpose:
+          "Programmes as cases, with the numbers each one actually produced. This is the page that makes the donate page credible.",
+        blocks: ["page-header", "case-study-grid", "stats-band"],
+        required: true,
+      },
+      {
+        path: "/seffaflik",
+        name: "Transparency",
+        purpose:
+          "Where the money went, the annual reports by year, and who audited them. A Turkish association files an annual dernek beyannamesi anyway; publishing a summary of it costs nothing and is the cheapest trust the site can buy.",
+        blocks: ["page-header", "stats-band", "spec-grouped", "changelog-list"],
+        required: true,
+      },
+      {
+        path: "/duzenli-bagisim",
+        name: "Donor portal",
+        purpose:
+          "Change the amount, pause, or cancel. The monthly consent says 'until you cancel', so a route where cancelling actually happens is part of the promise, not a nice-to-have.",
+        blocks: ["auth-split", "dashboard-shell", "settings-form"],
+        required: true,
+      },
+      {
+        path: "/gonullu-ol",
+        name: "Volunteer",
+        purpose:
+          "What help is needed, what it involves, and a form that asks only what a first reply needs.",
+        blocks: ["page-header", "steps-flow", "contact-form"],
+        required: true,
+      },
+      {
+        path: "/ekip",
+        name: "Team and board",
+        purpose: "Who runs it and who governs it. Naming the board is a transparency signal, not a vanity page.",
+        blocks: ["page-header", "team-grid"],
+        structuredData: "Person",
+        required: false,
+      },
+      {
+        path: "/haberler",
+        name: "News",
+        purpose: "Updates that show the work continuing between campaigns.",
+        skeleton: "publication",
+        structuredData: "Blog",
+        required: false,
+      },
+      {
+        path: "/iletisim",
+        name: "Contact",
+        purpose: "A real address and a named person. An organisation asking for money should be easy to find.",
+        blocks: ["page-header", "contact-form", "location-grid"],
+        structuredData: "Organization",
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Programme",
+        fields: ["slug", "title", "summary", "goalMinor?", "raisedMinor?", "startedAt", "endsAt?", "status"],
+        note: "Money in integer minor units. If the page shows a progress bar, `raisedMinor` has to come from the payment system rather than a hand-edited field, because a stale total is a public inaccuracy about money.",
+      },
+      {
+        name: "Donation tier",
+        fields: ["frequency", "amountMinor", "impact?"],
+        note: "Two ladders, one per frequency, never one ladder reused. `impact` is a claim: leave it out rather than invent one.",
+      },
+      {
+        name: "Donation",
+        fields: ["id", "donorId", "amountMinor", "currency", "frequency", "mandateId?", "receiptRequested", "createdAt"],
+        note: "A monthly donation stores a mandate rather than a repeating charge record. The mandate is the thing the donor portal cancels, so it needs an id the donor can be shown.",
+      },
+      {
+        name: "Donor",
+        fields: ["id", "name", "email", "taxId?", "publicNameConsent", "recurringConsentAt?"],
+        note: "The ID number exists only where a receipt was requested; it is collected to satisfy the obligation to issue that receipt and must not then be reused for anything else. Store each consent with its timestamp and the exact wording shown — \"they agreed\" is not evidence, a stored sentence is.",
+      },
+      {
+        name: "Receipt",
+        fields: ["id", "donationId", "serial", "issuedAt", "fileUrl"],
+        note: "Bağış makbuzu: a serially numbered document, not a thank-you email. The two are separate sends and only one of them can be re-issued.",
+      },
+      {
+        name: "Annual report",
+        fields: ["year", "title", "summary", "fileUrl", "auditedBy?"],
+        note: "Leave `auditedBy` empty until it is true. A year that quietly says nothing about audit reads as an audited one.",
+      },
+      {
+        name: "Volunteer application",
+        fields: ["id", "name", "email", "skills[]", "availability", "status"],
+      },
+    ],
+    forms: [
+      {
+        name: "Donation",
+        route: "/bagis",
+        registryItem: "donation-form",
+        collects: [
+          "amount and frequency",
+          "name and email",
+          "ID number, only where a receipt is requested",
+          "recurring authorisation, for a monthly gift",
+          "KVKK consent",
+        ],
+        destination:
+          "Your payment provider on submit; card details never touch this form. A monthly gift creates a mandate, and that mandate id is what /duzenli-bagisim later cancels. Store the consent wording as shown at the time, with the record.",
+      },
+      {
+        name: "Volunteer application",
+        route: "/gonullu-ol",
+        registryItem: "contact-form",
+        collects: ["name", "email", "skills", "availability"],
+        destination:
+          "The volunteer coordinator's inbox. Reply even to the ones you cannot take: an unanswered volunteer does not come back, and they talk.",
+      },
+      {
+        name: "News subscription",
+        route: "/haberler",
+        registryItem: "newsletter-signup",
+        collects: ["email"],
+        destination:
+          "Your email provider with a double opt-in, and consent registered in İYS. Whether a fundraising email is a ticari elektronik ileti is a question for your counsel; registering the consent either way costs nothing, and being wrong the other way costs the list.",
+      },
+    ],
+    legal: [
+      ...baseLegal,
+      {
+        path: "/yardim-toplama-izni",
+        name: "Yardım toplama izni",
+        why: "Collecting aid in Türkiye is permit-based under 2860 sayılı Yardım Toplama Kanunu. Some organisations — a kamu yararına çalışan dernek, a vergi muafiyeti tanınan vakıf — may be granted the right to collect without a per-campaign permit; most are not. State which you are, and where a permit applies, publish its number and validity. This is the item a donation site is most likely to skip.",
+      },
+      {
+        path: "/duzenli-bagis-kosullari",
+        name: "Düzenli bağış koşulları",
+        why: "The monthly consent promises \"until you cancel\", so these terms have to state the charge date, what happens after a failed charge, and the one-step way to stop it. A term the donor cannot act on is not a term.",
+      },
+      {
+        path: "/ileti-izni",
+        name: "İYS (İleti Yönetim Sistemi) izni",
+        why: "Any commercial email or SMS to a recipient in Türkiye needs consent registered there with an opt-out in every message. A charity with a mailing list is in the same position as any other sender.",
+      },
+    ],
+    operationalStates: [
+      "Donation: idle, validation errors, handing off to the payment provider, paid, payment declined, provider unreachable",
+      "Recurring gift: active, charge failed with a retry window, paused, cancelled by the donor, cancelled by the organisation",
+      "Receipt: requested and issued, requested but the ID number was rejected, not requested",
+      "Programme: open, target reached and still open, closed, closed early with the reason stated",
+      "Transparency: this year's report published, this year's report late with the date it is due, a year published and explicitly labelled unaudited",
+      "Volunteer application: submitted, acknowledged, accepted, not this time",
+      "Donor portal: no recurring gift, one active, cancellation confirmed in writing",
+    ],
+  },
 ];
 
 export function kitBySlug(slug: string) {

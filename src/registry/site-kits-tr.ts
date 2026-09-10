@@ -92,4 +92,11 @@ export const siteKitTr: Record<
       "Saat sayısını değil sonucu satan, müfredatı fiyattan önce gösteren ve ardından asıl zor işi yapan bir kurs sitesi: kayıt olan kişiyi kursu bitiren kişiye dönüştürmek.",
     outcome: "Kayıt ve tamamlanmış kurs",
   },
+  "nonprofit-donation": {
+    name: "Sivil toplum ve bağış",
+    sector: "Dernekler, vakıflar ve kampanyalar",
+    description:
+      "Para istemeden önce güven kuran bir site: kurumun ne yaptığı, bunun neye mal olduğu, hesapları kimin denetlediği — ve ardından aylık bağışı gerçekten bir taahhüt gibi ele alan bir bağış akışı.",
+    outcome: "Bağış, tercihen düzenli bağış",
+  },
 };

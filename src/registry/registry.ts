@@ -883,6 +883,18 @@ export const registry: RegistryItem[] = [
     note: "Owns no video vendor and no progress store: the player arrives through `media`, the curriculum through `aside`, and completion is controlled by the page so a refresh cannot lose a finished lesson. Transcript and resources state their empty case instead of removing the tab, because a silently absent tab reads like a bug.",
   },
 
+  /* ------------------------------------------------------------- non-profit */
+  {
+    slug: "donation-form",
+    name: "Donation form",
+    category: "block",
+    description: "Amount tiers, one-off or monthly, and the consent each of those actually needs.",
+    files: ["src/components/blocks/donation-form.tsx"],
+    registryDependencies: ["button", "form", "feedback"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    note: "Not a checkout. A monthly gift is a recurring authorisation, so it carries its own consent naming the amount, the frequency and how to stop it, and that consent is stored with the mandate rather than merely displayed. The receipt is a document with legal weight, so the ID number it needs is asked for only when the donor asks for the receipt. The one-off and monthly ladders are independent, because a monthly ladder is not the one-off ladder divided by twelve. No payment provider and no card fields; onDonated hands the donation to yours.",
+  },
+
   /* ------------------------------------------------------------------ theme */
   {
     slug: "tokens",

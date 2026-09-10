@@ -58,6 +58,7 @@ const clientItems = new Set([
   "settings-form",
   "content-index",
   "lesson-shell",
+  "donation-form",
 ]);
 
 const mixedItems = new Set([
@@ -100,6 +101,8 @@ const avoidWhen: Record<string, string> = {
     "Avoid using it for a flat process explanation, which is steps-flow, and avoid claiming progress the learner's record cannot support.",
   "lesson-shell":
     "Avoid holding completion inside the block; the page must persist it, or a refresh loses a finished lesson.",
+  "donation-form":
+    "Never collect card details here; hand payment to a provider on submit. Avoid reusing one amount ladder for one-off and monthly, and avoid an impact line the organisation cannot substantiate.",
 };
 
 const tags: Record<string, string[]> = {
@@ -136,6 +139,7 @@ const tags: Record<string, string[]> = {
   "event-schedule": ["event", "schedule", "programme"],
   "curriculum-list": ["education", "course", "curriculum", "progress", "disclosure"],
   "lesson-shell": ["education", "lesson", "player", "tabs", "progress"],
+  "donation-form": ["non-profit", "donation", "form", "recurring", "consent"],
 };
 
 function renderingFor(item: RegistryItem): RenderingMode {

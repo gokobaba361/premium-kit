@@ -1,8 +1,8 @@
 # Premium Kit — Development Handoff
 
 Last updated: 2026-09-10
-Current milestone: Phase 4 at 12 of 18 sector kits — the first blocks-then-kit batch is done
-(`dashboard-internal`, then `curriculum-list` + `lesson-shell` and the `education-course` kit)
+Current milestone: Phase 4 at 13 of 18 sector kits — `donation-form` and the
+`nonprofit-donation` kit it unblocks, plus a Checkbox primitive that can now be read from a form
 Project path: `C:\Users\TC-ICT\Projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
@@ -16,21 +16,21 @@ English human routes and machine-readable AI routes describe the same source of 
 
 Validated inventory:
 
-- 87 registry items
-- 60 full-page blocks
+- 88 registry items
+- 61 full-page blocks
 - 15 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes, each with a full worked `/templates/<theme>` page
 - 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
-- 12 of the 18 planned sector site kits, each with its route tree, content model, structured-data
+- 13 of the 18 planned sector site kits, each with its route tree, content model, structured-data
   types, forms, legal surfaces and operational states (EN + TR detail pages, plus
   `/r/site-kits.json`)
-- 281 statically generated documentation/product pages
+- 285 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
-- Turkish catalogue coverage: 87/87
+- Turkish catalogue coverage: 88/88
 - Five assembled demo flows: `/demo/commerce`, `/demo/content`, `/demo/booking`, `/demo/event` and
   `/demo/admin`
-- Every catalogue block is viewable: 31 have a boxed preview, 45 whole-page blocks render in a
+- Every catalogue block is viewable: 31 have a boxed preview, 46 whole-page blocks render in a
   framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch, and `confirm-dialog` shows
   an honest prose fallback (a controlled dialog cannot be given a static example without crossing
   the server/client boundary)
@@ -81,7 +81,7 @@ Primary files:
 
 ## 4. Quality automation
 
-`scripts/registry-audit.mjs` checks all 87 entries for:
+`scripts/registry-audit.mjs` checks all 88 entries for:
 
 - missing published files and CSS files
 - invalid or cyclic registry dependencies
@@ -124,81 +124,96 @@ Latest local result:
 - lint: clean (including the React Compiler rules: no manual useMemo it cannot preserve, no
   setState synchronously inside an effect)
 - typecheck: clean
-- registry installation audit: 87/87, no errors
-- Turkish coverage: 87/87
-- site kit reference audit: 12 kits, 0 broken references, 0 missing Turkish entries
+- registry installation audit: 88/88, no errors
+- Turkish coverage: 88/88
+- site kit reference audit: 13 kits, 0 broken references, 0 missing Turkish entries
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 281/281 static pages, dynamic registry and preview endpoints
+- production build: 285/285 static pages, dynamic registry and preview endpoints
 - clean `src` and non-`src` consumer fixtures: install, typecheck and build pass
-- verified in the browser: both new kits return 200 in EN and TR and the index lists 12 cards; the
-  TR pages resolve the new block names into Turkish (`Müfredat listesi`, `Ders çerçevesi`) and show
-  each sector's Turkish legal surfaces; every outbound link from the two kits was checked by HTTP
-  (35 distinct component, skeleton and template routes, all 200); `/r/site-kits.json` returns 12
-  kits and `/r/lesson-shell.json` resolves `button`, `tabs` and `premium-kit-base` as full URLs
-- both new blocks verified in the framed viewer: `curriculum-list` shows the derived total
-  (2h 41m), per-module counts, the progress bar at 31%, the in-progress badge and the
-  module-complete line, and a module containing an in-progress lesson opens even under
-  `defaultOpen="first"`; `lesson-shell` switches tabs and renders the resources panel; no
-  horizontal scroll at 375px on either; both checked on a light theme (`ivory`) as well as the
-  dark default; clean console
+- verified in the browser: the kit returns 200 in EN and TR, the index lists 13 cards, every
+  outbound link from it was checked by HTTP (21 distinct component, skeleton and template routes,
+  all 200), the TR page resolves the new block name into Turkish (`Bağış formu`),
+  `/r/site-kits.json` returns 13 kits and `/r/donation-form.json` resolves `button`, `form`,
+  `feedback` and `premium-kit-base` as full URLs
+- `donation-form` driven end to end in the framed viewer: submitting empty raised exactly the
+  expected four errors; switching to one-off swapped the ladder (₺75–₺600 → ₺250–₺2.500), dropped
+  the recurring consent and relabelled the button, keeping the tier position; the receipt box
+  revealed the ID field and made it required; an "other amount" of ₺10 was rejected against the
+  ₺25 minimum; a filled form reached the thanked state. Turkish money formatting (`₺1.000`) is
+  correct
+- the Checkbox fix verified in the DOM rather than by eye: the three consent boxes render hidden
+  inputs carrying `wantsReceipt`, `publicName` and `privacyConsent`, and `new FormData(form)`
+  returns `"on"` for a ticked box and nothing for an unticked one — which is what the submit
+  handler reads
+- clicking the aydınlatma-metni link inside the consent label leaves the box unticked
+- no horizontal scroll at 375px; checked on a light theme (`bone`) as well as the dark default;
+  no application console errors (only the preview pane's own dev-server HMR socket)
 
 ## 6. Completed in the latest batch
 
-The first batch under the blocks-then-kits rule, taking Phase 4 from 10 to 12 of 18.
+`donation-form`, the `nonprofit-donation` kit it unblocks, and a primitive that turned out to be
+broken in a way nothing had exercised. Phase 4 is now 13 of 18.
 
-**`dashboard-internal` (11 routes, 9 core)** — the one remaining kit that needed no new blocks,
-because the admin flow already ships `resource-table`, `record-form`, `confirm-dialog`, `audit-log`
-and `settings-form`. It is not a marketing site with a login bolted on, and the write-up says so:
-it is the only kit here that emits **no JSON-LD on any route**, because an authenticated tool has to
-be noindex rather than indexed well. Its legal block is deliberately not `baseLegal`: staff are data
-subjects through the employment relationship, which a visitor-facing aydınlatma metni does not
-cover, so it carries a çalışan-and-user aydınlatma metni, a **saklama ve imha politikası** (the
-document that actually decides how long the audit log may be kept, and the reason `retentionDays`
-is a setting rather than a guess), an internal acceptable-use page, and a cookie policy whose note
-records that a session-only cookie needs no consent banner but staff analytics does. `/kurulum` is
-a required route rather than a later one: an empty workspace with nobody invited is the state every
-internal tool forgets to build.
+**`donation-form`** — a donation is not a checkout, and three things follow from that.
 
-**`curriculum-list` and `lesson-shell`** — the two blocks the education kit needed.
+- **A monthly gift is a recurring authorisation, not a payment.** It carries its own consent,
+  separate from the privacy consent, and that consent names the amount, the frequency and how it
+  ends: "₺150 every month, until you cancel." The sentence is assembled from the live selection
+  rather than written once, so it cannot drift from what is actually being authorised. The consent
+  is required only in monthly mode.
+- **A receipt is a document, not a thank-you email.** The Turkish bağış makbuzu has to carry the
+  donor's ID number, so the block asks for that number only when the donor ticks the receipt box,
+  and the field is required only then. Collecting an ID from everyone "just in case" is the
+  failure mode this avoids.
+- **The two amount ladders are independent.** A monthly ladder is not the one-off ladder divided
+  by twelve. Switching frequency re-picks from the other ladder and clamps the index, because the
+  ladders are different lengths and a carried-over index lands silently on the wrong amount.
 
-- `curriculum-list` is server-rendered on native `details`/`summary`, so it expands with no
-  JavaScript, is keyboard operable for free and stays findable by find-in-page while collapsed.
-  One `enrolled` flag makes it serve two pages: `false` is the sales page (free previews
-  advertised, the rest locked, no progress claimed), `true` is the signed-in page (completion
-  ticks, progress bar). A module holding an in-progress lesson opens regardless of `defaultOpen`,
-  because the point of the page is to resume. Access and progress are one field (`locked` sits
-  beside `not-started`/`in-progress`/`complete`) so a caller cannot describe a lesson that is both
-  locked and half finished.
-- `lesson-shell` owns no video vendor and no progress store: the player arrives through `media`,
-  the curriculum through `aside`, and completion is controlled by the page the way every other
-  selection block here is controlled. Transcript and resources are tabs rather than an accordion,
-  and both **state their empty case instead of dropping the tab** — a silently absent tab reads as
-  a bug, and a missing transcript is information.
+Beyond that: a minimum that is stated up front rather than enforced at the payment step ("card
+fees take most of anything smaller"), a commitment line above the submit button that only appears
+once the amount is actually giveable, and a "list my name publicly" box whose description says it
+affects the public list and not the receipt. No provider, no card fields; `onDonated` hands the
+donation on.
 
-**`education-course` (9 routes, 7 core)** — curriculum above the price, because the curriculum is
-what a buyer is actually evaluating. The lesson route is behind enrolment and therefore emits no
-structured data. Its content model separates `Lesson progress` into its own entity to make the rule
-explicit: progress lives in the learner's record and the two new blocks are handed it, never derive
-it. Certificates may only be issued against completed progress and must carry a verifiable URL.
+**The Checkbox primitive could not participate in a form.** `Checkbox` in `form.tsx` accepted only
+`label`, `description`, `defaultChecked`, `indeterminate` and `disabled`. Radix renders its hidden
+input only when `name` is set, and `name` was never forwarded — so the box was unreadable from
+`FormData` and effectively decorative. Nothing had caught it because the only existing use was the
+catalogue's own component gallery, where nothing is submitted. Consent boxes are exactly the
+control a submit handler must read, so the wrapper now forwards `name`, `value`, `checked`,
+`onCheckedChange`, `required` and an `error` slot matching `Field`, and `label`/`description` widen
+to `ReactNode` because a consent label almost always contains a link. Every existing prop keeps its
+meaning, so this is additive.
 
-**One Turkey-specific finding worth carrying forward**
+That link needed its own fix: an anchor inside a `<label>` toggles the box on click, so opening the
+document you are being asked to read would tick the box saying you had. `ConsentLink` stops the
+propagation.
 
-An online course is distance selling, so `mesafeli satış sözleşmesi` and `ön bilgilendirme formu`
-were expected. The one that matters more is **cayma hakkı**: digital content delivered immediately
-loses the fourteen-day withdrawal right *only* where the buyer consented in advance and
-acknowledged losing it. If the checkout never captured that acknowledgement, the right survives —
-so the kit puts the acknowledgement in the checkout form's `collects` and requires it to be stored
-with the order, not merely displayed. That is a general lesson, now recorded in `PLAN.md`: a kit
-that names an obligation without naming the control that satisfies it has not finished the job.
-`/sertifika-hakkinda` follows the publication kit's precedent of a credibility obligation rather
-than a legal one — if the certificate is not an officially recognised qualification, the page has
-to say so before someone buys expecting one.
+**`nonprofit-donation` (10 routes, 7 core)** — the site earns trust before it asks. Two routes are
+core that a donation site usually treats as optional:
 
-**A stale document corrected**
+- `/seffaflik` — where the money went, reports by year, and who audited them. A Turkish association
+  files a dernek beyannamesi anyway, so publishing a summary of it costs nothing and is the
+  cheapest trust the site can buy. `auditedBy` stays empty until it is true, because a year that
+  quietly says nothing about audit reads as an audited one.
+- `/duzenli-bagisim` — the donor portal. The monthly consent promises "until you cancel", so a
+  route where cancelling actually happens is part of the promise rather than a nice-to-have. The
+  content model stores a mandate with an id the donor can be shown, not a repeating charge record.
 
-`PLAN.md` section 3 ("Current baseline") had been carrying figures from an earlier phase — 73
-items, 47 blocks, 190 pages — while its date was refreshed each batch. It now holds the real count
-and is expected to stay in step with section 1 of this file.
+`/bagis/tesekkurler` reuses `order-confirmation` rather than adding a block: it already carries a
+reference and a what-happens-next list, and the words change while the shape does not.
+
+**The Turkey-specific item most likely to be skipped: yardım toplama izni.** Collecting aid is
+permit-based under 2860 sayılı Yardım Toplama Kanunu. Some organisations — a kamu yararına çalışan
+dernek, a vergi muafiyeti tanınan vakıf — may be granted the right to collect without a per-campaign
+permit; most are not. The kit's legal surface says to state which you are and, where a permit
+applies, to publish its number and validity. Whether a fundraising email is a ticari elektronik
+ileti is flagged as a question for counsel, with the note that registering the consent in İYS costs
+nothing and being wrong the other way costs the list.
+
+This is the second batch in a row where the same rule paid off, and `PLAN.md` now records it twice
+over: a kit that names an obligation without naming the control that satisfies it has not finished
+the job.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -221,42 +236,47 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-**Phase 4 is at 12 of 18.** The pattern is settled: write the block, then the kit that consumes it,
-never a kit referencing a slug that does not exist yet. Six kits remain and each needs at least one
-new block.
+**Phase 4 is at 13 of 18.** Block first, then the kit that consumes it. Five kits remain.
 
-Remaining 6, grouped by the block they need:
+Remaining 5, grouped by the block they need:
 
-- **Non-profit and donation** — a donation form with amount tiers, one-off versus monthly, and a
-  gift-aid-style consent. Money in integer minor units like everywhere else. Turkish charities
-  collecting donations online have their own permit rules (bağış toplama izni) worth stating in the
-  legal surfaces, and a monthly donation is a recurring authorisation, which is a different consent
-  from a single payment. **Suggested next**, because the block is small and the flow is short.
 - **Real estate and architecture** — a property listing card and a property detail (specs, floor
   plan, location map) plus a viewing-request form. `product-grid` is close but a property has
-  different facts and no cart.
+  different facts and no cart. **Suggested next.** Turkey-specific surfaces to check while writing
+  it: the taşınmaz ticareti yetki belgesi an estate agency must hold, and the fact that a listing
+  price is an invitation rather than an offer.
 - **Hotel and travel** — a room type card and a date-range availability search. The existing
   `availability-calendar` is single-date; a stay needs check-in and check-out, which is a real
   extension of that block rather than a new one. Read it before writing: the month-change reset is
   handled in the change handler, not in an effect, and that has to stay true.
 - **Creator and personal brand** — a link-hub block and a membership/subscription tier block. The
   membership tiers are close to `ticket-tiers` and `pricing-duo`; check both before writing a third
-  price ladder, and if one of them stretches honestly, stretch it instead.
+  price ladder, and if one of them stretches honestly, stretch it instead. A membership is a
+  recurring authorisation, so it reuses the consent shape `donation-form` established rather than
+  inventing another.
 - **Marketplace and community** — a seller/member profile and a listing index with facets.
   `content-index` and `filter-toolbar` cover part of the faceted list already.
 - **Legal and financial service** — mostly covered by `professional-service`, but regulated
   disclosure surfaces differ enough to be worth their own kit. Needs no new block, so it is the
   cheap one to slot in whenever a batch has room.
 
-Suggested order: non-profit, real estate, hotel, then creator, marketplace and legal-financial.
+Suggested order: real estate, hotel, creator, then marketplace and legal-financial.
 
-Two conventions this batch confirmed and worth reusing:
+Conventions these batches confirmed and worth reusing:
 
 - A block that has both a public and a signed-in life should take a flag rather than fork into two
   blocks (`curriculum-list`'s `enrolled`). The sales page and the dashboard then cannot drift.
 - A stateful block never owns the state. It is handed progress, selection or completion and hands
-  back an event; the page persists it. `curriculum-list`, `lesson-shell`, `ticket-tiers` and
-  `service-picker` all follow this.
+  back an event; the page persists it. `curriculum-list`, `lesson-shell`, `ticket-tiers`,
+  `service-picker` and `donation-form` all follow this.
+- A recurring commitment gets its own consent, separate from the privacy consent, naming the
+  amount, the frequency and how it ends — assembled from the live selection so it cannot drift —
+  and the kit gives it a route where it can actually be ended. See `donation-form` and
+  `nonprofit-donation`.
+- When a primitive turns out to be unusable in a real form, fix the primitive additively rather
+  than bypassing it in the block. `donation-form` was first drafted with native inputs around
+  `Checkbox`; forwarding the props Radix already supports turned out smaller than the workaround
+  and fixed the gap for every future block.
 
 The alternative remains the owner's backlog below (open-source reference curation, the AI-manifest /
 recipe-bundle candidates). Confirm with the owner if unsure.

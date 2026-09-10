@@ -51,15 +51,15 @@ closing the skeleton/template preview gaps, and the AI-manifest/bundle candidate
 As of 2026-09-10. (This block had been carrying figures from an earlier phase while its date was
 being refreshed; it is now the real count and stays in step with HANDOFF section 1.)
 
-- 87 registry items
-- 60 full-page blocks
+- 88 registry items
+- 61 full-page blocks
 - 15 grouped primitive families
 - 6 motion components
 - 4 theme/foundation entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 12 of 18 sector site kits
-- 281 statically generated pages; registry endpoints are dynamic so dependency URLs use the
+- 13 of 18 sector site kits
+- 285 statically generated pages; registry endpoints are dynamic so dependency URLs use the
   real request origin
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
@@ -201,12 +201,14 @@ all six flows.
 
 ### Phase 4 — Sector site kits
 
-Status: In progress (12 of 18)
+Status: In progress (13 of 18)
 
-Latest completed batch: the first blocks-then-kit batch. `dashboard-internal` needed no new blocks
-(the admin flow already covered it); `education-course` needed two, so `curriculum-list` and
-`lesson-shell` were written first and the kit consumes them. Each of the remaining 6 still needs at
-least one new block, and the same order holds: block first, then the kit that uses it.
+Latest completed batch: `donation-form`, then the `nonprofit-donation` kit that consumes it. The
+batch also fixed the `Checkbox` primitive, which could not be read back from a form at all — the
+consent boxes a donation flow depends on were the first real use of it.
+
+The previous batch established the order that now holds for every remaining kit: block first, then
+the kit that uses it. Five kits remain and each needs at least one new block.
 
 A kit is deliberately the layer above a skeleton: a skeleton is one page's section order, a kit is
 the whole site. `src/registry/site-kits.ts` defines the `SiteKit` model, `/kits` and `/tr/kitler`
@@ -229,7 +231,7 @@ Target kits:
 - [x] Blog, publication and newsletter
 - [ ] Real estate and architecture — needs a property listing and detail
 - [ ] Legal and financial service — regulated disclosure surfaces
-- [ ] Non-profit and donation — needs a donation form with amount tiers
+- [x] Non-profit and donation
 - [x] Documentation and developer portal
 - [x] Dashboard and internal tool
 - [ ] Marketplace and community — needs a member profile and faceted listing
@@ -249,6 +251,11 @@ digital content that is delivered immediately removes the fourteen-day cayma hak
 the buyer consented in advance and acknowledged losing it, so `education-course` puts that
 acknowledgement in the checkout and stores it with the order. A kit that names an obligation without
 naming the control that satisfies it has not finished the job.
+
+`nonprofit-donation` is the second instance of the same rule and states it more plainly: the monthly
+consent promises "until you cancel", so the kit makes `/duzenli-bagisim` — the route where
+cancelling actually happens — a core route rather than a later one. It also names yardım toplama
+izni (2860 sayılı Kanun), which is the surface a donation site is most likely to skip entirely.
 
 ### Phase 5 — Visual-system breadth
 

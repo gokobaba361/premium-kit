@@ -350,6 +350,11 @@ const text: Record<string, { name: string; description: string }> = {
     description:
       "Tek bir dersin çerçevesi: oynatıcı alanı, içerik, deşifre, kaynaklar ve tamamlama.",
   },
+  "donation-form": {
+    name: "Bağış formu",
+    description:
+      "Tutar kademeleri, tek seferlik veya aylık bağış ve her birinin gerçekten gerektirdiği onaylar.",
+  },
 };
 
 export const registryTr: RegistryItem[] = registry.map((item) => ({

@@ -50,6 +50,7 @@ import { TicketTiers } from "@/components/blocks/ticket-tiers";
 import { Timeline } from "@/components/blocks/timeline";
 import { ContentIndex } from "@/components/blocks/content-index";
 import { CurriculumList } from "@/components/blocks/curriculum-list";
+import { DonationForm } from "@/components/blocks/donation-form";
 import { LessonShell } from "@/components/blocks/lesson-shell";
 import { Button } from "@/components/primitives/button";
 import { Field, Input } from "@/components/primitives/form";
@@ -1227,6 +1228,33 @@ export const blockExamples: Record<string, React.ReactNode> = {
         </ul>
       </div>
     </LessonShell>
+  ),
+
+  /* ------------------------------------------------------------- non-profit */
+
+  "donation-form": (
+    <DonationForm
+      title="Support the stream survey"
+      body="Suyolu Derneği restores stream habitat on the Ergene tributaries. Monthly giving is what lets the survey run through the winter, when one-off giving stops."
+      currency="TRY"
+      locale="tr-TR"
+      minimumMinor={2500}
+      defaultFrequency="monthly"
+      privacyHref="#gizlilik"
+      recurringTermsHref="#duzenli-bagis"
+      oneOffTiers={[
+        { amountMinor: 25000, impact: "One nesting box, built and mounted" },
+        { amountMinor: 50000, impact: "A day of survey work on one reach" },
+        { amountMinor: 100000, impact: "Fifty metres of bank replanted" },
+        { amountMinor: 250000, impact: "A full season of monitoring at one site" },
+      ]}
+      monthlyTiers={[
+        { amountMinor: 7500, impact: "A nesting box every quarter" },
+        { amountMinor: 15000, impact: "Survey work that does not stop in winter" },
+        { amountMinor: 30000, impact: "Replanting through the year" },
+        { amountMinor: 60000, impact: "One site monitored continuously" },
+      ]}
+    />
   ),
 
   "newsletter-signup": (

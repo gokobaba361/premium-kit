@@ -209,27 +209,60 @@ export function Select({
 const boxBase =
   "flex size-5 shrink-0 items-center justify-center rounded-pk-sm border border-strong bg-elevated transition-colors duration-[var(--pk-dur-fast)] data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=indeterminate]:border-accent data-[state=indeterminate]:bg-accent disabled:opacity-55";
 
+/**
+ * `name` matters: without it Radix renders no hidden input, so the box cannot
+ * be read back from FormData and is decorative in a real form. Consent boxes
+ * are exactly the ones a submit handler has to read, so name/checked/required
+ * are forwarded rather than left off.
+ */
 export function Checkbox({
   label,
   description,
+  name,
+  value,
+  checked,
   defaultChecked,
+  onCheckedChange,
+  required,
   indeterminate,
   disabled,
+  error,
 }: {
-  label: string;
-  description?: string;
+  label: React.ReactNode;
+  description?: React.ReactNode;
+  name?: string;
+  value?: string;
+  checked?: boolean;
   defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+  required?: boolean;
   indeterminate?: boolean;
   disabled?: boolean;
+  /** Rendered under the label with role="alert", matching Field. */
+  error?: string;
 }) {
   const id = useId();
   return (
     <div className="flex items-start gap-3">
       <CheckboxPrimitive.Root
         id={id}
+        name={name}
+        value={value}
         disabled={disabled}
-        defaultChecked={indeterminate ? "indeterminate" : defaultChecked}
-        className={cn(boxBase, "mt-0.5")}
+        required={required}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
+        // `indeterminate` stays on defaultChecked. Routing it through `checked`
+        // would make the box controlled with nothing to control it, so it could
+        // never be clicked out of that state.
+        checked={checked}
+        defaultChecked={
+          checked === undefined ? (indeterminate ? "indeterminate" : defaultChecked) : undefined
+        }
+        onCheckedChange={
+          onCheckedChange ? (next) => onCheckedChange(next === true) : undefined
+        }
+        className={cn(boxBase, "mt-0.5", error && "border-accent")}
       >
         <CheckboxPrimitive.Indicator className="text-accent-fg">
           {indeterminate ? (
@@ -244,6 +277,11 @@ export function Checkbox({
           {label}
         </label>
         {description ? <p className="text-sm text-muted">{description}</p> : null}
+        {error ? (
+          <p id={`${id}-error`} role="alert" className="text-sm text-accent">
+            {error}
+          </p>
+        ) : null}
       </div>
     </div>
   );
