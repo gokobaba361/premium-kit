@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { AnnouncementBar } from "@/components/blocks/announcement-bar";
 import { AppShowcaseHero } from "@/components/blocks/app-showcase-hero";
 import { ArticleLayout } from "@/components/blocks/article-layout";
@@ -48,6 +49,8 @@ import { TestimonialGrid } from "@/components/blocks/testimonial-grid";
 import { TicketTiers } from "@/components/blocks/ticket-tiers";
 import { Timeline } from "@/components/blocks/timeline";
 import { ContentIndex } from "@/components/blocks/content-index";
+import { CurriculumList } from "@/components/blocks/curriculum-list";
+import { LessonShell } from "@/components/blocks/lesson-shell";
 import { Button } from "@/components/primitives/button";
 import { Field, Input } from "@/components/primitives/form";
 import { Container } from "@/components/primitives/layout";
@@ -1019,6 +1022,211 @@ export const blockExamples: Record<string, React.ReactNode> = {
         which is a more expensive and more honest arrangement.
       </p>
     </ArticleLayout>
+  ),
+
+  /* -------------------------------------------------------------- education */
+
+  "curriculum-list": (
+    <CurriculumList
+      title="Course curriculum"
+      body="Thirteen lessons across four modules. The last module unlocks when the cohort reaches it."
+      enrolled
+      defaultOpen="first"
+      modules={[
+        {
+          id: "body",
+          title: "Setting the body text",
+          summary: "The 80% of a page nobody notices until it is wrong.",
+          lessons: [
+            {
+              id: "reader",
+              title: "What a reader actually sees",
+              durationMin: 9,
+              kind: "video",
+              href: "#reader",
+              status: "complete",
+            },
+            {
+              id: "measure",
+              title: "Choosing a size and a measure",
+              durationMin: 14,
+              kind: "video",
+              href: "#measure",
+              status: "complete",
+            },
+            {
+              id: "leading",
+              title: "Line height is a rhythm, not a number",
+              durationMin: 11,
+              kind: "video",
+              href: "#leading",
+              status: "complete",
+            },
+          ],
+        },
+        {
+          id: "scale",
+          title: "Scale and hierarchy",
+          summary: "A scale you can defend beats a scale you downloaded.",
+          lessons: [
+            {
+              id: "scale-build",
+              title: "Building a scale you can defend",
+              durationMin: 16,
+              kind: "video",
+              href: "#scale-build",
+              status: "complete",
+            },
+            {
+              id: "headings",
+              title: "Headings that survive translation",
+              durationMin: 12,
+              kind: "video",
+              href: "#headings",
+              status: "in-progress",
+            },
+            {
+              id: "small-text",
+              title: "Small text: labels, captions and legal",
+              durationMin: 8,
+              kind: "reading",
+              href: "#small-text",
+              status: "not-started",
+            },
+          ],
+        },
+        {
+          id: "loading",
+          title: "Loading fonts without hurting the page",
+          lessons: [
+            {
+              id: "formats",
+              title: "Formats, subsets and what to drop",
+              durationMin: 15,
+              kind: "video",
+              href: "#formats",
+              status: "not-started",
+            },
+            {
+              id: "display",
+              title: "font-display and the flash you chose",
+              durationMin: 10,
+              kind: "video",
+              href: "#display",
+              status: "not-started",
+            },
+            {
+              id: "self-host",
+              title: "Self-hosting checklist",
+              durationMin: 7,
+              kind: "reading",
+              href: "#self-host",
+              status: "not-started",
+            },
+            {
+              id: "subset",
+              title: "Exercise: cut a subset and measure it",
+              durationMin: 25,
+              kind: "exercise",
+              href: "#subset",
+              status: "not-started",
+            },
+          ],
+        },
+        {
+          id: "interface",
+          title: "Type in a real interface",
+          summary: "Opens on 14 October, when the cohort gets here.",
+          lessons: [
+            {
+              id: "tables",
+              title: "Tables and numbers",
+              durationMin: 13,
+              kind: "video",
+              status: "locked",
+            },
+            {
+              id: "forms",
+              title: "Forms and error text",
+              durationMin: 11,
+              kind: "video",
+              status: "locked",
+            },
+            {
+              id: "quiz",
+              title: "Module quiz",
+              durationMin: 10,
+              kind: "quiz",
+              status: "locked",
+            },
+          ],
+        },
+      ]}
+    />
+  ),
+
+  "lesson-shell": (
+    <LessonShell
+      courseTitle="Type on the web, properly"
+      courseHref="#course"
+      moduleTitle="Setting the body text"
+      title="Line height is a rhythm, not a number"
+      durationMin={11}
+      position={{ index: 3, total: 13 }}
+      prevHref="#measure"
+      nextHref="#scale-build"
+      media={
+        <Image
+          src="https://picsum.photos/seed/punto-baseline-grid/1280/720"
+          alt="A paragraph with a baseline grid drawn over it"
+          width={1280}
+          height={720}
+          className="h-auto w-full"
+        />
+      }
+      resources={[
+        { label: "Leading worksheet", href: "#worksheet", meta: "PDF, 180 KB" },
+        { label: "Before and after, as a CodePen", href: "#pen", meta: "Opens in a new tab" },
+        { label: "The three paragraphs used in this lesson", href: "#samples", meta: "Plain text" },
+      ]}
+      transcript={
+        <div className="pk-prose">
+          <p>
+            The first thing to do with line height is to stop treating it as a property of the
+            font and start treating it as a property of the paragraph. A number that works at
+            sixteen pixels over forty characters does not work at the same size over ninety.
+          </p>
+          <p>
+            So the question is never “what is the right line height”. It is “how far does the
+            eye have to travel to find the start of the next line, and can it do that without
+            counting”.
+          </p>
+        </div>
+      }
+      aside={
+        <div className="rounded-pk border border-line bg-elevated p-5">
+          <p className="text-xs text-faint">In this module</p>
+          <ol className="mt-3 flex flex-col gap-2.5 text-sm">
+            <li className="text-muted">1. What a reader actually sees</li>
+            <li className="text-muted">2. Choosing a size and a measure</li>
+            <li className="font-medium">3. Line height is a rhythm, not a number</li>
+          </ol>
+        </div>
+      }
+    >
+      <div className="pk-prose">
+        <p>
+          Leading is the distance between one baseline and the next, and it is the single
+          setting that decides whether a paragraph is read or skimmed. This lesson sets it
+          against the measure rather than against the type size.
+        </p>
+        <ul>
+          <li>Why a fixed 1.5 fails on both short and long measures.</li>
+          <li>Setting leading from the measure, then checking it at the extremes.</li>
+          <li>What to do with headings, which want the opposite of what body text wants.</li>
+        </ul>
+      </div>
+    </LessonShell>
   ),
 
   "newsletter-signup": (

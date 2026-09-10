@@ -341,6 +341,15 @@ const text: Record<string, { name: string; description: string }> = {
     name: "Makale düzeni",
     description: "Yazar künyesi ve prose tipografisiyle uzun içerik okuma düzeni.",
   },
+  "curriculum-list": {
+    name: "Müfredat listesi",
+    description: "Süre ve tamamlanma durumuyla derslere açılan kurs modülleri.",
+  },
+  "lesson-shell": {
+    name: "Ders çerçevesi",
+    description:
+      "Tek bir dersin çerçevesi: oynatıcı alanı, içerik, deşifre, kaynaklar ve tamamlama.",
+  },
 };
 
 export const registryTr: RegistryItem[] = registry.map((item) => ({

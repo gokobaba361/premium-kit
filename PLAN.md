@@ -1,6 +1,6 @@
 # Premium Kit — Master Plan
 
-Last updated: 2026-07-24
+Last updated: 2026-09-10
 Status: Active development
 Working language: Turkish-first, English parity
 Primary surface: `http://localhost:3000/tr`
@@ -48,16 +48,18 @@ closing the skeleton/template preview gaps, and the AI-manifest/bundle candidate
 
 ## 3. Current baseline
 
-As of 2026-07-24:
+As of 2026-09-10. (This block had been carrying figures from an earlier phase while its date was
+being refreshed; it is now the real count and stays in step with HANDOFF section 1.)
 
-- 73 registry items
-- 47 full-page blocks
-- 14 grouped primitive families
+- 87 registry items
+- 60 full-page blocks
+- 15 grouped primitive families
 - 6 motion components
 - 4 theme/foundation entries
 - 12 sector-calibrated visual themes
 - 10 purpose-led site skeletons
-- 190 statically generated pages; registry endpoints are dynamic so dependency URLs use the
+- 12 of 18 sector site kits
+- 281 statically generated pages; registry endpoints are dynamic so dependency URLs use the
   real request origin
 - English and Turkish catalogue routes
 - Build-time Shiki syntax highlighting
@@ -199,11 +201,12 @@ all six flows.
 
 ### Phase 4 — Sector site kits
 
-Status: In progress (10 of 18)
+Status: In progress (12 of 18)
 
-Latest completed batch: the 6 kits the existing block library already covered completely. Every
-remaining kit needs at least one new block, so the next batch is blocks first, then the kits that
-use them.
+Latest completed batch: the first blocks-then-kit batch. `dashboard-internal` needed no new blocks
+(the admin flow already covered it); `education-course` needed two, so `curriculum-list` and
+`lesson-shell` were written first and the kit consumes them. Each of the remaining 6 still needs at
+least one new block, and the same order holds: block first, then the kit that uses it.
 
 A kit is deliberately the layer above a skeleton: a skeleton is one page's section order, a kit is
 the whole site. `src/registry/site-kits.ts` defines the `SiteKit` model, `/kits` and `/tr/kitler`
@@ -222,13 +225,13 @@ Target kits:
 - [x] Restaurant, cafe and hospitality
 - [ ] Hotel and travel — needs a room-type card and date-range availability
 - [x] Event and conference
-- [ ] Education and online course — needs a curriculum list and lesson shell
+- [x] Education and online course
 - [x] Blog, publication and newsletter
 - [ ] Real estate and architecture — needs a property listing and detail
 - [ ] Legal and financial service — regulated disclosure surfaces
 - [ ] Non-profit and donation — needs a donation form with amount tiers
 - [x] Documentation and developer portal
-- [ ] Dashboard and internal tool — covered by the admin flow, needs the write-up
+- [x] Dashboard and internal tool
 - [ ] Marketplace and community — needs a member profile and faceted listing
 - [ ] Creator and personal brand — needs a link hub and membership tiers
 
@@ -237,8 +240,15 @@ surfaces and operational states.
 
 Legal surfaces are Turkey-first and named for the real obligation (KVKK aydınlatma metni, açık rıza
 for health data, mesafeli satış sözleşmesi and ön bilgilendirme formu for distance selling, İYS
-registration for any commercial email or SMS). They are stated as a build checklist so nothing is
-forgotten at launch, never as legal advice.
+registration for any commercial email or SMS, and the saklama ve imha politikası a VERBİS-registered
+controller needs). They are stated as a build checklist so nothing is forgotten at launch, never as
+legal advice.
+
+Some of those surfaces are only half a page: they also require a control in the product. Selling
+digital content that is delivered immediately removes the fourteen-day cayma hakkı **only** where
+the buyer consented in advance and acknowledged losing it, so `education-course` puts that
+acknowledgement in the checkout and stores it with the order. A kit that names an obligation without
+naming the control that satisfies it has not finished the job.
 
 ### Phase 5 — Visual-system breadth
 

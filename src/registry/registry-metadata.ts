@@ -57,6 +57,7 @@ const clientItems = new Set([
   "onboarding-flow",
   "settings-form",
   "content-index",
+  "lesson-shell",
 ]);
 
 const mixedItems = new Set([
@@ -95,6 +96,10 @@ const avoidWhen: Record<string, string> = {
   "record-form": "Avoid separate create and edit forms that drift apart; drive both from one field config.",
   "confirm-dialog": "Avoid a bare confirm for a hard-to-undo action; require typing the resource name for the highest-stakes ones.",
   "audit-log": "Avoid presenting reconstructed or partial history as a complete audit trail.",
+  "curriculum-list":
+    "Avoid using it for a flat process explanation, which is steps-flow, and avoid claiming progress the learner's record cannot support.",
+  "lesson-shell":
+    "Avoid holding completion inside the block; the page must persist it, or a refresh loses a finished lesson.",
 };
 
 const tags: Record<string, string[]> = {
@@ -129,6 +134,8 @@ const tags: Record<string, string[]> = {
   "dashboard-shell": ["application", "dashboard", "navigation"],
   "docs-sidebar": ["documentation", "navigation", "content"],
   "event-schedule": ["event", "schedule", "programme"],
+  "curriculum-list": ["education", "course", "curriculum", "progress", "disclosure"],
+  "lesson-shell": ["education", "lesson", "player", "tabs", "progress"],
 };
 
 function renderingFor(item: RegistryItem): RenderingMode {

@@ -862,6 +862,27 @@ export const registry: RegistryItem[] = [
     note: "The body uses the shared .pk-prose rules from globals.css, so Markdown-rendered content and hand-written JSX read the same, including fenced code blocks that scroll inside their own box. Server component; no client JavaScript. See /demo/content for the assembled flow.",
   },
 
+  /* -------------------------------------------------------------- education */
+  {
+    slug: "curriculum-list",
+    name: "Curriculum list",
+    category: "block",
+    description: "Course modules that expand to lessons with duration and completion.",
+    files: ["src/components/blocks/curriculum-list.tsx"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    note: "Not steps-flow: a curriculum is hierarchical and stateful, a steps flow is flat and stateless. Native details and summary, so it expands with no JavaScript and stays findable by find-in-page while collapsed. One block serves both the sales page and the signed-in page through `enrolled`: false advertises free previews and locks the rest, true shows progress. Progress is passed in from the learner's record and never derived here.",
+  },
+  {
+    slug: "lesson-shell",
+    name: "Lesson shell",
+    category: "block",
+    description: "The frame around one lesson: player slot, body, transcript, resources and completion.",
+    files: ["src/components/blocks/lesson-shell.tsx"],
+    registryDependencies: ["button", "tabs"],
+    dependencies: ["@phosphor-icons/react", "clsx", "tailwind-merge"],
+    note: "Owns no video vendor and no progress store: the player arrives through `media`, the curriculum through `aside`, and completion is controlled by the page so a refresh cannot lose a finished lesson. Transcript and resources state their empty case instead of removing the tab, because a silently absent tab reads like a bug.",
+  },
+
   /* ------------------------------------------------------------------ theme */
   {
     slug: "tokens",

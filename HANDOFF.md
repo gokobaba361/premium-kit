@@ -1,9 +1,9 @@
 # Premium Kit — Development Handoff
 
-Last updated: 2026-07-24
-Current milestone: Phase 4 at 10 of 18 sector kits — every kit that the existing block library
-already covers is written
-Project path: `C:\Users\TC-ICT\projects\premium-kit`
+Last updated: 2026-09-10
+Current milestone: Phase 4 at 12 of 18 sector kits — the first blocks-then-kit batch is done
+(`dashboard-internal`, then `curriculum-list` + `lesson-shell` and the `education-course` kit)
+Project path: `C:\Users\TC-ICT\Projects\premium-kit`
 Local URL: `http://localhost:3000`
 GitHub: `https://github.com/gokobaba361/premium-kit` (private)
 
@@ -16,21 +16,21 @@ English human routes and machine-readable AI routes describe the same source of 
 
 Validated inventory:
 
-- 85 registry items
-- 58 full-page blocks
+- 87 registry items
+- 60 full-page blocks
 - 15 grouped primitive families
 - 6 user-facing motion components plus one shared motion foundation
 - 12 visual themes, each with a full worked `/templates/<theme>` page
 - 10 purpose-led site skeletons, each with a live assembled preview (EN + TR detail pages)
-- 10 of the 18 planned sector site kits, each with its route tree, content model, structured-data
+- 12 of the 18 planned sector site kits, each with its route tree, content model, structured-data
   types, forms, legal surfaces and operational states (EN + TR detail pages, plus
   `/r/site-kits.json`)
-- 273 statically generated documentation/product pages
+- 281 statically generated documentation/product pages
 - Dynamic `/r/<slug>.json` and `/r/registry.json` endpoints
-- Turkish catalogue coverage: 85/85
+- Turkish catalogue coverage: 87/87
 - Five assembled demo flows: `/demo/commerce`, `/demo/content`, `/demo/booking`, `/demo/event` and
   `/demo/admin`
-- Every catalogue block is viewable: 31 have a boxed preview, 43 whole-page blocks render in a
+- Every catalogue block is viewable: 31 have a boxed preview, 45 whole-page blocks render in a
   framed viewer (`/preview/<slug>`) with a viewport and 12-theme switch, and `confirm-dialog` shows
   an honest prose fallback (a controlled dialog cannot be given a static example without crossing
   the server/client boundary)
@@ -81,7 +81,7 @@ Primary files:
 
 ## 4. Quality automation
 
-`scripts/registry-audit.mjs` checks all 73 entries for:
+`scripts/registry-audit.mjs` checks all 87 entries for:
 
 - missing published files and CSS files
 - invalid or cyclic registry dependencies
@@ -124,61 +124,81 @@ Latest local result:
 - lint: clean (including the React Compiler rules: no manual useMemo it cannot preserve, no
   setState synchronously inside an effect)
 - typecheck: clean
-- registry installation audit: 85/85, no errors
-- Turkish coverage: 85/85
-- site kit reference audit: 10 kits, 0 broken references, 0 missing Turkish entries
+- registry installation audit: 87/87, no errors
+- Turkish coverage: 87/87
+- site kit reference audit: 12 kits, 0 broken references, 0 missing Turkish entries
 - theme contrast audit: 0 pairs below WCAG AA
-- production build: 273/273 static pages, dynamic registry and preview endpoints
+- production build: 281/281 static pages, dynamic registry and preview endpoints
 - clean `src` and non-`src` consumer fixtures: install, typecheck and build pass
-- site kits verified in the browser: all 6 new kits return 200 in EN and TR, the index lists 10
-  cards, every outbound link from the new kits was checked by HTTP (22 distinct skeleton, block and
-  template routes, all 200), the TR pages resolve block names into Turkish and show the sector's
-  Turkish legal surfaces, `/r/site-kits.json` returns 10 kits, no horizontal page scroll, clean
-  console on a fresh tab
-- admin flow (previous batch) still verified end to end
+- verified in the browser: both new kits return 200 in EN and TR and the index lists 12 cards; the
+  TR pages resolve the new block names into Turkish (`Müfredat listesi`, `Ders çerçevesi`) and show
+  each sector's Turkish legal surfaces; every outbound link from the two kits was checked by HTTP
+  (35 distinct component, skeleton and template routes, all 200); `/r/site-kits.json` returns 12
+  kits and `/r/lesson-shell.json` resolves `button`, `tabs` and `premium-kit-base` as full URLs
+- both new blocks verified in the framed viewer: `curriculum-list` shows the derived total
+  (2h 41m), per-module counts, the progress bar at 31%, the in-progress badge and the
+  module-complete line, and a module containing an in-progress lesson opens even under
+  `defaultOpen="first"`; `lesson-shell` switches tabs and renders the resources panel; no
+  horizontal scroll at 375px on either; both checked on a light theme (`ivory`) as well as the
+  dark default; clean console
 
 ## 6. Completed in the latest batch
 
-Wrote the 6 sector kits that the existing block library already covers completely, taking Phase 4
-from 4 to 10 of 18. No new blocks were needed, which was the selection rule for this batch. (The
-previous batch, the kit layer itself plus the first 4 kits, is in git history.)
+The first batch under the blocks-then-kits rule, taking Phase 4 from 10 to 12 of 18.
 
-**The six kits**
+**`dashboard-internal` (11 routes, 9 core)** — the one remaining kit that needed no new blocks,
+because the admin flow already ships `resource-table`, `record-form`, `confirm-dialog`, `audit-log`
+and `settings-form`. It is not a marketing site with a login bolted on, and the write-up says so:
+it is the only kit here that emits **no JSON-LD on any route**, because an authenticated tool has to
+be noindex rather than indexed well. Its legal block is deliberately not `baseLegal`: staff are data
+subjects through the employment relationship, which a visitor-facing aydınlatma metni does not
+cover, so it carries a çalışan-and-user aydınlatma metni, a **saklama ve imha politikası** (the
+document that actually decides how long the audit log may be kept, and the reason `retentionDays`
+is a setting rather than a guess), an internal acceptable-use page, and a cookie policy whose note
+records that a session-only cookie needs no consent banner but staff analytics does. `/kurulum` is
+a required route rather than a later one: an empty workspace with nobody invited is the state every
+internal tool forgets to build.
 
-- `agency-studio` (6 routes) and `freelancer-portfolio` (5): both on `studio-portfolio`, but they
-  are genuinely different sites. The agency kit qualifies an enquiry with a budget band and has a
-  case-study route; the freelancer kit carries an availability field that drives a banner, and its
-  project model records **role**, because on a one-person site what you did matters more than what
-  the team did.
-- `professional-service` (6): consulting and regulated advice. Uses the booking blocks for the first
-  consultation, and its content model notes that a regulated profession must state its real chamber
-  or bar registration rather than decorate it.
-- `publication-newsletter` (7): the content flow as a whole publication, with an archive, topic
-  pages and a real newsletter route.
-- `developer-docs` (6): documentation with `appliesToVersion` in the content model, which is what
-  stops a doc site silently describing a release nobody runs.
-- `event-conference` (7): consumes the event flow shipped two batches ago end to end
-  (`ticket-tiers` → `registration-form` → `registration-confirmation`).
+**`curriculum-list` and `lesson-shell`** — the two blocks the education kit needed.
 
-**Two Turkey-specific findings while writing them**
+- `curriculum-list` is server-rendered on native `details`/`summary`, so it expands with no
+  JavaScript, is keyboard operable for free and stays findable by find-in-page while collapsed.
+  One `enrolled` flag makes it serve two pages: `false` is the sales page (free previews
+  advertised, the rest locked, no progress claimed), `true` is the signed-in page (completion
+  ticks, progress bar). A module holding an in-progress lesson opens regardless of `defaultOpen`,
+  because the point of the page is to resume. Access and progress are one field (`locked` sits
+  beside `not-started`/`in-progress`/`complete`) so a caller cannot describe a lesson that is both
+  locked and half finished.
+- `lesson-shell` owns no video vendor and no progress store: the player arrives through `media`,
+  the curriculum through `aside`, and completion is controlled by the page the way every other
+  selection block here is controlled. Transcript and resources are tabs rather than an accordion,
+  and both **state their empty case instead of dropping the tab** — a silently absent tab reads as
+  a bug, and a missing transcript is information.
 
-- Writing the publication kit surfaced **İYS (İleti Yönetim Sistemi)**: commercial email or SMS to
-  recipients in Türkiye needs consent registered there, with an opt-out in every message. That
-  applies to any kit with a newsletter, so the existing `ecommerce-store` kit was missing it too and
-  has been corrected. Both now carry a `/ileti-izni` legal surface.
-- The publication kit also carries an editorial-standards page covering funding, corrections and
-  sponsored-content labelling. That one is stated as a credibility obligation, not a legal one.
+**`education-course` (9 routes, 7 core)** — curriculum above the price, because the curriculum is
+what a buyer is actually evaluating. The lesson route is behind enrolment and therefore emits no
+structured data. Its content model separates `Lesson progress` into its own entity to make the rule
+explicit: progress lives in the learner's record and the two new blocks are handed it, never derive
+it. Certificates may only be issued against completed progress and must carry a verifiable URL.
 
-**Two real defects caught in-flight**
+**One Turkey-specific finding worth carrying forward**
 
-1. The kits were first appended with `siteKits.push(...)`. That compiles and renders fine, but
-   `kit-audit.mjs` reads the `siteKits` **array literal** through the TypeScript AST, so it would
-   have silently kept auditing only the original 4 and reported "OK" while 6 kits went unchecked.
-   Fixed by folding them into the array literal; the audit then correctly reported 10.
-2. A missing Turkish entry would crash the TR index (`siteKitTr[kit.slug].sector` on undefined) and
-   404 the TR detail page, and nothing caught it — the i18n audit covers registry items, not kits.
-   `kit-audit.mjs` now also fails on a missing or empty Turkish field and warns on a stale entry.
-   Verified by deleting a translation: it failed with the right message, then passed once restored.
+An online course is distance selling, so `mesafeli satış sözleşmesi` and `ön bilgilendirme formu`
+were expected. The one that matters more is **cayma hakkı**: digital content delivered immediately
+loses the fourteen-day withdrawal right *only* where the buyer consented in advance and
+acknowledged losing it. If the checkout never captured that acknowledgement, the right survives —
+so the kit puts the acknowledgement in the checkout form's `collects` and requires it to be stored
+with the order, not merely displayed. That is a general lesson, now recorded in `PLAN.md`: a kit
+that names an obligation without naming the control that satisfies it has not finished the job.
+`/sertifika-hakkinda` follows the publication kit's precedent of a credibility obligation rather
+than a legal one — if the certificate is not an officially recognised qualification, the page has
+to say so before someone buys expecting one.
+
+**A stale document corrected**
+
+`PLAN.md` section 3 ("Current baseline") had been carrying figures from an earlier phase — 73
+items, 47 blocks, 190 pages — while its date was refreshed each batch. It now holds the real count
+and is expected to stay in step with section 1 of this file.
 
 ## 7. Research decision and non-blocking quality work
 
@@ -201,34 +221,42 @@ current implementation tasks.
 
 ## 8. Exact next batch
 
-**Phase 4 is at 10 of 18.** Every kit the existing block library already covered is written, so the
-easy half is done and the remaining 8 are a different shape: each one needs at least one block the
-library does not have. The next batch is therefore **blocks first, then the kits that use them**,
-never a kit referencing a slug that does not exist yet.
+**Phase 4 is at 12 of 18.** The pattern is settled: write the block, then the kit that consumes it,
+never a kit referencing a slug that does not exist yet. Six kits remain and each needs at least one
+new block.
 
-Remaining 8, grouped by the block they need:
+Remaining 6, grouped by the block they need:
 
-- **Education and online course** — a curriculum/module list (nested lessons with duration and a
-  completion state) and a lesson player shell. `steps-flow` is not a substitute; a curriculum is
-  hierarchical and stateful.
 - **Non-profit and donation** — a donation form with amount tiers, one-off versus monthly, and a
   gift-aid-style consent. Money in integer minor units like everywhere else. Turkish charities
-  collecting donations online have their own permit rules worth stating in the legal surfaces.
+  collecting donations online have their own permit rules (bağış toplama izni) worth stating in the
+  legal surfaces, and a monthly donation is a recurring authorisation, which is a different consent
+  from a single payment. **Suggested next**, because the block is small and the flow is short.
 - **Real estate and architecture** — a property listing card and a property detail (specs, floor
   plan, location map) plus a viewing-request form. `product-grid` is close but a property has
   different facts and no cart.
 - **Hotel and travel** — a room type card and a date-range availability search. The existing
   `availability-calendar` is single-date; a stay needs check-in and check-out, which is a real
-  extension rather than a new block.
-- **Legal and financial service** — mostly covered by `professional-service`, but regulated
-  disclosure surfaces differ enough to be worth their own kit once written.
-- **Creator and personal brand** — a link-hub block and a membership/subscription tier block.
+  extension of that block rather than a new one. Read it before writing: the month-change reset is
+  handled in the change handler, not in an effect, and that has to stay true.
+- **Creator and personal brand** — a link-hub block and a membership/subscription tier block. The
+  membership tiers are close to `ticket-tiers` and `pricing-duo`; check both before writing a third
+  price ladder, and if one of them stretches honestly, stretch it instead.
 - **Marketplace and community** — a seller/member profile and a listing index with facets.
-- **Dashboard and internal tool** — largely covered by the admin flow; needs a kit write-up rather
-  than new blocks, so it can be done at any time.
+  `content-index` and `filter-toolbar` cover part of the faceted list already.
+- **Legal and financial service** — mostly covered by `professional-service`, but regulated
+  disclosure surfaces differ enough to be worth their own kit. Needs no new block, so it is the
+  cheap one to slot in whenever a batch has room.
 
-Suggested order: `dashboard-internal` first (no new blocks), then education, non-profit, real
-estate, the rest.
+Suggested order: non-profit, real estate, hotel, then creator, marketplace and legal-financial.
+
+Two conventions this batch confirmed and worth reusing:
+
+- A block that has both a public and a signed-in life should take a flag rather than fork into two
+  blocks (`curriculum-list`'s `enrolled`). The sales page and the dashboard then cannot drift.
+- A stateful block never owns the state. It is handed progress, selection or completion and hands
+  back an event; the page persists it. `curriculum-list`, `lesson-shell`, `ticket-tiers` and
+  `service-picker` all follow this.
 
 The alternative remains the owner's backlog below (open-source reference curation, the AI-manifest /
 recipe-bundle candidates). Confirm with the owner if unsure.

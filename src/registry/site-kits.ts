@@ -1238,6 +1238,439 @@ export const siteKits: SiteKit[] = [
       "Event: upcoming, running today, finished with recordings linked",
     ],
   },
+  /* ------------------------------------------------------------- internal */
+  {
+    slug: "dashboard-internal",
+    name: "Dashboard and internal tool",
+    sector: "Internal operations, admin panels and back-office tools",
+    description:
+      "A tool for the people who run the business: a signed-in frame, a filterable list, a real create-edit-delete cycle and an audit trail that can answer who changed what. It has no public marketing surface at all, and that changes almost every decision in it.",
+    outcome: "Completed work with an audit trail",
+    themes: ["slate", "obsidian", "cobalt"],
+    routes: [
+      {
+        path: "/giris",
+        name: "Sign in",
+        purpose:
+          "The single entry. Where the company has SSO the email field only chooses the provider; where it does not, a one-time code beats a password nobody rotates.",
+        blocks: ["auth-split", "form", "advanced-form"],
+        required: true,
+      },
+      {
+        path: "/",
+        name: "Panel",
+        purpose:
+          "What needs attention today: the few metrics that drive a decision, then the work queue. Unlike every other kit here it emits no JSON-LD, because an authenticated tool must be noindex rather than indexed well.",
+        skeleton: "application-dashboard",
+        required: true,
+      },
+      {
+        path: "/kayitlar",
+        name: "Records",
+        purpose:
+          "The list the tool exists for: search, filter, sort, paginate. The filter toolbar is a GET form, so any view someone reaches is a URL they can send to a colleague.",
+        blocks: ["dashboard-shell", "filter-toolbar", "resource-table"],
+        required: true,
+      },
+      {
+        path: "/kayitlar/yeni",
+        name: "Create record",
+        purpose:
+          "A create page rather than a modal, so the work survives a reload and can be linked to from a ticket.",
+        blocks: ["dashboard-shell", "record-form"],
+        required: true,
+      },
+      {
+        path: "/kayitlar/[id]",
+        name: "Record detail",
+        purpose:
+          "Edit in place, delete behind a confirmation, and this record's own history underneath so the last change is never a mystery.",
+        blocks: ["dashboard-shell", "record-form", "confirm-dialog", "audit-log"],
+        required: true,
+      },
+      {
+        path: "/kullanicilar",
+        name: "Users and roles",
+        purpose:
+          "Invite, assign a role, suspend. Suspension rather than deletion, because a deleted user takes the meaning of their audit entries with them.",
+        blocks: ["dashboard-shell", "resource-table", "record-form", "confirm-dialog"],
+        required: true,
+      },
+      {
+        path: "/denetim-kaydi",
+        name: "Audit log",
+        purpose:
+          "Who did what, to what, and when, filterable by actor, action and date. This is the route that answers an incident, so it ships in v1 rather than later.",
+        blocks: ["dashboard-shell", "filter-toolbar", "audit-log"],
+        required: true,
+      },
+      {
+        path: "/ayarlar",
+        name: "Workspace settings",
+        purpose:
+          "Name, locale, time zone, retention window and whether SSO is mandatory. Each save writes its previous value to the audit log.",
+        blocks: ["dashboard-shell", "settings-form"],
+        required: true,
+      },
+      {
+        path: "/kurulum",
+        name: "First run",
+        purpose:
+          "The state every internal tool forgets: an empty workspace with nobody invited and nothing configured. Onboarding sets the time zone, the retention window and the first admin.",
+        blocks: ["onboarding-flow"],
+        required: true,
+      },
+      {
+        path: "/hesabim",
+        name: "My account",
+        purpose:
+          "Own name, own password or authenticator, and the list of active sessions with a way to end one.",
+        blocks: ["dashboard-shell", "settings-form"],
+        required: false,
+      },
+      {
+        path: "/ara",
+        name: "Search",
+        purpose:
+          "Once the tool holds more than a few hundred records, people navigate by search. The palette is the keyboard route to the same results.",
+        blocks: ["dashboard-shell", "command-palette", "search-results"],
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Record",
+        fields: ["id", "title", "status", "ownerId", "updatedAt", "fields"],
+        note: "The domain object the tool exists to manage. Its status set is finite and declared in one place, because the table pill, the filter option and the form select drift apart the moment they are written three times.",
+      },
+      {
+        name: "User",
+        fields: ["id", "name", "email", "role", "status", "lastSeenAt"],
+        note: "Status is invited, active or suspended. An expired invitation is a visible state, not a silent failure.",
+      },
+      {
+        name: "Role",
+        fields: ["id", "name", "permissions[]"],
+        note: "Permissions are checked on the server on every request. A hidden button is not a permission.",
+      },
+      {
+        name: "Audit entry",
+        fields: ["id", "at", "actorId", "action", "subjectType", "subjectId", "summary"],
+        note: "Append-only, and written in the same transaction as the change it records or it will eventually disagree with reality. Stored in UTC with the workspace time zone carried as a label.",
+      },
+      {
+        name: "Saved view",
+        fields: ["id", "name", "ownerId", "query", "shared"],
+        note: "Because the filter toolbar is a GET form, a saved view is only a stored query string: shareable and bookmarkable without any extra machinery.",
+      },
+      {
+        name: "Workspace settings",
+        fields: ["name", "locale", "timeZone", "retentionDays", "ssoRequired"],
+        note: "retentionDays governs how long audit entries are kept and must match the written saklama ve imha politikası rather than whatever the database happened to keep.",
+      },
+    ],
+    forms: [
+      {
+        name: "Sign in",
+        route: "/giris",
+        registryItem: "form",
+        collects: ["work email", "one-time code, or an SSO redirect"],
+        destination:
+          "Your identity provider. Never store a password yourself, and never let the failed-login message reveal whether the address exists.",
+      },
+      {
+        name: "Record create and edit",
+        route: "/kayitlar/[id]",
+        registryItem: "record-form",
+        collects: ["the record's own fields", "owner", "status"],
+        destination:
+          "Your application database, in the same transaction that writes the audit entry.",
+      },
+      {
+        name: "Delete confirmation",
+        route: "/kayitlar/[id]",
+        registryItem: "confirm-dialog",
+        collects: ["a typed confirmation phrase for a high-stakes delete"],
+        destination:
+          "No destination of its own: it gates the request, and the server action re-checks the permission before deleting anything.",
+      },
+      {
+        name: "User invitation",
+        route: "/kullanicilar",
+        registryItem: "record-form",
+        collects: ["work email", "role"],
+        destination:
+          "Your identity provider's invitation endpoint. The invite expires, and the expired state is shown in the users table.",
+      },
+      {
+        name: "Workspace settings",
+        route: "/ayarlar",
+        registryItem: "settings-form",
+        collects: [
+          "workspace name",
+          "locale and time zone",
+          "retention window",
+          "whether SSO is required",
+        ],
+        destination: "Your settings store, with the previous value written to the audit log.",
+      },
+    ],
+    legal: [
+      {
+        path: "/gizlilik",
+        name: "KVKK aydınlatma metni (çalışan ve kullanıcı)",
+        why: "An internal tool processes staff personal data through the employment relationship, which a visitor-facing aydınlatma metni does not cover. If the organisation is over the VERBİS registration threshold, this processing belongs in that registration too.",
+      },
+      {
+        path: "/saklama-ve-imha",
+        name: "Kişisel veri saklama ve imha politikası",
+        why: "Required of a data controller registered in VERBİS, and it is the document that decides how long the audit log itself may be kept. Without it, retentionDays is a guess.",
+      },
+      {
+        path: "/kullanim-kosullari",
+        name: "Acceptable use",
+        why: "Internal rather than commercial: who may hold an account, what may be exported, and what happens on misuse. It is what a suspension has to point at.",
+      },
+      {
+        path: "/cerez-politikasi",
+        name: "Cookie policy",
+        why: "A session cookie alone is essential and needs no consent banner. Add product analytics or a session recorder and consent is required again, on staff as much as on customers.",
+      },
+    ],
+    operationalStates: [
+      "Session: signed out, signed in, expired mid-edit with the draft preserved, signed in elsewhere",
+      "Permission: allowed, read-only, forbidden with a named person to ask rather than a blank page",
+      "Record list: loading, empty on first run, empty because the filter matched nothing, loaded, a page beyond the last page",
+      "Record form: idle, validation errors, saving, saved, conflict because someone else saved first",
+      "Delete: confirmation required, typed phrase incomplete, deleting, deleted with an undo window, refused by permission",
+      "Audit log: populated, filtered to nothing, retention window reached with older entries already destroyed",
+      "Workspace: first run before setup, configured, suspended",
+    ],
+  },
+  /* ------------------------------------------------------------- education */
+  {
+    slug: "education-course",
+    name: "Education and online course",
+    sector: "Course creators, academies and training providers",
+    description:
+      "A course site that sells the outcome rather than the hour count, shows the curriculum before the price, and then does the harder job: turning someone who enrolled into someone who finished.",
+    outcome: "Enrolment, then a finished course",
+    themes: ["bone", "cobalt", "forest"],
+    routes: [
+      {
+        path: "/",
+        name: "Home",
+        purpose:
+          "Who this is for, what they will be able to do afterwards, and the one course to start with.",
+        skeleton: "service-business",
+        structuredData: "EducationalOrganization",
+        required: true,
+      },
+      {
+        path: "/kurslar",
+        name: "Course catalogue",
+        purpose:
+          "Every course by subject and level. A catalogue, not a shop: there is no cart, because a course is bought one at a time.",
+        blocks: ["page-header", "content-index"],
+        structuredData: "ItemList",
+        required: true,
+      },
+      {
+        path: "/kurslar/[slug]",
+        name: "Course",
+        purpose:
+          "The full curriculum above the price, because the curriculum is what the buyer is actually evaluating. Free preview lessons are playable from here.",
+        blocks: [
+          "page-header",
+          "curriculum-list",
+          "team-grid",
+          "testimonial-grid",
+          "pricing-duo",
+          "faq-accordion",
+          "cta-band",
+        ],
+        structuredData: "Course",
+        required: true,
+      },
+      {
+        path: "/kurslar/[slug]/ders/[lessonSlug]",
+        name: "Lesson",
+        purpose:
+          "The lesson itself, with the curriculum beside it. Behind enrolment, so it emits no structured data and is noindex.",
+        blocks: ["lesson-shell", "curriculum-list"],
+        required: true,
+      },
+      {
+        path: "/kayit",
+        name: "Enrolment",
+        purpose:
+          "Billing details, the withdrawal-right acknowledgement, payment at a provider, then access that starts immediately.",
+        blocks: ["checkout-form", "order-confirmation"],
+        required: true,
+      },
+      {
+        path: "/giris",
+        name: "Sign in",
+        purpose: "Entry for someone who already bought, with the course they are mid-way through named beside the form.",
+        blocks: ["auth-split", "form"],
+        required: true,
+      },
+      {
+        path: "/panel",
+        name: "Learner dashboard",
+        purpose:
+          "Continue where you stopped. One resume button beats a grid of courses, because the reason people do not finish is that restarting is a decision.",
+        blocks: ["dashboard-shell", "metrics-overview", "curriculum-list"],
+        required: true,
+      },
+      {
+        path: "/egitmenler",
+        name: "Instructors",
+        purpose: "Who is teaching and what they have actually done, which is the proof a course has.",
+        blocks: ["page-header", "team-grid"],
+        structuredData: "Person",
+        required: false,
+      },
+      {
+        path: "/blog",
+        name: "Blog",
+        purpose: "Free writing that demonstrates the teaching before anyone pays for it.",
+        skeleton: "publication",
+        structuredData: "Blog",
+        required: false,
+      },
+    ],
+    contentModel: [
+      {
+        name: "Course",
+        fields: [
+          "slug",
+          "title",
+          "outcome",
+          "level",
+          "language",
+          "priceMinor",
+          "totalMinutes",
+          "instructorIds[]",
+          "updatedAt",
+        ],
+        note: "Sold on its outcome and its level, not its hour count. totalMinutes is derived from the lessons rather than typed, or the two disagree by the second edit.",
+      },
+      {
+        name: "Module",
+        fields: ["id", "courseId", "title", "summary?", "order", "releaseAt?"],
+        note: "releaseAt drives a drip-released module's locked state. A locked module stays visible, because a buyer is entitled to see what they bought before it opens.",
+      },
+      {
+        name: "Lesson",
+        fields: [
+          "id",
+          "moduleId",
+          "title",
+          "kind",
+          "durationMin",
+          "mediaId?",
+          "transcript",
+          "resources[]",
+          "order",
+        ],
+        note: "The transcript is not decoration: it is the search index, the accessibility surface and what a learner skims before deciding to watch. Treat a missing one as an unfinished lesson.",
+      },
+      {
+        name: "Enrolment",
+        fields: ["id", "userId", "courseId", "startedAt", "expiresAt?", "cohortId?"],
+        note: "If access has a term, expiry is a state with a renewal route, never a 404 on a lesson someone paid for.",
+      },
+      {
+        name: "Lesson progress",
+        fields: ["userId", "lessonId", "status", "lastPositionSec?", "completedAt?"],
+        note: "One row per learner per lesson. This is where progress lives; curriculum-list and lesson-shell are handed it and never derive or store it.",
+      },
+      {
+        name: "Certificate",
+        fields: ["id", "enrolmentId", "issuedAt", "verifyUrl"],
+        note: "Issue only against completed progress, and give it a URL a third party can check. A certificate nobody can verify is a graphic.",
+      },
+      {
+        name: "Instructor",
+        fields: ["id", "name", "role", "bio", "photo?"],
+      },
+    ],
+    forms: [
+      {
+        name: "Enrolment and payment",
+        route: "/kayit",
+        registryItem: "checkout-form",
+        collects: [
+          "name",
+          "email",
+          "billing details for the invoice",
+          "acknowledgement that instant access ends the withdrawal right",
+        ],
+        destination:
+          "Your payment provider on submit; card details never touch this form. The billing fields are not decoration — a Turkish sale needs an e-arşiv fatura — and the acknowledgement must be stored with the order, not just displayed.",
+      },
+      {
+        name: "Sign in",
+        route: "/giris",
+        registryItem: "form",
+        collects: ["email", "password or a one-time code"],
+        destination: "Your auth provider. Never store a password yourself.",
+      },
+      {
+        name: "Free lesson by email",
+        route: "/kurslar/[slug]",
+        registryItem: "newsletter-signup",
+        collects: ["email"],
+        destination:
+          "Your email provider with a double opt-in. Consent goes to İYS before any commercial message follows.",
+      },
+      {
+        name: "Team training enquiry",
+        route: "/",
+        registryItem: "contact-form",
+        collects: ["company", "team size", "which course", "timeline"],
+        destination: "The sales inbox. Corporate buying is a conversation, not a checkout.",
+      },
+    ],
+    legal: [
+      ...baseLegal,
+      {
+        path: "/mesafeli-satis-sozlesmesi",
+        name: "Mesafeli satış sözleşmesi",
+        why: "A course sold online to a consumer is distance selling: the contract is presented and accepted before payment, not linked in the footer afterwards.",
+      },
+      {
+        path: "/on-bilgilendirme-formu",
+        name: "Ön bilgilendirme formu",
+        why: "A separate document from the contract, confirmed before the order is placed. Two surfaces, not one page with two headings.",
+      },
+      {
+        path: "/cayma-hakki",
+        name: "Cayma hakkı",
+        why: "Digital content delivered immediately loses the fourteen-day withdrawal right only where the buyer consented in advance and acknowledged losing it. If the checkout never captured that acknowledgement, the right survives — so build the checkbox, do not only write the page.",
+      },
+      {
+        path: "/ileti-izni",
+        name: "İYS (İleti Yönetim Sistemi) izni",
+        why: "Commercial email or SMS to a recipient in Türkiye needs consent registered with İYS and an opt-out in every message. A course site with a mailing list is squarely inside this.",
+      },
+      {
+        path: "/sertifika-hakkinda",
+        name: "What the certificate is",
+        why: "A credibility obligation rather than a legal one. If the certificate is not an officially recognised qualification, say so before someone buys expecting one.",
+      },
+    ],
+    operationalStates: [
+      "Course: draft, enrolling, cohort full, closed, retired but still readable by everyone who bought it",
+      "Module: released, scheduled with the date shown, locked",
+      "Lesson: not started, in progress with the resume position, complete, media failed to load with the transcript still available",
+      "Enrolment: active, expiring soon, expired with a renewal route rather than a 404",
+      "Checkout: idle, validation errors, paying, paid, payment failed, already enrolled",
+      "Progress: nothing started, in progress, complete with the certificate issued",
+      "Transcript and captions: present, or missing with the gap stated rather than hidden",
+    ],
+  },
 ];
 
 export function kitBySlug(slug: string) {

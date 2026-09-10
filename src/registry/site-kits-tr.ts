@@ -78,4 +78,18 @@ export const siteKitTr: Record<
       "Etkinlik vaadini kuran, programı taranabilir yapan, mekân bilgisini kayda yakın tutan ve bileti siteden çıkmadan satan bir etkinlik sitesi.",
     outcome: "Tamamlanmış kayıt",
   },
+  "dashboard-internal": {
+    name: "Panel ve iç kullanım aracı",
+    sector: "İç operasyon, yönetim panelleri ve back-office araçları",
+    description:
+      "İşi yürüten ekip için bir araç: oturum açılmış bir çerçeve, filtrelenebilir bir liste, gerçek bir oluştur-düzenle-sil döngüsü ve kimin neyi değiştirdiğini yanıtlayabilen bir denetim kaydı. Kamuya açık bir pazarlama yüzeyi yok ve bu, içindeki neredeyse her kararı değiştiriyor.",
+    outcome: "Denetim kaydıyla tamamlanmış iş",
+  },
+  "education-course": {
+    name: "Eğitim ve online kurs",
+    sector: "Kurs üreticileri, akademiler ve eğitim sağlayıcıları",
+    description:
+      "Saat sayısını değil sonucu satan, müfredatı fiyattan önce gösteren ve ardından asıl zor işi yapan bir kurs sitesi: kayıt olan kişiyi kursu bitiren kişiye dönüştürmek.",
+    outcome: "Kayıt ve tamamlanmış kurs",
+  },
 };
